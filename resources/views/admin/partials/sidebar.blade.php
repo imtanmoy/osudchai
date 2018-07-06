@@ -31,65 +31,65 @@
                         </span>
                             </a>
                         </li>
-                        {{--<li class="{{ $request->segment(2) == 'roles' ? 'active active-sub' : '' }}">--}}
-                            {{--<a href="{{ route('admin.roles.index') }}">--}}
-                                {{--<i class="fa fa-briefcase"></i>--}}
-                                {{--<span class="title">--}}
-                        {{--@lang('global.roles.title')--}}
-                        {{--</span>--}}
-                            {{--</a>--}}
-                        {{--</li>--}}
+                        <li class="{{ $request->segment(2) == 'roles' ? 'active active-sub' : '' }}">
+                            <a href="{{ route('admin.roles.index') }}">
+                                <i class="fa fa-briefcase"></i>
+                                <span class="title">
+                        @lang('global.roles.title')
+                        </span>
+                            </a>
+                        </li>
                         {{--<li class="{{ $request->segment(2) == 'adminusers' ? 'active active-sub' : '' }}">--}}
-                            {{--<a href="{{ route('admin.adminusers.index') }}">--}}
-                                {{--<i class="fa fa-user"></i>--}}
-                                {{--<span class="title">--}}
+                        {{--<a href="{{ route('admin.adminusers.index') }}">--}}
+                        {{--<i class="fa fa-user"></i>--}}
+                        {{--<span class="title">--}}
                         {{--@lang('global.users.title')--}}
                         {{--</span>--}}
-                            {{--</a>--}}
+                        {{--</a>--}}
                         {{--</li>--}}
                     </ul>
                 </li>
                 {{--<li class="{{ $request->segment(2) == 'manufacturer' ? 'active' : '' }}">--}}
-                    {{--<a href="{{ url('/admin/manufacturer') }}">--}}
-                        {{--<i class="fa fa-wrench"></i>--}}
-                        {{--<span class="title">Manufacturer</span>--}}
-                    {{--</a>--}}
+                {{--<a href="{{ url('/admin/manufacturer') }}">--}}
+                {{--<i class="fa fa-wrench"></i>--}}
+                {{--<span class="title">Manufacturer</span>--}}
+                {{--</a>--}}
                 {{--</li>--}}
                 {{--<li class="{{ $request->segment(2) == 'product_type' ? 'active' : '' }}">--}}
-                    {{--<a href="{{ url('/admin/product_type') }}">--}}
-                        {{--<i class="fa fa-wrench"></i>--}}
-                        {{--<span class="title">Product Type</span>--}}
-                    {{--</a>--}}
+                {{--<a href="{{ url('/admin/product_type') }}">--}}
+                {{--<i class="fa fa-wrench"></i>--}}
+                {{--<span class="title">Product Type</span>--}}
+                {{--</a>--}}
                 {{--</li>--}}
                 {{--<li class="{{ $request->segment(2) == 'categories' ? 'active' : '' }}">--}}
-                    {{--<a href="{{ url('/admin/categories') }}">--}}
-                        {{--<i class="fa fa-wrench"></i>--}}
-                        {{--<span class="title">Category</span>--}}
-                    {{--</a>--}}
+                {{--<a href="{{ url('/admin/categories') }}">--}}
+                {{--<i class="fa fa-wrench"></i>--}}
+                {{--<span class="title">Category</span>--}}
+                {{--</a>--}}
                 {{--</li>--}}
                 {{--<li class="{{ $request->segment(2) == 'attribute' ? 'active' : '' }}">--}}
-                    {{--<a href="{{ url('/admin/attribute') }}">--}}
-                        {{--<i class="fa fa-wrench"></i>--}}
-                        {{--<span class="title">Attribute</span>--}}
-                    {{--</a>--}}
+                {{--<a href="{{ url('/admin/attribute') }}">--}}
+                {{--<i class="fa fa-wrench"></i>--}}
+                {{--<span class="title">Attribute</span>--}}
+                {{--</a>--}}
                 {{--</li>--}}
                 {{--<li class="{{ $request->segment(2) == 'products' ? 'active' : '' }}">--}}
-                    {{--<a href="{{ url('/admin/products') }}">--}}
-                        {{--<i class="fa fa-wrench"></i>--}}
-                        {{--<span class="title">Product</span>--}}
-                    {{--</a>--}}
+                {{--<a href="{{ url('/admin/products') }}">--}}
+                {{--<i class="fa fa-wrench"></i>--}}
+                {{--<span class="title">Product</span>--}}
+                {{--</a>--}}
                 {{--</li>--}}
                 {{--<li class="{{ $request->segment(2) == 'discounts' ? 'active' : '' }}">--}}
-                    {{--<a href="{{ url('/admin/discounts') }}">--}}
-                        {{--<i class="fa fa-wrench"></i>--}}
-                        {{--<span class="title">Discounts</span>--}}
-                    {{--</a>--}}
+                {{--<a href="{{ url('/admin/discounts') }}">--}}
+                {{--<i class="fa fa-wrench"></i>--}}
+                {{--<span class="title">Discounts</span>--}}
+                {{--</a>--}}
                 {{--</li>--}}
                 {{--<li class="{{ $request->segment(2) == 'orders' ? 'active' : '' }}">--}}
-                    {{--<a href="{{ url('/admin/orders') }}">--}}
-                        {{--<i class="fa fa-wrench"></i>--}}
-                        {{--<span class="title">Orders</span>--}}
-                    {{--</a>--}}
+                {{--<a href="{{ url('/admin/orders') }}">--}}
+                {{--<i class="fa fa-wrench"></i>--}}
+                {{--<span class="title">Orders</span>--}}
+                {{--</a>--}}
                 {{--</li>--}}
                 <li class="treeview">
                     <a href="#">
@@ -101,16 +101,16 @@
                     </a>
                     <ul class="treeview-menu">
                         {{--<li class="{{ $request->segment(2) == 'customers' ? 'active active-sub' : '' }}">--}}
-                            {{--<a href="{{ route('admin.customers.index') }}">--}}
-                                {{--<i class="fa fa-briefcase"></i>--}}
-                                {{--<span class="title">Customers</span>--}}
-                            {{--</a>--}}
+                        {{--<a href="{{ route('admin.customers.index') }}">--}}
+                        {{--<i class="fa fa-briefcase"></i>--}}
+                        {{--<span class="title">Customers</span>--}}
+                        {{--</a>--}}
                         {{--</li>--}}
                         {{--<li class="{{ $request->segment(2) == 'customer_group' ? 'active' : '' }}">--}}
-                            {{--<a href="{{ url('/admin/customer_group') }}">--}}
-                                {{--<i class="fa fa-wrench"></i>--}}
-                                {{--<span class="title">Customer Group</span>--}}
-                            {{--</a>--}}
+                        {{--<a href="{{ url('/admin/customer_group') }}">--}}
+                        {{--<i class="fa fa-wrench"></i>--}}
+                        {{--<span class="title">Customer Group</span>--}}
+                        {{--</a>--}}
                         {{--</li>--}}
                     </ul>
                 </li>

@@ -11,8 +11,13 @@ Route::get('/home', function () {
 })->name('home');
 
 Route::get('/', 'Admin\AdminController@index');
+
 // Permission Routes
 Route::resource('permissions', 'Admin\PermissionsController');
+
+// Role Routes
+Route::resource('roles', 'Admin\RolesController');
+
 
 
 
