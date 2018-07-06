@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6a2be9e09a260df128f4f58e27513753",
+    "content-hash": "9facc4f88db039effdee3ae5c2b93fb7",
     "packages": [
         {
             "name": "anahkiasen/underscore-php",
@@ -1724,6 +1724,52 @@
                 "time"
             ],
             "time": "2018-03-19T15:50:49+00:00"
+        },
+        {
+            "name": "nicolaslopezj/searchable",
+            "version": "1.10.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nicolaslopezj/searchable.git",
+                "reference": "813a860244eff7a5031b597f46d971890305dfe5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nicolaslopezj/searchable/zipball/813a860244eff7a5031b597f46d971890305dfe5",
+                "reference": "813a860244eff7a5031b597f46d971890305dfe5",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "illuminate/database": "4.2.x|~5.0",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Nicolaslopezj\\Searchable\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Lopez",
+                    "email": "nicolaslopezj@me.com"
+                }
+            ],
+            "description": "Eloquent model search trait.",
+            "keywords": [
+                "database",
+                "eloquent",
+                "laravel",
+                "model",
+                "search",
+                "searchable"
+            ],
+            "time": "2018-06-21T15:42:27+00:00"
         },
         {
             "name": "nikic/php-parser",
