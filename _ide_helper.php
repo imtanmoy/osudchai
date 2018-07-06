@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.6.26 on 2018-07-06 15:51:01.
+ * Generated for Laravel 5.6.26 on 2018-07-06 19:37:22.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -2974,6 +2974,19 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
+         * Get a lock instance.
+         *
+         * @param string $name
+         * @param int $seconds
+         * @return \Illuminate\Contracts\Cache\Lock 
+         * @static 
+         */ 
+        public static function lock($name, $seconds = 0)
+        {
+            return \Illuminate\Cache\RedisStore::lock($name, $seconds);
+        }
+        
+        /**
          * Remove all items from the cache.
          *
          * @return bool 
@@ -2981,29 +2994,41 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function flush()
         {
-            return \Illuminate\Cache\FileStore::flush();
+            return \Illuminate\Cache\RedisStore::flush();
         }
         
         /**
-         * Get the Filesystem instance.
+         * Get the Redis connection instance.
          *
-         * @return \Illuminate\Filesystem\Filesystem 
+         * @return \Predis\ClientInterface 
          * @static 
          */ 
-        public static function getFilesystem()
+        public static function connection()
         {
-            return \Illuminate\Cache\FileStore::getFilesystem();
+            return \Illuminate\Cache\RedisStore::connection();
         }
         
         /**
-         * Get the working directory of the cache.
+         * Set the connection name to be used.
          *
-         * @return string 
+         * @param string $connection
+         * @return void 
          * @static 
          */ 
-        public static function getDirectory()
+        public static function setConnection($connection)
         {
-            return \Illuminate\Cache\FileStore::getDirectory();
+            \Illuminate\Cache\RedisStore::setConnection($connection);
+        }
+        
+        /**
+         * Get the Redis database instance.
+         *
+         * @return \Illuminate\Contracts\Redis\Factory 
+         * @static 
+         */ 
+        public static function getRedis()
+        {
+            return \Illuminate\Cache\RedisStore::getRedis();
         }
         
         /**
@@ -3014,7 +3039,19 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function getPrefix()
         {
-            return \Illuminate\Cache\FileStore::getPrefix();
+            return \Illuminate\Cache\RedisStore::getPrefix();
+        }
+        
+        /**
+         * Set the cache key prefix.
+         *
+         * @param string $prefix
+         * @return void 
+         * @static 
+         */ 
+        public static function setPrefix($prefix)
+        {
+            \Illuminate\Cache\RedisStore::setPrefix($prefix);
         }
          
     }
@@ -6450,22 +6487,21 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function size($queue = null)
         {
-            return \Illuminate\Queue\SyncQueue::size($queue);
+            return \Illuminate\Queue\RedisQueue::size($queue);
         }
         
         /**
          * Push a new job onto the queue.
          *
-         * @param string $job
+         * @param object|string $job
          * @param mixed $data
          * @param string $queue
          * @return mixed 
-         * @throws \Exception|\Throwable
          * @static 
          */ 
         public static function push($job, $data = '', $queue = null)
         {
-            return \Illuminate\Queue\SyncQueue::push($job, $data, $queue);
+            return \Illuminate\Queue\RedisQueue::push($job, $data, $queue);
         }
         
         /**
@@ -6479,14 +6515,14 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function pushRaw($payload, $queue = null, $options = array())
         {
-            return \Illuminate\Queue\SyncQueue::pushRaw($payload, $queue, $options);
+            return \Illuminate\Queue\RedisQueue::pushRaw($payload, $queue, $options);
         }
         
         /**
          * Push a new job onto the queue after a delay.
          *
          * @param \DateTimeInterface|\DateInterval|int $delay
-         * @param string $job
+         * @param object|string $job
          * @param mixed $data
          * @param string $queue
          * @return mixed 
@@ -6494,7 +6530,7 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function later($delay, $job, $data = '', $queue = null)
         {
-            return \Illuminate\Queue\SyncQueue::later($delay, $job, $data, $queue);
+            return \Illuminate\Queue\RedisQueue::later($delay, $job, $data, $queue);
         }
         
         /**
@@ -6506,7 +6542,70 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function pop($queue = null)
         {
-            return \Illuminate\Queue\SyncQueue::pop($queue);
+            return \Illuminate\Queue\RedisQueue::pop($queue);
+        }
+        
+        /**
+         * Migrate the delayed jobs that are ready to the regular queue.
+         *
+         * @param string $from
+         * @param string $to
+         * @return array 
+         * @static 
+         */ 
+        public static function migrateExpiredJobs($from, $to)
+        {
+            return \Illuminate\Queue\RedisQueue::migrateExpiredJobs($from, $to);
+        }
+        
+        /**
+         * Delete a reserved job from the queue.
+         *
+         * @param string $queue
+         * @param \Illuminate\Queue\Jobs\RedisJob $job
+         * @return void 
+         * @static 
+         */ 
+        public static function deleteReserved($queue, $job)
+        {
+            \Illuminate\Queue\RedisQueue::deleteReserved($queue, $job);
+        }
+        
+        /**
+         * Delete a reserved job from the reserved queue and release it.
+         *
+         * @param string $queue
+         * @param \Illuminate\Queue\Jobs\RedisJob $job
+         * @param int $delay
+         * @return void 
+         * @static 
+         */ 
+        public static function deleteAndRelease($queue, $job, $delay)
+        {
+            \Illuminate\Queue\RedisQueue::deleteAndRelease($queue, $job, $delay);
+        }
+        
+        /**
+         * Get the queue or return the default.
+         *
+         * @param string|null $queue
+         * @return string 
+         * @static 
+         */ 
+        public static function getQueue($queue)
+        {
+            return \Illuminate\Queue\RedisQueue::getQueue($queue);
+        }
+        
+        /**
+         * Get the underlying Redis instance.
+         *
+         * @return \Illuminate\Contracts\Redis\Factory 
+         * @static 
+         */ 
+        public static function getRedis()
+        {
+            return \Illuminate\Queue\RedisQueue::getRedis();
         }
         
         /**
@@ -6521,7 +6620,7 @@ namespace Illuminate\Support\Facades {
         public static function pushOn($queue, $job, $data = '')
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::pushOn($queue, $job, $data);
+            return \Illuminate\Queue\RedisQueue::pushOn($queue, $job, $data);
         }
         
         /**
@@ -6537,7 +6636,7 @@ namespace Illuminate\Support\Facades {
         public static function laterOn($queue, $delay, $job, $data = '')
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::laterOn($queue, $delay, $job, $data);
+            return \Illuminate\Queue\RedisQueue::laterOn($queue, $delay, $job, $data);
         }
         
         /**
@@ -6552,7 +6651,7 @@ namespace Illuminate\Support\Facades {
         public static function bulk($jobs, $data = '', $queue = null)
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::bulk($jobs, $data, $queue);
+            return \Illuminate\Queue\RedisQueue::bulk($jobs, $data, $queue);
         }
         
         /**
@@ -6565,7 +6664,7 @@ namespace Illuminate\Support\Facades {
         public static function getJobExpiration($job)
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::getJobExpiration($job);
+            return \Illuminate\Queue\RedisQueue::getJobExpiration($job);
         }
         
         /**
@@ -6577,7 +6676,7 @@ namespace Illuminate\Support\Facades {
         public static function getConnectionName()
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::getConnectionName();
+            return \Illuminate\Queue\RedisQueue::getConnectionName();
         }
         
         /**
@@ -6590,7 +6689,7 @@ namespace Illuminate\Support\Facades {
         public static function setConnectionName($name)
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::setConnectionName($name);
+            return \Illuminate\Queue\RedisQueue::setConnectionName($name);
         }
         
         /**
@@ -6603,7 +6702,7 @@ namespace Illuminate\Support\Facades {
         public static function setContainer($container)
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            \Illuminate\Queue\SyncQueue::setContainer($container);
+            \Illuminate\Queue\RedisQueue::setContainer($container);
         }
          
     }
@@ -15047,6 +15146,263 @@ namespace Laracasts\Flash {
  
 }
 
+namespace Arcanedev\LogViewer\Facades { 
+
+    class LogViewer {
+        
+        /**
+         * Get the log levels.
+         *
+         * @param bool $flip
+         * @return array 
+         * @static 
+         */ 
+        public static function levels($flip = false)
+        {
+            return \Arcanedev\LogViewer\LogViewer::levels($flip);
+        }
+        
+        /**
+         * Get the translated log levels.
+         *
+         * @param string|null $locale
+         * @return array 
+         * @static 
+         */ 
+        public static function levelsNames($locale = null)
+        {
+            return \Arcanedev\LogViewer\LogViewer::levelsNames($locale);
+        }
+        
+        /**
+         * Set the log storage path.
+         *
+         * @param string $path
+         * @return self 
+         * @static 
+         */ 
+        public static function setPath($path)
+        {
+            return \Arcanedev\LogViewer\LogViewer::setPath($path);
+        }
+        
+        /**
+         * Get the log pattern.
+         *
+         * @return string 
+         * @static 
+         */ 
+        public static function getPattern()
+        {
+            return \Arcanedev\LogViewer\LogViewer::getPattern();
+        }
+        
+        /**
+         * Set the log pattern.
+         *
+         * @param string $date
+         * @param string $prefix
+         * @param string $extension
+         * @return self 
+         * @static 
+         */ 
+        public static function setPattern($prefix = 'laravel-', $date = '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]', $extension = '.log')
+        {
+            return \Arcanedev\LogViewer\LogViewer::setPattern($prefix, $date, $extension);
+        }
+        
+        /**
+         * Get all logs.
+         *
+         * @return \Arcanedev\LogViewer\Entities\LogCollection 
+         * @static 
+         */ 
+        public static function all()
+        {
+            return \Arcanedev\LogViewer\LogViewer::all();
+        }
+        
+        /**
+         * Paginate all logs.
+         *
+         * @param int $perPage
+         * @return \Illuminate\Pagination\LengthAwarePaginator 
+         * @static 
+         */ 
+        public static function paginate($perPage = 30)
+        {
+            return \Arcanedev\LogViewer\LogViewer::paginate($perPage);
+        }
+        
+        /**
+         * Get a log.
+         *
+         * @param string $date
+         * @return \Arcanedev\LogViewer\Entities\Log 
+         * @static 
+         */ 
+        public static function get($date)
+        {
+            return \Arcanedev\LogViewer\LogViewer::get($date);
+        }
+        
+        /**
+         * Get the log entries.
+         *
+         * @param string $date
+         * @param string $level
+         * @return \Arcanedev\LogViewer\Entities\LogEntryCollection 
+         * @static 
+         */ 
+        public static function entries($date, $level = 'all')
+        {
+            return \Arcanedev\LogViewer\LogViewer::entries($date, $level);
+        }
+        
+        /**
+         * Download a log file.
+         *
+         * @param string $date
+         * @param string|null $filename
+         * @param array $headers
+         * @return \Symfony\Component\HttpFoundation\BinaryFileResponse 
+         * @static 
+         */ 
+        public static function download($date, $filename = null, $headers = array())
+        {
+            return \Arcanedev\LogViewer\LogViewer::download($date, $filename, $headers);
+        }
+        
+        /**
+         * Get logs statistics.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function stats()
+        {
+            return \Arcanedev\LogViewer\LogViewer::stats();
+        }
+        
+        /**
+         * Get logs statistics table.
+         *
+         * @param string|null $locale
+         * @return \Arcanedev\LogViewer\Tables\StatsTable 
+         * @static 
+         */ 
+        public static function statsTable($locale = null)
+        {
+            return \Arcanedev\LogViewer\LogViewer::statsTable($locale);
+        }
+        
+        /**
+         * Delete the log.
+         *
+         * @param string $date
+         * @return bool 
+         * @static 
+         */ 
+        public static function delete($date)
+        {
+            return \Arcanedev\LogViewer\LogViewer::delete($date);
+        }
+        
+        /**
+         * Get all valid log files.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function files()
+        {
+            return \Arcanedev\LogViewer\LogViewer::files();
+        }
+        
+        /**
+         * List the log files (only dates).
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function dates()
+        {
+            return \Arcanedev\LogViewer\LogViewer::dates();
+        }
+        
+        /**
+         * Get logs count.
+         *
+         * @return int 
+         * @static 
+         */ 
+        public static function count()
+        {
+            return \Arcanedev\LogViewer\LogViewer::count();
+        }
+        
+        /**
+         * Get entries total from all logs.
+         *
+         * @param string $level
+         * @return int 
+         * @static 
+         */ 
+        public static function total($level = 'all')
+        {
+            return \Arcanedev\LogViewer\LogViewer::total($level);
+        }
+        
+        /**
+         * Get logs tree.
+         *
+         * @param bool $trans
+         * @return array 
+         * @static 
+         */ 
+        public static function tree($trans = false)
+        {
+            return \Arcanedev\LogViewer\LogViewer::tree($trans);
+        }
+        
+        /**
+         * Get logs menu.
+         *
+         * @param bool $trans
+         * @return array 
+         * @static 
+         */ 
+        public static function menu($trans = true)
+        {
+            return \Arcanedev\LogViewer\LogViewer::menu($trans);
+        }
+        
+        /**
+         * Determine if the log folder is empty or not.
+         *
+         * @return bool 
+         * @static 
+         */ 
+        public static function isEmpty()
+        {
+            return \Arcanedev\LogViewer\LogViewer::isEmpty();
+        }
+        
+        /**
+         * Get the LogViewer version.
+         *
+         * @return string 
+         * @static 
+         */ 
+        public static function version()
+        {
+            return \Arcanedev\LogViewer\LogViewer::version();
+        }
+         
+    }
+ 
+}
+
 
 namespace  { 
 
@@ -17408,6 +17764,8 @@ namespace  {
     class Debugbar extends \Barryvdh\Debugbar\Facade {}
 
     class Flash extends \Laracasts\Flash\Flash {}
+
+    class LogViewer extends \Arcanedev\LogViewer\Facades\LogViewer {}
  
 }
 
