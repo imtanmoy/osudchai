@@ -70,11 +70,11 @@ return [
 
         'redis' => [
             'driver' => 'redis',
-            'connection' => 'default',
-        ],
-        'redis2' => [
-            'driver' => 'redis',
             'connection' => 'cache',
+        ],
+        'model_cache' => [
+            'driver' => 'redis',
+            'connection' => 'model_cache',
         ],
 
     ],
