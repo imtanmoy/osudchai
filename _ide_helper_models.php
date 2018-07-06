@@ -37,6 +37,37 @@ namespace App{
 
 namespace App\Models{
 /**
+ * App\Models\Category
+ *
+ * @property int $id
+ * @property string $name
+ * @property int $order
+ * @property int $is_active
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property int $_lft
+ * @property int $_rgt
+ * @property int|null $parent_id
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activity
+ * @property-read \Kalnoy\Nestedset\Collection|\App\Models\Category[] $children
+ * @property-read \App\Models\Category|null $parent
+ * @property-read \Kalnoy\Nestedset\Collection|\App\Models\Category[] $subCategories
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category d()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereLft($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereRgt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereUpdatedAt($value)
+ */
+	class Category extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Manufacturer
  *
  * @property int $id

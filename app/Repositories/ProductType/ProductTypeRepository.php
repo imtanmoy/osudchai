@@ -39,7 +39,7 @@ class ProductTypeRepository implements ProductTypeInterface
         try {
             return $this->model->create($attributes);
         } catch (\Exception $exception) {
-            return abort(500);
+            return redirect()->back()->withErrors($exception->getMessage());
         }
 
     }
@@ -49,7 +49,7 @@ class ProductTypeRepository implements ProductTypeInterface
         try {
             return $this->model->find($id)->update($attributes);
         } catch (\Exception $exception) {
-            return abort(500);
+            return redirect()->back()->withErrors($exception->getMessage());
         }
     }
 
@@ -58,7 +58,7 @@ class ProductTypeRepository implements ProductTypeInterface
         try {
             return $this->model->find($id)->delete();
         } catch (\Exception $e) {
-            return abort(500);
+            return redirect()->back()->withErrors($e->getMessage());
         }
     }
 }

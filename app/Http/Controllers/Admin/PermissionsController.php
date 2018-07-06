@@ -44,7 +44,7 @@ class PermissionsController extends Controller
         try {
             Permission::create($request->all());
         } catch (\Exception $exception) {
-            return abort(500);
+            return redirect()->back()->withErrors($exception->getMessage());
         }
         return redirect()->route('admin.permissions.index');
     }
@@ -88,7 +88,7 @@ class PermissionsController extends Controller
             $permission = Permission::findOrFail($id);
             $permission->update($request->all());
         } catch (\Exception $exception) {
-            return abort(500);
+            return redirect()->back()->withErrors($exception->getMessage());
         }
         return redirect()->route('admin.permissions.index');
     }
@@ -106,7 +106,7 @@ class PermissionsController extends Controller
             $permission = Permission::findOrFail($id);
             $permission->delete();
         } catch (\Exception $e) {
-            return abort(500);
+            return redirect()->back()->withErrors($e->getMessage());
         }
         return redirect()->route('admin.permissions.index');
 

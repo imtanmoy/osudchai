@@ -49,7 +49,7 @@ class RolesController extends Controller
             $permissions = $request->input('permission') ? $request->input('permission') : [];
             $role->givePermissionTo($permissions);
         } catch (\Exception $exception) {
-            return abort(500);
+            return redirect()->back()->withErrors($exception->getMessage());
         }
         return redirect()->route('admin.roles.index');
     }
@@ -101,7 +101,7 @@ class RolesController extends Controller
             $permissions = $request->input('permission') ? $request->input('permission') : [];
             $role->syncPermissions($permissions);
         } catch (\Exception $exception) {
-            return abort(500);
+            return redirect()->back()->withErrors($exception->getMessage());
         }
         return redirect()->route('admin.roles.index');
     }
@@ -119,7 +119,7 @@ class RolesController extends Controller
             $role = Role::findOrFail($id);
             $role->delete();
         } catch (\Exception $exception) {
-            return abort(500);
+            return redirect()->back()->withErrors($exception->getMessage());
         }
         return redirect()->route('admin.roles.index');
     }

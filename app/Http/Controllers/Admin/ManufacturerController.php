@@ -48,7 +48,7 @@ class ManufacturerController extends Controller
         try {
             Manufacturer::create($request->all());
         } catch (\Exception $exception) {
-            return abort(500);
+            return redirect()->back()->withErrors($exception->getMessage());
         }
         return redirect()->route('admin.manufacturers.index');
     }
@@ -98,7 +98,7 @@ class ManufacturerController extends Controller
             $manufacturer = Manufacturer::findOrFail($id);
             $manufacturer->update($request->all());
         } catch (\Exception $exception) {
-            return abort(500);
+            return redirect()->back()->withErrors($exception->getMessage());
         }
         return redirect()->route('admin.manufacturers.index');
     }
@@ -119,7 +119,7 @@ class ManufacturerController extends Controller
             $manufacturer = Manufacturer::findOrFail($id);
             $manufacturer->delete();
         } catch (\Exception $exception) {
-            return abort(500);
+            return redirect()->back()->withErrors($exception->getMessage());
         }
         return redirect()->route('admin.manufacturers.index');
     }
