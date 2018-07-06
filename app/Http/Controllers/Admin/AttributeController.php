@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\AttributeRequest;
+use App\Models\Attribute;
 use App\Repositories\Attribute\AttributeInterface;
 use App\Http\Controllers\Controller;
+use DataTables;
 use Gate;
+use Request;
 
 class AttributeController extends Controller
 {
@@ -112,23 +115,55 @@ class AttributeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param Request $request
+     * @param
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
 
-        $this->attribute->delete($id);
+        try {
+            $attribute = Attribute::findOrFail($id);
 
-        return redirect()->route('admin.attributes.index');
+            $status = $attribute->delete();
+
+            if ($status) {
+                if ($request->ajax()) {
+                    return response()->json(['status' => true, 'message' => 'Attribute Successfully Deleted']);
+                } else {
+                    return redirect()->route('admin.attributes.index');
+                }
+            }
+        } catch (\Exception $exception) {
+            if ($request->ajax()) {
+                return response()->json(['status' => false, 'message' => $exception->getMessage()]);
+            }
+            return redirect()->back()->withErrors($exception->getMessage());
+        }
     }
 
     public function showAll()
     {
         $attributes = $this->attribute->getAll();
         return response()->json($attributes);
+    }
+
+    public function data_table()
+    {
+        try {
+            $attributes = Attribute::all();
+            return Datatables::of($attributes)
+                ->editColumn('name', function ($attribute) {
+                    return '<a href="' . route('admin.attributes.show', $attribute->id) . '">' . $attribute->name . '</a>';
+                })
+                ->addColumn('action', function ($attribute) {
+                    return '<a id="deleteBtn" data-id="' . $attribute->id . '"  class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
+                })->rawColumns(['action', 'name'])->make(true);
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 }

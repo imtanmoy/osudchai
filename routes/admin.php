@@ -30,6 +30,8 @@ Route::get('datatable/categories', 'Admin\CategoryController@dataTableCategory')
 
 // Attribute Routes
 Route::resource('attributes', 'Admin\AttributeController');
+Route::get('datatable/attributes', 'Admin\AttributeController@data_table')->name('datatable.attributes');
+
 
 
 

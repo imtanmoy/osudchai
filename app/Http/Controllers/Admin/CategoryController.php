@@ -169,7 +169,7 @@ class CategoryController extends Controller
                 if ($request->ajax()) {
                     return response()->json(['status' => true, 'message' => 'Category Successfully Deleted']);
                 } else {
-                    return redirect()->route('categories.index');
+                    return redirect()->route('admin.categories.index');
                 }
             }
         } catch (\Exception $exception) {
