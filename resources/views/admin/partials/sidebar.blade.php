@@ -67,12 +67,12 @@
                         <span class="title">Category</span>
                     </a>
                 </li>
-                {{--<li class="{{ $request->segment(2) == 'attribute' ? 'active' : '' }}">--}}
-                {{--<a href="{{ url('/admin/attribute') }}">--}}
-                {{--<i class="fa fa-wrench"></i>--}}
-                {{--<span class="title">Attribute</span>--}}
-                {{--</a>--}}
-                {{--</li>--}}
+                <li class="{{ $request->segment(2) == 'attributes' ? 'active' : '' }}">
+                    <a href="{{ route('admin.attributes.index') }}">
+                        <i class="fa fa-wrench"></i>
+                        <span class="title">Attributes</span>
+                    </a>
+                </li>
                 {{--<li class="{{ $request->segment(2) == 'products' ? 'active' : '' }}">--}}
                 {{--<a href="{{ url('/admin/products') }}">--}}
                 {{--<i class="fa fa-wrench"></i>--}}
