@@ -21,6 +21,10 @@ Route::resource('roles', 'Admin\RolesController');
 // Manufacturer Routes
 Route::resource('manufacturers', 'Admin\ManufacturerController');
 
+// ProductType Routes
+Route::resource('product_types', 'Admin\ProductTypeController');
+
+
 
 
 

@@ -47,6 +47,7 @@ class RolesRequest extends FormRequest
                     ];
                 }
             default:
+                return [];
                 break;
         }
     }

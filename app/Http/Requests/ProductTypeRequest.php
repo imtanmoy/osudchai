@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ManufacturerRequest extends FormRequest
+class ProductTypeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -37,9 +37,6 @@ class ManufacturerRequest extends FormRequest
                 {
                     return [
                         'name' => 'required',
-//                    'phone' => 'required',
-//                    'email' => 'required|email',
-//                    'address' => 'required',
                     ];
                 }
             case 'PUT':
@@ -47,9 +44,6 @@ class ManufacturerRequest extends FormRequest
                 {
                     return [
                         'name' => 'required',
-//                    'phone' => 'required',
-//                    'email' => 'required|email',
-//                    'address' => 'required',
                     ];
                 }
             default:

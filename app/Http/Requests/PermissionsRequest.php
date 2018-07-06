@@ -44,6 +44,7 @@ class PermissionsRequest extends FormRequest
                 ];
             }
             default:
+                return [];
                 break;
         }
     }

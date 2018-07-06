@@ -55,12 +55,12 @@
                         <span class="title">Manufacturers</span>
                     </a>
                 </li>
-                {{--<li class="{{ $request->segment(2) == 'product_type' ? 'active' : '' }}">--}}
-                {{--<a href="{{ url('/admin/product_type') }}">--}}
-                {{--<i class="fa fa-wrench"></i>--}}
-                {{--<span class="title">Product Type</span>--}}
-                {{--</a>--}}
-                {{--</li>--}}
+                <li class="{{ $request->segment(2) == 'product_types' ? 'active' : '' }}">
+                    <a href="{{ route('admin.product_types.index') }}">
+                        <i class="fa fa-wrench"></i>
+                        <span class="title">Product Types</span>
+                    </a>
+                </li>
                 {{--<li class="{{ $request->segment(2) == 'categories' ? 'active' : '' }}">--}}
                 {{--<a href="{{ url('/admin/categories') }}">--}}
                 {{--<i class="fa fa-wrench"></i>--}}
