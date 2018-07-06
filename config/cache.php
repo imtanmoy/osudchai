@@ -72,6 +72,10 @@ return [
             'driver' => 'redis',
             'connection' => 'default',
         ],
+        'redis2' => [
+            'driver' => 'redis',
+            'connection' => 'cache',
+        ],
 
     ],
 
