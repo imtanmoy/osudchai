@@ -18,6 +18,9 @@ Route::resource('permissions', 'Admin\PermissionsController');
 // Role Routes
 Route::resource('roles', 'Admin\RolesController');
 
+// Manufacturer Routes
+Route::resource('manufacturers', 'Admin\ManufacturerController');
+
 
 
 

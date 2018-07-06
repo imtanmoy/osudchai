@@ -44,10 +44,13 @@ class RolesController extends Controller
      */
     public function store(RolesRequest $request)
     {
-        $role = Role::create($request->except('permission'));
-        $permissions = $request->input('permission') ? $request->input('permission') : [];
-        $role->givePermissionTo($permissions);
-
+        try {
+            $role = Role::create($request->except('permission'));
+            $permissions = $request->input('permission') ? $request->input('permission') : [];
+            $role->givePermissionTo($permissions);
+        } catch (\Exception $exception) {
+            return abort(500);
+        }
         return redirect()->route('admin.roles.index');
     }
 
@@ -92,13 +95,13 @@ class RolesController extends Controller
      */
     public function update(RolesRequest $request, $id)
     {
-        try{
+        try {
             $role = Role::findOrFail($id);
             $role->update($request->except('permission'));
             $permissions = $request->input('permission') ? $request->input('permission') : [];
             $role->syncPermissions($permissions);
-        }catch (\Exception $exception){
-            abort(500);
+        } catch (\Exception $exception) {
+            return abort(500);
         }
         return redirect()->route('admin.roles.index');
     }
@@ -112,11 +115,11 @@ class RolesController extends Controller
      */
     public function destroy(RolesRequest $request, $id)
     {
-        try{
+        try {
             $role = Role::findOrFail($id);
             $role->delete();
-        }catch (\Exception $exception){
-            abort(500);
+        } catch (\Exception $exception) {
+            return abort(500);
         }
         return redirect()->route('admin.roles.index');
     }

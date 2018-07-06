@@ -49,12 +49,12 @@
                         {{--</li>--}}
                     </ul>
                 </li>
-                {{--<li class="{{ $request->segment(2) == 'manufacturer' ? 'active' : '' }}">--}}
-                {{--<a href="{{ url('/admin/manufacturer') }}">--}}
-                {{--<i class="fa fa-wrench"></i>--}}
-                {{--<span class="title">Manufacturer</span>--}}
-                {{--</a>--}}
-                {{--</li>--}}
+                <li class="{{ $request->segment(2) == 'manufacturers' ? 'active' : '' }}">
+                    <a href="{{ route('admin.manufacturers.index') }}">
+                        <i class="fa fa-wrench"></i>
+                        <span class="title">Manufacturers</span>
+                    </a>
+                </li>
                 {{--<li class="{{ $request->segment(2) == 'product_type' ? 'active' : '' }}">--}}
                 {{--<a href="{{ url('/admin/product_type') }}">--}}
                 {{--<i class="fa fa-wrench"></i>--}}
