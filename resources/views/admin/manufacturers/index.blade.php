@@ -13,45 +13,14 @@
         </div>
 
         <div class="panel-body table-responsive">
-            <table class="table table-bordered table-striped {{ count($manufacturers) > 0 ? 'datatable' : '' }} dt-select">
+            <table class="table table-hover table-bordered table-striped datatable text-center" style="width:100%">
                 <thead>
-                    <tr>
-                        <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                        <th>Address</th>
-                        <th>&nbsp;</th>
-                    </tr>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Action</th>
+                </tr>
                 </thead>
-
-                <tbody>
-                    @if (count($manufacturers) > 0)
-                        @foreach ($manufacturers as $manufacturer)
-                            <tr data-entry-id="{{ $manufacturer->id }}">
-                                <td></td>
-                                <td>{{ $manufacturer->name }}</td>
-                                <td>{{ $manufacturer->phone }}</td>
-                                <td>{{ $manufacturer->email }}</td>
-                                <td>{{ $manufacturer->address }}</td>
-                                <td>
-                                    <a href="{{ route('admin.manufacturers.edit',[$manufacturer->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
-                                    {!! Form::open(array(
-                                        'style' => 'display: inline-block;',
-                                        'method' => 'DELETE',
-                                        'onsubmit' => "return confirm('".trans("global.app_are_you_sure")."');",
-                                        'route' => ['admin.manufacturers.destroy', $manufacturer->id])) !!}
-                                    {!! Form::submit(trans('global.app_delete'), array('class' => 'btn btn-xs btn-danger')) !!}
-                                    {!! Form::close() !!}
-                                </td>
-                            </tr>
-                        @endforeach
-                    @else
-                        <tr>
-                            <td colspan="6">@lang('global.app_no_entries_in_table')</td>
-                        </tr>
-                    @endif
-                </tbody>
             </table>
         </div>
     </div>
@@ -59,6 +28,58 @@
 
 @section('javascript')
     <script>
-        {{--window.route_mass_crud_entries_destroy = '{{ route('admin.roles.mass_destroy') }}';--}}
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        var table = undefined;
+        $(document).ready(function () {
+            table = $('.datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{!!route('admin.datatable.manufacturers')!!}',
+                columns: [
+                    {data: 'id', name: 'id'},
+                    {data: 'name', name: 'name'},
+                    {data: 'action', name: 'action'},
+                ]
+            });
+
+            $("table").on('click', '#deleteBtn', function () {
+//                e.preventDefault();
+
+                var id = $(this).data('id');
+                $.confirm({
+                    title: 'Confirm!',
+                    content: 'Delete Manufacturer',
+                    buttons: {
+                        confirm: function () {
+                            $.ajax({
+                                url: '/admin/manufacturers/' + id,
+                                type: 'DELETE',
+                                dataType: 'json',
+                                data: {method: '_DELETE', submit: true}
+                            }).always(function (data) {
+                                table.ajax.reload();
+                            }).done(function (data) {
+                                console.log(data);
+                                noty({
+                                    layout: 'bottomCenter',
+                                    theme: 'relax',
+                                    text: data.message,
+                                    type: 'success',
+                                    timeout: 2000
+                                });
+                            });
+                        },
+                        cancel: function () {
+
+                        }
+                    }
+                });
+
+            });
+        });
     </script>
 @endsection

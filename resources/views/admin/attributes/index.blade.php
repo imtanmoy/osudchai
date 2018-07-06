@@ -13,40 +13,6 @@
         </div>
 
         <div class="panel-body table-responsive">
-            {{--<table class="table table-bordered table-striped {{ count($attributes) > 0 ? 'datatable' : '' }} dt-select">--}}
-            {{--<thead>--}}
-            {{--<tr>--}}
-            {{--<th style="text-align:center;"><input type="checkbox" id="select-all" /></th>--}}
-            {{--<th>Name</th>--}}
-            {{--<th>&nbsp;</th>--}}
-            {{--</tr>--}}
-            {{--</thead>--}}
-
-            {{--<tbody>--}}
-            {{--@if (count($attributes) > 0)--}}
-            {{--@foreach ($attributes as $attribute)--}}
-            {{--<tr data-entry-id="{{ $attribute->id }}">--}}
-            {{--<td></td>--}}
-            {{--<td>{{ $attribute->name }}</td>--}}
-            {{--<td>--}}
-            {{--<a href="{{ route('admin.attributes.edit',[$attribute->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>--}}
-            {{--{!! Form::open(array(--}}
-            {{--'style' => 'display: inline-block;',--}}
-            {{--'method' => 'DELETE',--}}
-            {{--'onsubmit' => "return confirm('".trans("global.app_are_you_sure")."');",--}}
-            {{--'route' => ['admin.attributes.destroy', $attribute->id])) !!}--}}
-            {{--{!! Form::submit(trans('global.app_delete'), array('class' => 'btn btn-xs btn-danger')) !!}--}}
-            {{--{!! Form::close() !!}--}}
-            {{--</td>--}}
-            {{--</tr>--}}
-            {{--@endforeach--}}
-            {{--@else--}}
-            {{--<tr>--}}
-            {{--<td colspan="6">@lang('global.app_no_entries_in_table')</td>--}}
-            {{--</tr>--}}
-            {{--@endif--}}
-            {{--</tbody>--}}
-            {{--</table>--}}
             <table class="table table-hover table-bordered table-striped datatable text-center" style="width:100%">
                 <thead>
                 <tr>

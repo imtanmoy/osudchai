@@ -20,6 +20,8 @@ Route::resource('roles', 'Admin\RolesController');
 
 // Manufacturer Routes
 Route::resource('manufacturers', 'Admin\ManufacturerController');
+Route::get('datatable/manufacturers', 'Admin\ManufacturerController@dataTableManufacturer')->name('datatable.manufacturers');
+
 
 // ProductType Routes
 Route::resource('product_types', 'Admin\ProductTypeController');

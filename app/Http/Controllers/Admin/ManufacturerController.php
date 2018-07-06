@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ManufacturerRequest;
 use App\Models\Manufacturer;
+use DataTables;
 use Gate;
 use App\Http\Controllers\Controller;
+use Request;
 
 class ManufacturerController extends Controller
 {
@@ -109,7 +111,7 @@ class ManufacturerController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         if (!Gate::allows('users_manage')) {
             return abort(401);
@@ -117,10 +119,35 @@ class ManufacturerController extends Controller
 
         try {
             $manufacturer = Manufacturer::findOrFail($id);
-            $manufacturer->delete();
+            $status = $manufacturer->delete();
+            if ($status) {
+                if ($request->ajax()) {
+                    return response()->json(['status' => true, 'message' => 'Manufacturer Successfully Deleted']);
+                } else {
+                    return redirect()->route('admin.manufacturers.index');
+                }
+            }
         } catch (\Exception $exception) {
+            if ($request->ajax()) {
+                return response()->json(['status' => false, 'message' => $exception->getMessage()]);
+            }
             return redirect()->back()->withErrors($exception->getMessage());
         }
-        return redirect()->route('admin.manufacturers.index');
+    }
+
+    public function dataTableManufacturer()
+    {
+        try {
+            $manufacturers = Manufacturer::all();
+            return Datatables::of($manufacturers)
+                ->editColumn('name', function ($manufacturer) {
+                    return '<a href="' . route('admin.manufacturers.show', $manufacturer->id) . '">' . $manufacturer->name . '</a>';
+                })
+                ->addColumn('action', function ($manufacturer) {
+                    return '<a id="deleteBtn" data-id="' . $manufacturer->id . '"  class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
+                })->rawColumns(['action', 'name'])->make(true);
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 }
