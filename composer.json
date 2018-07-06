@@ -21,7 +21,8 @@
         "spatie/laravel-cors": "^1.2",
         "spatie/laravel-permission": "^2.12",
         "spatie/laravel-sluggable": "^2.1",
-        "tymon/jwt-auth": "1.0.0-rc.2"
+        "tymon/jwt-auth": "1.0.0-rc.2",
+        "yajra/laravel-datatables-oracle": "~8.0"
     },
     "require-dev": {
         "filp/whoops": "^2.0",
