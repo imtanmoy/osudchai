@@ -25,6 +25,8 @@ Route::get('datatable/manufacturers', 'Admin\ManufacturerController@dataTableMan
 
 // ProductType Routes
 Route::resource('product_types', 'Admin\ProductTypeController');
+Route::get('datatable/product_types', 'Admin\ProductTypeController@dataTable')->name('datatable.product_types');
+
 
 // Category Routes
 Route::resource('categories', 'Admin\CategoryController');

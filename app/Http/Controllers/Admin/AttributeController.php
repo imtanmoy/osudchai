@@ -8,7 +8,7 @@ use App\Repositories\Attribute\AttributeInterface;
 use App\Http\Controllers\Controller;
 use DataTables;
 use Gate;
-use Request;
+use Illuminate\Http\Request;
 
 class AttributeController extends Controller
 {

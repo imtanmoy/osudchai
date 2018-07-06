@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ProductTypeRequest;
+use App\Models\ProductType;
 use App\Repositories\ProductType\ProductTypeInterface;
+use DataTables;
 use Gate;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class ProductTypeController extends Controller
 {
@@ -123,14 +126,43 @@ class ProductTypeController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
 
-        $this->productType->delete($id);
+        try {
+            $product_type = ProductType::findOrFail($id);
+            $status = $product_type->delete();
+            if ($status) {
+                if ($request->ajax()) {
+                    return response()->json(['status' => true, 'message' => 'Product Type Successfully Deleted']);
+                } else {
+                    return redirect()->route('admin.product_types.index');
+                }
+            }
+        } catch (\Exception $exception) {
+            if ($request->ajax()) {
+                return response()->json(['status' => false, 'message' => $exception->getMessage()]);
+            }
+            return redirect()->back()->withErrors($exception->getMessage());
+        }
+    }
 
-        return redirect()->route('admin.product_types.index');
+    public function dataTable()
+    {
+        try {
+            $product_types = ProductType::all();
+            return Datatables::of($product_types)
+                ->editColumn('name', function ($product_type) {
+                    return '<a href="' . route('admin.product_types.show', $product_type->id) . '">' . $product_type->name . '</a>';
+                })
+                ->addColumn('action', function ($product_type) {
+                    return '<a id="deleteBtn" data-id="' . $product_type->id . '"  class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
+                })->rawColumns(['action', 'name'])->make(true);
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 }

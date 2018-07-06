@@ -7,7 +7,7 @@ use App\Models\Manufacturer;
 use DataTables;
 use Gate;
 use App\Http\Controllers\Controller;
-use Request;
+use Illuminate\Http\Request;
 
 class ManufacturerController extends Controller
 {
