@@ -90,90 +90,26 @@ class ProductRepository implements ProductInterface
     {
 
         try {
-            if ($attributes) {
-
-//                $category = Category::findOrFail($attributes['category_id']);
-
-//                if ($attributes['available'] == null) {
-//                    $attributes['available'] = 0;
-//                } else {
-//                    $attributes['available'] = 1;
-//                }
-
+            if (!empty($attributes)) {
 
                 $product = $this->product->create($attributes);
 
-                if (isset($attributes['strength']) && isset($attributes['generic_name'])) {
-
-                    $strength = Strength::firstOrCreate(['strength' => $attributes['strength']]);
-
-                    if (!empty($strength->id)) {
-                        $product->strengths()->attach($strength->id);
-                    }
-
+                if (isset($attributes['generic_name'])) {
                     $genericName = GenericName::firstOrCreate(['name' => $attributes['generic_name']]);
-
                     if (!empty($genericName->id)) {
-                        $product->generic_names()->attach($genericName->id);
+                        $product->generic_name()->associate($genericName);
+                        $product->save();
                     }
                 }
 
-                if (isset($attributes['available_qty'])) {
-                    $available_qty = $attributes['available_qty'] ?: 1;
-                    $minimum_order_qty = $attributes['minimum_order_qty'] ?: 1;
-                    $stock_status = $attributes['stock_status'] ?: 'inStock';
-
-                    if (isset($attributes['subtract_stock']) && $attributes['subtract_stock'] != null) {
-                        $attributes['subtract_stock'] = 1;
-                    } else {
-                        $attributes['subtract_stock'] = 0;
-                    }
-                    $subtract_stock = $attributes['subtract_stock'] ?: 0;
-
-                    if (!empty($available_qty)) {
-                        $product_stock = new ProductStock(['available_qty' => $available_qty, 'minimum_order_qty' => $minimum_order_qty, 'stock_status' => $stock_status, 'subtract_stock' => $subtract_stock]);
-                        $product->stock()->save($product_stock);
+                if (isset($attributes['strength'])) {
+                    $strength = Strength::firstOrCreate(['value' => $attributes['strength']]);
+                    if (!empty($strength->id)) {
+                        $product->strength()->associate($strength);
+                        $product->save();
                     }
                 }
-
-                if (isset($attributes['attribute_name']) && isset($attributes['attribute_value'])) {
-
-                    $values = $attributes['attribute_value'];
-                    $names = $attributes['attribute_name'];
-                    foreach ($names as $name) {
-                        if (!empty($name)) {
-                            $key = array_search($name, $names);
-                            $new_attribute = Attribute::firstOrCreate(['name' => $name]);
-                            $new_attribute_value = AttributeValue::create(['value' => $values[$key], 'attribute_id' => $new_attribute->id]);
-                            ProductAttribute::create(['product_id' => $product->id, 'attribute_value_id' => $new_attribute_value->id]);
-                        }
-                    }
-                }
-
-                try {
-                    if (isset($attributes['featuredImg'])) {
-                        $featuredImage = $attributes['featuredImg'];
-                        $fileName = trim(time() . $featuredImage->getClientOriginalName());
-                        Storage::disk('public')->put($fileName, File::get($featuredImage));
-                        $url = Storage::disk('public')->url($fileName);
-                        ProductImages::create(['name' => $fileName, 'path' => $url, 'featured' => 1, 'product_id' => $product->id]);
-                    }
-
-                    if (!empty($attributes['images'])):
-                        $images = $attributes['images'];
-
-                        foreach ($images as $img):
-                            $imgName = trim(time() . $img->getClientOriginalName());
-                            Storage::disk('public')->put($imgName, File::get($img));
-                            $iurl = Storage::disk('public')->url($imgName);
-                            ProductImages::create(['name' => $imgName, 'path' => $iurl, 'featured' => 0, 'product_id' => $product->id]);
-                        endforeach;
-                    endif;
-
-                } catch (FileNotFoundException $e) {
-
-                }
-
+                
                 return response()->json(['message' => 'Product Created'], 200);
             } else {
                 return response()->json(['message' => 'Could not get the data'], 400);

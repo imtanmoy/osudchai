@@ -144,7 +144,7 @@
                 })
                     .done(function (data) {
                         console.log(data);
-                        window.location.href = '{{route('admin.products.index')}}';
+                        {{--window.location.href = '{{route('admin.products.index')}}';--}}
                     });
 
                 e.preventDefault();

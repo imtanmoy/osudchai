@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\ProductType;
@@ -53,12 +54,15 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param ProductRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
+        if (!Gate::allows('users_manage')) {
+            return abort(401);
+        }
+        return $this->product->create($request->all());
     }
 
     /**
