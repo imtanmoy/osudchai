@@ -33,6 +33,7 @@ Route::resource('categories', 'Admin\CategoryController');
 Route::get('datatable/categories', 'Admin\CategoryController@dataTableCategory')->name('datatable.categories');
 
 // Attribute Routes
+Route::get('attributes/suggest', 'Admin\AttributeController@autoComplete')->name('attributes.suggest');
 Route::resource('attributes', 'Admin\AttributeController');
 Route::get('datatable/attributes', 'Admin\AttributeController@data_table')->name('datatable.attributes');
 

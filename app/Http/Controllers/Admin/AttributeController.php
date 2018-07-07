@@ -166,4 +166,10 @@ class AttributeController extends Controller
             return null;
         }
     }
+
+    public function autoComplete(Request $request)
+    {
+        $data = Attribute::select("name")->where("name", "LIKE", "%{$request->input('query')}%")->get();
+        return response()->json($data);
+    }
 }

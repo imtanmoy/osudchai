@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Attribute extends Model
 {
-    use Cachable;
+//    use Cachable;
 
     protected $fillable = ['name'];
 }

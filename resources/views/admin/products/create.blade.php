@@ -56,13 +56,13 @@
             });
 
 
-            var $strengthDiv = $('#strengthDiv');
             var $addAttribute = $('#addAttribute');
             var $attributeTable = $('#attributeTable');
 
 
             var genericNameAutoComplete = "{{ route('admin.generic_names.suggest') }}";
             var strengthAutoComplete = "{{ route('admin.strengths.suggest') }}";
+            var attributeNameAutocomplete = "{{ route('admin.attributes.suggest') }}";
 
 
             $('.select2').select2({
@@ -83,8 +83,8 @@
                 e.preventDefault();
                 $(
                     '<tr>\n' +
-                    '<td><input class="form-control" name="attribute_name[' + rowCount + ']" placeholder="Attribute Name" id="vvvv"></td>\n' +
-                    '<td><input class="form-control" name="attribute_value[' + rowCount + ']" placeholder="Attribute Value"></td>\n' +
+                    '<td><input class="form-control typeahead" name="attribute_name[' + rowCount + ']" placeholder="Attribute Name" id="attribute_name"></td>\n' +
+                    '<td><input class="form-control" name="attribute_value[' + rowCount + ']" placeholder="Attribute Value" id="attribute_value"></td>\n' +
                     '<td class="text-center"><input data-id="' + rowCount + '" type="button" id="rowDel" class="btn btn-danger btn-sm" value="Delete"></td>\n' +
                     '</tr>'
                 ).appendTo($attributeTable);
@@ -99,21 +99,27 @@
 
             $('input#generic_name').typeahead({
                 source: function (query, process) {
-                    // console.log('aaaa');
                     return $.get(genericNameAutoComplete, {query: query}, function (data) {
-                        // console.log(data);
                         return process(data);
                     });
                 }
             });
             $('input#strength').typeahead({
                 source: function (query, process) {
-                    // console.log('aaaa');
                     return $.get(strengthAutoComplete, {query: query}, function (data) {
-                        // console.log(data);
                         return process(data);
                     });
                 }
+            });
+
+            $(document).on('input change keyup paste', '#attribute_name', function () {
+                $(this).typeahead({
+                    source: function (query, process) {
+                        return $.get(attributeNameAutocomplete, {query: query}, function (data) {
+                            return process(data);
+                        });
+                    }
+                });
             });
 
             $('form').submit(function (e) {
@@ -128,7 +134,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: '{{url('/admin/products')}}',
+                    url: '{{route('admin.products.store')}}',
                     dataType: 'json',
                     processData: false,
                     contentType: false,
