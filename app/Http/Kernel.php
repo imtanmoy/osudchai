@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\IsVerified;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -64,5 +65,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'jwt.auth' => 'Tymon\JWTAuth\Middleware\GetUserFromToken',
         'jwt.refresh' => 'Tymon\JWTAuth\Middleware\RefreshToken',
+        'isVerified' => IsVerified::class,
     ];
 }
