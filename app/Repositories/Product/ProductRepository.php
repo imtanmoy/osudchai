@@ -128,6 +128,20 @@ class ProductRepository implements ProductInterface
                     }
                 }
 
+                if (isset($attributes['attribute_name']) && isset($attributes['attribute_value'])) {
+
+                    $values = $attributes['attribute_value'];
+                    $names = $attributes['attribute_name'];
+                    foreach ($names as $name) {
+                        if (!empty($name)) {
+                            $key = array_search($name, $names);
+                            $attribute = Attribute::firstOrCreate(['name' => $name]);
+                            $product_attribute = new ProductAttribute(['value' => $values[$key], 'attribute_id' => $attribute->id]);
+                            $product->attributes()->save($product_attribute);
+                        }
+                    }
+                }
+
                 return response()->json(['message' => 'Product Created'], 200);
             } else {
                 return response()->json(['message' => 'Could not get the data'], 400);

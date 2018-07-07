@@ -86,6 +86,7 @@ class Product extends Model
     {
         return $this->belongsTo(GenericName::class, 'generic_name_id', 'id');
     }
+
     public function strength()
     {
         return $this->belongsTo(Strength::class, 'strength_id', 'id');
@@ -94,5 +95,10 @@ class Product extends Model
     public function stock()
     {
         return $this->hasOne(ProductStock::class, 'product_id', 'id');
+    }
+
+    public function attributes()
+    {
+        return $this->hasMany(ProductAttribute::class, 'product_id', 'id');
     }
 }
