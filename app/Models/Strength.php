@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Strength extends Model
 {
-    use Cachable;
+//    use Cachable;
 
     protected $fillable = ['value'];
     protected $hidden = ['created_at', 'updated_at'];
