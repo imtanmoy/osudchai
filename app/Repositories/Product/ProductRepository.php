@@ -109,7 +109,25 @@ class ProductRepository implements ProductInterface
                         $product->save();
                     }
                 }
-                
+
+                if (isset($attributes['available_qty'])) {
+                    $available_qty = $attributes['available_qty'] ?: 1;
+                    $minimum_order_qty = $attributes['minimum_order_qty'] ?: 1;
+                    $stock_status = $attributes['stock_status'] ?: 'inStock';
+
+                    if (isset($attributes['subtract_stock']) && $attributes['subtract_stock'] != null) {
+                        $attributes['subtract_stock'] = 1;
+                    } else {
+                        $attributes['subtract_stock'] = 0;
+                    }
+                    $subtract_stock = $attributes['subtract_stock'] ?: 0;
+
+                    if (!empty($available_qty)) {
+                        $product_stock = new ProductStock(['available_qty' => $available_qty, 'minimum_order_qty' => $minimum_order_qty, 'stock_status' => $stock_status, 'subtract_stock' => $subtract_stock]);
+                        $product->stock()->save($product_stock);
+                    }
+                }
+
                 return response()->json(['message' => 'Product Created'], 200);
             } else {
                 return response()->json(['message' => 'Could not get the data'], 400);
