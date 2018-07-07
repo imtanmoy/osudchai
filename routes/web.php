@@ -30,5 +30,7 @@ Route::group(['prefix' => 'admin'], function () {
 });
 
 Auth::routes();
+Route::get('auth/verify/{token}', 'Auth\VerificationController@verifyUser');
+
 
 Route::get('/home', 'HomeController@index')->name('home');
