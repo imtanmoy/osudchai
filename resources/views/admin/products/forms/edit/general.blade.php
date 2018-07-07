@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-xs-12 form-group">
         {!! Form::label('name', 'Name*', []) !!}
-        {!! Form::text('name', '', ['class' => 'form-control', 'placeholder' => 'Product Name', 'required' => '']) !!}
+        {!! Form::text('name', old('name'), ['class' => 'form-control', 'placeholder' => 'Product Name', 'required' => '']) !!}
         <p class="help-block"></p>
         @if($errors->has('name'))
             <p class="help-block">
@@ -30,25 +30,21 @@
         @endif
     </div>
     <div class="col-xs-12 form-group">
-        <label for="manufactureSelect">Manufacturer</label>
-        <select id="manufactureSelect" required name="manufacturer_id"
-                class="form-control select2 select2-hidden-accessible"
-                style="width: 100%;" tabindex="-1" aria-hidden="true">
-            <option></option>
-            @foreach($manufacturers as $manufacturer)
-                <option value="{{$manufacturer->id}}">{{$manufacturer->name}}</option>
-            @endforeach
-        </select>
+        {!! Form::label('manufacturer_id', 'Manufacturer*', []) !!}
+        {{ Form::select('manufacturer_id', $manufacturers,old('manufacturer_id'), ['id'=>'manufacturer_id','required' => '', 'class' => 'form-control select2', 'style'=>'width: 100%']) }}
+        @if($errors->has('manufacturer_id'))
+            <span class="help-block">
+                {{ $errors->first('manufacturer_id') }}
+            </span>
+        @endif
     </div>
     <div class="col-xs-12 form-group">
-        <label for="categorySelect">Category</label>
-        <select id="categorySelect" name="category_id" required
-                class="form-control select2 select2-hidden-accessible"
-                style="width: 100%;" tabindex="-1" aria-hidden="true">
-            <option></option>
-            @foreach($categories as $category)
-                <option value="{{$category->id}}">{{$category->name}}</option>
-            @endforeach
-        </select>
+        {!! Form::label('category_id', 'Category*', []) !!}
+        {{ Form::select('category_id', $categories,old('category_id'), ['id'=>'category_id','required' => '', 'class' => 'form-control select2', 'style'=>'width: 100%']) }}
+        @if($errors->has('category_id'))
+            <span class="help-block">
+                {{ $errors->first('category_id') }}
+            </span>
+        @endif
     </div>
 </div>

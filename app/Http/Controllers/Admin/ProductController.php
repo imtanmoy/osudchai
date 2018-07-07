@@ -86,7 +86,15 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        if (!Gate::allows('users_manage')) {
+            return abort(401);
+        }
+        $manufacturers = Manufacturer::pluck('name', 'id');
+        $categories = Category::pluck('name', 'id');
+        $product_types = ProductType::pluck('name', 'id');
+        $product = Product::findOrFail($id);
+
+        return view('admin.products.edit', compact('product', 'manufacturers', 'categories', 'product_types'));
     }
 
     /**

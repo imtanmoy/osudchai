@@ -1,18 +1,16 @@
 <div class="row">
     <div class="col-xs-12 form-group">
-        <label for="productTypeSelect">Product Type</label>
-        <select id="productTypeSelect" name="product_type_id" required
-                class="form-control select2 select2-hidden-accessible"
-                style="width: 100%;" tabindex="-1" aria-hidden="true">
-            <option></option>
-            @foreach($product_types as $product_type)
-                <option value="{{$product_type->id}}">{{$product_type->name}}</option>
-            @endforeach
-        </select>
+        {!! Form::label('product_type_id', 'Product Type*', []) !!}
+        {{ Form::select('product_type_id', $product_types,old('product_type_id'), ['id'=>'product_type_id','required' => '', 'class' => 'form-control select2', 'style'=>'width: 100%']) }}
+        @if($errors->has('product_type_id'))
+            <span class="help-block">
+                {{ $errors->first('product_type_id') }}
+            </span>
+        @endif
     </div>
     <div id="strengthDiv" class="col-xs-12 form-group">
         {!! Form::label('strength', 'Strength', []) !!}
-        {!! Form::text('strength', old('strength'), ['class' => 'form-control typeahead', 'placeholder' => 'Product Strength']) !!}
+        {!! Form::text('strength', $product->strength->value, ['class' => 'form-control typeahead', 'placeholder' => 'Product Strength']) !!}
         <p class="help-block"></p>
         @if($errors->has('strength'))
             <p class="help-block">
@@ -22,7 +20,7 @@
     </div>
     <div id="genericNameDiv" class="col-xs-12 form-group">
         {!! Form::label('generic_name', 'Generic Name', []) !!}
-        {!! Form::text('generic_name', old('generic_name'), ['class' => 'form-control typeahead ', 'placeholder' => 'Product Generic Name']) !!}
+        {!! Form::text('generic_name', $product->generic_name->name, ['class' => 'form-control typeahead ', 'placeholder' => 'Product Generic Name']) !!}
         <p class="help-block"></p>
         @if($errors->has('generic_name'))
             <p class="help-block">
