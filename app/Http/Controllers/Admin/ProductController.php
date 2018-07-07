@@ -11,6 +11,7 @@ use App\Repositories\Product\ProductInterface;
 use Gate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 use Spatie\Activitylog\Models\Activity;
 
 class ProductController extends Controller
@@ -100,13 +101,13 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param ProductRequest $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
-        //
+        return $this->product->update($id, $request->all());
     }
 
     /**

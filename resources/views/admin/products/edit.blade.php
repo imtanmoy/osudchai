@@ -55,7 +55,6 @@
             });
 
 
-            var $strengthDiv = $('#strengthDiv');
             var $addAttribute = $('#addAttribute');
             var $attributeTable = $('#attributeTable');
 
@@ -99,9 +98,7 @@
             });
             $('input#strength').typeahead({
                 source: function (query, process) {
-                    // console.log('aaaa');
                     return $.get(strengthAutoComplete, {query: query}, function (data) {
-                        // console.log(data);
                         return process(data);
                     });
                 }

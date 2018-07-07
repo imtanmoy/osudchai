@@ -177,62 +177,55 @@ class ProductRepository implements ProductInterface
     {
         try {
             $product = Product::findOrFail($id);
-
-//            return response()->json([$product->name, $attributes['name']]);
             $product->name = $attributes['name'];
             $product->sku = $attributes['sku'];
             $product->description = $attributes['description'];
             $product->manufacturer_id = $attributes['manufacturer_id'];
             $product->category_id = $attributes['category_id'];
             $product->product_type_id = $attributes['product_type_id'];
+            $product->price = $attributes['price'];
 
+            if (isset($attributes['generic_name']) && !empty($attributes['generic_name'])) {
+                $genericName = GenericName::firstOrCreate(['name' => $attributes['generic_name']]);
+                if (!empty($genericName->id) && $product->generic_name_id != $genericName->id) {
+                    $product->generic_name()->dissociate();
+                    $product->generic_name()->associate($genericName);
+                    $product->save();
+                }
+            }
 
-//            return response()->json([$product, $attributes]);
+            if (isset($attributes['strength']) && !empty($attributes['strength'])) {
+                $strength = Strength::firstOrCreate(['value' => $attributes['strength']]);
+                if (!empty($strength->id) && $product->strength_id != $strength->id) {
+                    $product->strength()->dissociate();
+                    $product->strength()->associate($strength);
+                    $product->save();
+                }
+            }
+
+            if (isset($attributes['available_qty'])) {
+                $available_qty = $attributes['available_qty'] ?: 1;
+                $minimum_order_qty = $attributes['minimum_order_qty'] ?: 1;
+                $stock_status = $attributes['stock_status'] ?: 'inStock';
+
+                if (isset($attributes['subtract_stock']) && $attributes['subtract_stock'] != null) {
+                    $attributes['subtract_stock'] = 1;
+                } else {
+                    $attributes['subtract_stock'] = 0;
+                }
+                $subtract_stock = $attributes['subtract_stock'] ?: 0;
+
+                $product->stock()->update([
+                    'available_qty' => $available_qty,
+                    'minimum_order_qty' => $minimum_order_qty,
+                    'stock_status' => $stock_status,
+                    'subtract_stock' => $subtract_stock,
+                ]);
+            }
+
 
             $success = $product->save();
 
-//            return response()->json([$product, $attributes, $success]);
-
-
-            if (isset($attributes['strength'])) {
-
-                $strength = Strength::firstOrCreate(['strength' => $attributes['strength']]);
-
-                if (!empty($strength->id)) {
-                    DB::table('product_strengths')->where('product_id', $product->id)->update(['strength_id' => $strength->id]);
-                }
-            }
-
-            if (isset($attributes['generic_name'])) {
-
-                $genericName = GenericName::firstOrCreate(['name' => $attributes['generic_name']]);
-
-                if (!empty($genericName->id)) {
-                    DB::table('product_generic_names')->where('product_id', $product->id)->update(['generic_name_id' => $genericName->id]);
-                }
-            }
-
-//            if (isset($attributes['available_qty'])) {
-//
-//            }
-//
-//            if (isset($attributes['stock_status'])) {
-//
-//            }
-//
-//            if (isset($attributes['minimum_order_qty'])) {
-//
-//            }
-
-//            if (isset($attributes['price'])) {
-//                $price = $attributes['price'];
-//                if (!empty($price)) {
-//                    $current = Carbon::now();
-//                    $future = $current->addMonth(1);
-//                    $product_price = ['base_price' => $price, 'is_active' => 1, 'exp_date' => $future->toDateTimeString()];
-//                    $product->price()->update($product_price);
-//                }
-//            }
 
             return response()->json(['message' => 'Product Updated'], 200);
 
