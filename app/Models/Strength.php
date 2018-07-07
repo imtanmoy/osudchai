@@ -13,8 +13,8 @@ class Strength extends Model
     protected $hidden = ['created_at', 'updated_at'];
 
 
-//    public function products()
-//    {
-//        return $this->belongsToMany(Product::class, 'product_strengths', 'strength_id', 'product_id');
-//    }
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'strength_id', 'id');
+    }
 }

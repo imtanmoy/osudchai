@@ -12,8 +12,8 @@ class GenericName extends Model
     protected $fillable = ['name'];
     protected $hidden = ['created_at', 'updated_at'];
 
-//    public function products()
-//    {
-//        return $this->belongsToMany(Product::class, 'product_generic_names', 'generic_name_id', 'product_id');
-//    }
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'generic_name_id', 'id');
+    }
 }

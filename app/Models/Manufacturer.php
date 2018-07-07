@@ -21,8 +21,8 @@ class Manufacturer extends Model
 
     protected static $logAttributes = ['name'];
 
-//    public function products()
-//    {
-//        return $this->hasMany(Product::class, 'manufacturer_id');
-//    }
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'manufacturer_id', 'id');
+    }
 }

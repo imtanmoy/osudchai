@@ -42,6 +42,9 @@ Route::get('strengths/suggest', 'Admin\StrengthController@autoComplete')->name('
 // GenericName Routes
 Route::get('generic_names/suggest', 'Admin\GenericNameController@autoComplete')->name('generic_names.suggest');
 
+// Product Routes
+Route::resource('products', 'Admin\ProductController');
+
 
 
 
