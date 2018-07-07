@@ -6,6 +6,7 @@ use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\Product;
+use App\Models\ProductAttribute;
 use App\Models\ProductType;
 use App\Repositories\Product\ProductInterface;
 use Gate;
@@ -165,6 +166,20 @@ class ProductController extends Controller
             return redirect()->route('admin.products.index');
         } catch (\Exception $exception) {
             return redirect()->back()->withErrors($exception->getMessage());
+        }
+    }
+
+    public function deleteAttributes($id, $aid)
+    {
+        if (!Gate::allows('users_manage')) {
+            return abort(401);
+        }
+        try {
+            $product_attribute = ProductAttribute::findOrFail($aid);
+            $product_attribute->delete();
+            return response()->json(['status' => true, 'message' => 'Attribute Successfully Deleted']);
+        } catch (\Exception $exception) {
+            return response()->json(['status' => false, 'message' => $exception->getMessage()]);
         }
     }
 }

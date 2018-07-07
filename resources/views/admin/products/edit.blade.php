@@ -54,6 +54,8 @@
                 }
             });
 
+            var pid = "{{$product->id}}";
+
 
             var $addAttribute = $('#addAttribute');
             var $attributeTable = $('#attributeTable');
@@ -75,8 +77,8 @@
                 e.preventDefault();
                 $(
                     '<tr>\n' +
-                    '<td><input class="form-control" name="attribute_name[' + rowCount + ']" placeholder="Attribute Name" id="vvvv"></td>\n' +
-                    '<td><input class="form-control" name="attribute_value[' + rowCount + ']" placeholder="Attribute Value"></td>\n' +
+                    '<td><input class="form-control typeahead" name="attribute_name[' + rowCount + ']" placeholder="Attribute Name" id="attribute_name"></td>\n' +
+                    '<td><input class="form-control" name="attribute_value[' + rowCount + ']" placeholder="Attribute Value" id="attribute_value"></td>\n' +
                     '<td class="text-center"><input data-id="' + rowCount + '" type="button" id="rowDel" class="btn btn-danger btn-sm" value="Delete"></td>\n' +
                     '</tr>'
                 ).appendTo($attributeTable);
@@ -86,6 +88,38 @@
 //                console.log(e);
 //                console.log($(this).attr("data-id"));
                 $(this).parents("td").parent('tr').remove();
+            });
+
+            $attributeTable.on('click', "#oldrowDel", function () {
+                console.log($(this).attr("data-id"));
+                var aid = $(this).attr("data-id");
+                $.confirm({
+                    title: 'Confirm!',
+                    content: 'Delete Attribute',
+                    buttons: {
+                        confirm: function () {
+                            $.ajax({
+                                url: '/admin/products/' + pid + '/attributes/' + aid,
+                                type: 'DELETE',
+                                dataType: 'json',
+                                data: {method: '_DELETE', submit: true}
+                            }).always(function (data) {
+                            }).done(function (data) {
+                                console.log(data);
+                                noty({
+                                    layout: 'bottomCenter',
+                                    theme: 'relax',
+                                    text: data.message,
+                                    type: 'success',
+                                    timeout: 2000
+                                });
+                            });
+                        },
+                        cancel: function () {
+
+                        }
+                    }
+                });
             });
 
 
@@ -102,6 +136,16 @@
                         return process(data);
                     });
                 }
+            });
+
+            $(document).on('input change keyup paste', '#attribute_name', function () {
+                $(this).typeahead({
+                    source: function (query, process) {
+                        return $.get(attributeNameAutocomplete, {query: query}, function (data) {
+                            return process(data);
+                        });
+                    }
+                });
             });
 
             $('form').submit(function (e) {
@@ -126,7 +170,7 @@
                 })
                     .done(function (data) {
                         console.log(data);
-                        {{--window.location.href = '{{route('admin.products.index')}}';--}}
+                        window.location.href = '{{route('admin.products.index')}}';
                     }).fail(function () {
                     alert("error");
                 });
