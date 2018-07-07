@@ -3,7 +3,7 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2018-07-06 19:37:25.
+    * Generated on 2018-07-07 03:33:37.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
@@ -78,6 +78,7 @@ namespace PHPSTORM_META {
         'command.ide-helper.meta' => \Barryvdh\LaravelIdeHelper\Console\MetaCommand::class,
         'command.ide-helper.eloquent' => \Barryvdh\LaravelIdeHelper\Console\EloquentCommand::class,
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
+        'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -255,6 +256,7 @@ namespace PHPSTORM_META {
         'command.ide-helper.meta' => \Barryvdh\LaravelIdeHelper\Console\MetaCommand::class,
         'command.ide-helper.eloquent' => \Barryvdh\LaravelIdeHelper\Console\EloquentCommand::class,
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
+        'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -432,6 +434,7 @@ namespace PHPSTORM_META {
         'command.ide-helper.meta' => \Barryvdh\LaravelIdeHelper\Console\MetaCommand::class,
         'command.ide-helper.eloquent' => \Barryvdh\LaravelIdeHelper\Console\EloquentCommand::class,
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
+        'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -609,6 +612,7 @@ namespace PHPSTORM_META {
         'command.ide-helper.meta' => \Barryvdh\LaravelIdeHelper\Console\MetaCommand::class,
         'command.ide-helper.eloquent' => \Barryvdh\LaravelIdeHelper\Console\EloquentCommand::class,
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
+        'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -786,6 +790,7 @@ namespace PHPSTORM_META {
         'command.ide-helper.meta' => \Barryvdh\LaravelIdeHelper\Console\MetaCommand::class,
         'command.ide-helper.eloquent' => \Barryvdh\LaravelIdeHelper\Console\EloquentCommand::class,
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
+        'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -963,6 +968,7 @@ namespace PHPSTORM_META {
         'command.ide-helper.meta' => \Barryvdh\LaravelIdeHelper\Console\MetaCommand::class,
         'command.ide-helper.eloquent' => \Barryvdh\LaravelIdeHelper\Console\EloquentCommand::class,
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
+        'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -1140,6 +1146,7 @@ namespace PHPSTORM_META {
         'command.ide-helper.meta' => \Barryvdh\LaravelIdeHelper\Console\MetaCommand::class,
         'command.ide-helper.eloquent' => \Barryvdh\LaravelIdeHelper\Console\EloquentCommand::class,
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
+        'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
