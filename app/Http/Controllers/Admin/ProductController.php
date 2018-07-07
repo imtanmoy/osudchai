@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Manufacturer;
+use App\Models\Product;
 use App\Models\ProductType;
 use App\Repositories\Product\ProductInterface;
 use Gate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Spatie\Activitylog\Models\Activity;
 
 class ProductController extends Controller
 {
@@ -108,5 +110,52 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function showAdjust($id)
+    {
+        if (!Gate::allows('users_manage')) {
+            return abort(401);
+        }
+
+        $product = Product::findOrFail($id);
+
+        return view('admin.products.adjust', compact('product'));
+    }
+
+    public function updateAdjust(Request $request, $id)
+    {
+        if (!Gate::allows('users_manage')) {
+            return abort(401);
+        }
+
+        try {
+            $product = Product::findOrFail($id);
+
+            if (isset($request->price)) {
+                $product->price = $request->price;
+                $product->save();
+            }
+
+            if (isset($request->available_qty)) {
+                $product->stock->update([
+                    'available_qty' => $request->available_qty,
+                ]);
+            }
+
+            if (isset($request->stock_status)) {
+                $product->stock->update([
+                    'stock_status' => $request->stock_status,
+                ]);
+            }
+
+            $lastActivity = Activity::all()->last();
+
+            flash($lastActivity->description)->success();
+
+            return redirect()->route('admin.products.index');
+        } catch (\Exception $exception) {
+            return redirect()->back()->withErrors($exception->getMessage());
+        }
     }
 }

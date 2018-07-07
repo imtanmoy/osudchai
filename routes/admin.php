@@ -45,6 +45,8 @@ Route::get('generic_names/suggest', 'Admin\GenericNameController@autoComplete')-
 
 // Product Routes
 Route::resource('products', 'Admin\ProductController');
+Route::get('products/{id}/adjust', 'Admin\ProductController@showAdjust')->name('products.adjust');
+Route::post('products/{id}/adjust', 'Admin\ProductController@updateAdjust')->name('products.updateAdjust');
 
 
 
