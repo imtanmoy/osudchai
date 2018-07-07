@@ -3,7 +3,7 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2018-07-07 14:14:38.
+    * Generated on 2018-07-07 15:55:18.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
@@ -80,6 +80,7 @@ namespace PHPSTORM_META {
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
         'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'App\Repositories\Product\ProductInterface' => \App\Repositories\Product\ProductRepository::class,
+        'user.verification' => \App\Services\UserVerification::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -259,6 +260,7 @@ namespace PHPSTORM_META {
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
         'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'App\Repositories\Product\ProductInterface' => \App\Repositories\Product\ProductRepository::class,
+        'user.verification' => \App\Services\UserVerification::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -438,6 +440,7 @@ namespace PHPSTORM_META {
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
         'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'App\Repositories\Product\ProductInterface' => \App\Repositories\Product\ProductRepository::class,
+        'user.verification' => \App\Services\UserVerification::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -617,6 +620,7 @@ namespace PHPSTORM_META {
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
         'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'App\Repositories\Product\ProductInterface' => \App\Repositories\Product\ProductRepository::class,
+        'user.verification' => \App\Services\UserVerification::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -796,6 +800,7 @@ namespace PHPSTORM_META {
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
         'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'App\Repositories\Product\ProductInterface' => \App\Repositories\Product\ProductRepository::class,
+        'user.verification' => \App\Services\UserVerification::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -975,6 +980,7 @@ namespace PHPSTORM_META {
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
         'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'App\Repositories\Product\ProductInterface' => \App\Repositories\Product\ProductRepository::class,
+        'user.verification' => \App\Services\UserVerification::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -1154,6 +1160,7 @@ namespace PHPSTORM_META {
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
         'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'App\Repositories\Product\ProductInterface' => \App\Repositories\Product\ProductRepository::class,
+        'user.verification' => \App\Services\UserVerification::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,

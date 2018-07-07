@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.6.26 on 2018-07-07 14:14:35.
+ * Generated for Laravel 5.6.26 on 2018-07-07 15:55:14.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -15042,6 +15042,27 @@ namespace Barryvdh\Debugbar {
  
 }
 
+namespace App\Facades { 
+
+    class UserVerification {
+        
+        /**
+         * 
+         *
+         * @param \App\Services\User $user
+         * @return mixed 
+         * @throws UserHasNoEmailException
+         * @static 
+         */ 
+        public static function generate($user)
+        {
+            return \App\Services\UserVerification::generate($user);
+        }
+         
+    }
+ 
+}
+
 namespace Laracasts\Flash { 
 
     class Flash {
@@ -17762,6 +17783,8 @@ namespace  {
     class DataTables extends \Yajra\DataTables\Facades\DataTables {}
 
     class Debugbar extends \Barryvdh\Debugbar\Facade {}
+
+    class UserVerification extends \App\Facades\UserVerification {}
 
     class Flash extends \Laracasts\Flash\Flash {}
 
