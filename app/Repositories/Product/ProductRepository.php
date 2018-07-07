@@ -142,6 +142,25 @@ class ProductRepository implements ProductInterface
                     }
                 }
 
+                if (isset($attributes['featuredImg'])) {
+                    $featuredImage = $attributes['featuredImg'];
+                    $fileName = trim(time() . $featuredImage->getClientOriginalName());
+                    Storage::disk('public')->put($fileName, File::get($featuredImage));
+                    $url = Storage::disk('public')->url($fileName);
+                    ProductImages::create(['name' => $fileName, 'path' => $url, 'featured' => 1, 'product_id' => $product->id]);
+                }
+
+                if (!empty($attributes['images'])) {
+                    $images = $attributes['images'];
+                    foreach ($images as $img) {
+                        $imgName = trim(time() . $img->getClientOriginalName());
+                        Storage::disk('public')->put($imgName, File::get($img));
+                        $iurl = Storage::disk('public')->url($imgName);
+                        ProductImages::create(['name' => $imgName, 'path' => $iurl, 'featured' => 0, 'product_id' => $product->id]);
+                    }
+                }
+
+
                 return response()->json(['message' => 'Product Created'], 200);
             } else {
                 return response()->json(['message' => 'Could not get the data'], 400);
