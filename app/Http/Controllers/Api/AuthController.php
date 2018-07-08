@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\RegisterRequest;
+use App\Services\UserService\Facades\UserVerification;
+use App\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use JWTAuth;
@@ -72,5 +76,38 @@ class AuthController extends Controller
     public function refresh()
     {
         return $this->respondWithToken(auth('api')->refresh());
+    }
+
+    public function register(Request $request)
+    {
+        try {
+            $errors = $this->validator($request->all())->errors();
+            if (count($errors)) {
+                return response()->json(['errors' => $errors], 401);
+            }
+            event(new Registered($user = $this->create($request->all())));
+            UserVerification::generate($user);
+            return response()->json($user, 201);
+        } catch (\Exception $exception) {
+            return response()->json(['message' => $exception->getMessage()], $exception->getCode());
+        }
+    }
+
+    protected function create(array $data)
+    {
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+    }
+
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
     }
 }

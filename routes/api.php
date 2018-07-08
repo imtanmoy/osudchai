@@ -24,9 +24,10 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     });
 });
 
-Route::group(['middleware' => ['api']], function () {
+Route::group(['middleware' => ['api', 'cors']], function () {
 
     Route::post('auth/login', 'Api\AuthController@login');
+    Route::post('auth/register', 'Api\AuthController@register');
 
     Route::group(['prefix' => 'auth', 'middleware' => 'jwt.auth'], function () {
         Route::get('user', 'Api\AuthController@getAuthUser');

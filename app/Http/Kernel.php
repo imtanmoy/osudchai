@@ -11,6 +11,7 @@ use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Spatie\Cors\Cors;
 
 class Kernel extends HttpKernel
 {
@@ -73,5 +74,6 @@ class Kernel extends HttpKernel
         'jwt.auth' => 'Tymon\JWTAuth\Middleware\GetUserFromToken',
         'jwt.refresh' => 'Tymon\JWTAuth\Middleware\RefreshToken',
         'isVerified' => IsVerified::class,
+        'cors' => Cors::class,
     ];
 }
