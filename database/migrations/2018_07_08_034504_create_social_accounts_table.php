@@ -15,13 +15,13 @@ class CreateSocialAccountsTable extends Migration
     {
         Schema::create('social_accounts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id')->unsigned()->index();
             $table->string('provider', 50);
             $table->string('social_id')->unique();
             $table->string('access_token');
             $table->string('refresh_token')->nullable();
             $table->timestamps();
 
+            $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

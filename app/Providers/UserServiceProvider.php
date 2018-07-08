@@ -27,5 +27,8 @@ class UserServiceProvider extends ServiceProvider
         App::bind('user.verification', function () {
             return new App\Services\UserService\UserVerification;
         });
+        App::bind('user.socialAccount', function () {
+            return new App\Services\UserService\SocialAccountService;
+        });
     }
 }

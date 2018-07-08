@@ -224,7 +224,8 @@ return [
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
-        'UserVerification' => App\Services\UserService\Facades\UserVerification::class
+        'UserVerification' => App\Services\UserService\Facades\UserVerification::class,
+        'SocialAccountService' => \App\Services\UserService\Facades\SocialAccountService::class
 
     ],
 
