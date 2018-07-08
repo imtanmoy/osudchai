@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\SocialAccount;
 use App\Models\UserVerification;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -52,5 +53,10 @@ class User extends Authenticatable implements JWTSubject
     public function verification()
     {
         return $this->hasOne(UserVerification::class, 'user_id', 'id');
+    }
+
+    public function accounts()
+    {
+        return $this->hasMany(SocialAccount::class);
     }
 }
