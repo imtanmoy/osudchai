@@ -35,3 +35,6 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('me', 'Api\AuthController@me');
     });
 });
+
+
+Route::get('/products', 'Api\ProductController@index');
