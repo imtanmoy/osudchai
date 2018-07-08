@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class ProductType extends Model
 {
     use LogsActivity;
-    use Cachable;
+//    use Cachable;
 
 
     protected $fillable = [

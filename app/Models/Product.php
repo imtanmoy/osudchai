@@ -38,6 +38,7 @@ class Product extends Model
         'generic_name_id',
         'created_at',
         'updated_at',
+        'is_active'
     ];
 
     protected static $logAttributes = [

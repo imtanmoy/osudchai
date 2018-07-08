@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class GenericName extends Model
 {
-    use Cachable;
+//    use Cachable;
 
     protected $fillable = ['name'];
     protected $hidden = ['created_at', 'updated_at'];
