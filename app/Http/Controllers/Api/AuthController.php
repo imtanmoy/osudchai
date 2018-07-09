@@ -28,13 +28,46 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $token = null;
-        $credentials = $request->only('email', 'password');
 
-        $rules = [
-            'email' => 'required|email',
-            'password' => 'required',
-        ];
+        $login_type = '';
+
+        $rules = [];
+
+        $credentials = null;
+
+        if (is_numeric($request->input('email'))) {
+            $login_type = 'phone';
+        } elseif (filter_var($request->input('email'), FILTER_VALIDATE_EMAIL)) {
+            $login_type = 'email';
+        }else{
+            return response()->json(['success' => false, 'error' => ["email"=>["Not a valid Phone or Email"]]]);
+        }
+
+        if ($login_type == 'phone') {
+            $rules = [
+                'phone' => 'required|required|regex:/(01)[0-9]{9}/|max:14|min:11',
+                'password' => 'required',
+            ];
+
+            $request->merge([$login_type => $request->input('email')]);
+            $credentials = $request->only('phone', 'password');
+        } elseif ($login_type == 'email') {
+            $rules = [
+                'email' => 'required|email',
+                'password' => 'required',
+            ];
+
+            $request->merge([$login_type => $request->input('email')]);
+            $credentials = $request->only('email', 'password');
+        }
+
+
+//        $rules = [
+//            'email' => 'required|email',
+//            'password' => 'required',
+//        ];
         $validator = Validator::make($credentials, $rules);
+
         if ($validator->fails()) {
             return response()->json(['success' => false, 'error' => $validator->messages()]);
         }
