@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Address;
 use App\Models\CustomerGroup;
 use App\Models\Prescription;
 use App\Models\SocialAccount;
@@ -73,5 +74,10 @@ class User extends Authenticatable implements JWTSubject
     public function prescriptions()
     {
         return $this->hasMany(Prescription::class, 'user_id', 'id');
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class, 'user_id', 'id');
     }
 }
