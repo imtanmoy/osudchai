@@ -40,7 +40,9 @@ class SocialAccountService
                     'avatar' => $providerUser->getAvatar(),
                     'is_verified' => 1,
                 ]);
-                // $user->customerGroup()->attach(1); // Default User Customer Group
+
+                $user->customerGroup()->attach(1); // Default User Customer Group
+
                 event(new Registered($user));
 //                event(new WelcomeVerifiedUser($user));
             }

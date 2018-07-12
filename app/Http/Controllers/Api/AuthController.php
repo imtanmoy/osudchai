@@ -39,8 +39,8 @@ class AuthController extends Controller
             $login_type = 'phone';
         } elseif (filter_var($request->input('email'), FILTER_VALIDATE_EMAIL)) {
             $login_type = 'email';
-        }else{
-            return response()->json(['success' => false, 'error' => ["email"=>["Not a valid Phone or Email"]]]);
+        } else {
+            return response()->json(['success' => false, 'error' => ["email" => ["Not a valid Phone or Email"]]]);
         }
 
         if ($login_type == 'phone') {
@@ -118,7 +118,13 @@ class AuthController extends Controller
             if (count($errors)) {
                 return response()->json(['errors' => $errors], 401);
             }
-            event(new Registered($user = $this->create($request->all())));
+            $user = $this->create($request->all());
+
+            $user->customerGroup()->attach(1); // Default User Customer Group
+
+            event(new Registered($user));
+
+
             UserVerification::generate($user);
             return response()->json($user, 201);
         } catch (\Exception $exception) {

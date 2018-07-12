@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\CustomerGroup;
 use App\Models\SocialAccount;
 use App\Models\UserVerification;
 use Illuminate\Notifications\Notifiable;
@@ -58,5 +59,13 @@ class User extends Authenticatable implements JWTSubject
     public function accounts()
     {
         return $this->hasMany(SocialAccount::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function customerGroup()
+    {
+        return $this->belongsToMany(CustomerGroup::class, 'user_customer_group', 'user_id', 'customer_group_id');
     }
 }
