@@ -35,6 +35,10 @@ Route::group(['middleware' => ['api', 'cors']], function () {
         Route::get('refresh', 'Api\AuthController@refresh');
         Route::get('me', 'Api\AuthController@me');
     });
+
+    Route::group(['middleware' => 'jwt.auth'], function () {
+        Route::resource('prescriptions', 'Api\PrescriptionController')->except(['create', 'edit']);
+    });
 });
 
 

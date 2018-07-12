@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\CustomerGroup;
+use App\Models\Prescription;
 use App\Models\SocialAccount;
 use App\Models\UserVerification;
 use Illuminate\Notifications\Notifiable;
@@ -67,5 +68,10 @@ class User extends Authenticatable implements JWTSubject
     public function customerGroup()
     {
         return $this->belongsToMany(CustomerGroup::class, 'user_customer_group', 'user_id', 'customer_group_id');
+    }
+
+    public function prescriptions()
+    {
+        return $this->hasMany(Prescription::class, 'user_id', 'id');
     }
 }
