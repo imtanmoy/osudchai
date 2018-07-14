@@ -17,7 +17,7 @@ class CreatePackSizeValuesTable extends Migration
             $table->increments('id');
             $table->string('value');
             $table->unsignedInteger('pack_size_id');
-            $table->foreign('pack_size_id')->references('id')->on('pack_sizes');
+            $table->foreign('pack_size_id')->references('id')->on('pack_sizes')->onDelete('cascade');
             $table->timestamps();
         });
     }
