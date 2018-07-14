@@ -19,9 +19,11 @@ use App\Models\ProductImages;
 use App\Models\ProductStock;
 use App\Models\ProductType;
 use App\Models\Strength;
+use App\Shop\Products\Exceptions\ProductNotFoundException;
 use Carbon\Carbon;
 use File;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Request;
 use Storage;
@@ -47,37 +49,18 @@ class ProductRepository implements ProductInterface
         return $this->product->all();
     }
 
+    /**
+     * @param $id
+     * @return Product
+     * @throws ProductNotFoundException
+     */
     function getById($id)
     {
         try {
             $product = $this->product->find($id);
-
-            $product->load('product_type');
-            $product->load('manufacturer');
-            $product->load('featuredPhoto');
-            $product->load('images');
-//            $product->load('subCategory');
-            $product->load('category');
-
-
-//            $category = $product->subCategory->parent;
-
-//            $product['category'] = $category;
-
-
-//            if ($product->subCategory->name == "Medicine" && $product->category->name == "Pharmacy") {
-            $strength = DB::select('SELECT strengths.strength FROM strengths LEFT JOIN product_strengths ON product_strengths.strength_id = strengths.id WHERE product_strengths.product_id = ' . $id . ' LIMIT 1');
-            $product['strength'] = $strength[0]->strength;
-
-            $generic_name = DB::select('SELECT generic_names.id, generic_names.name FROM generic_names LEFT JOIN product_generic_names ON product_generic_names.generic_name_id = generic_names.id WHERE product_generic_names.product_id = ' . $id . ' LIMIT 1');
-            $product['generic_name'] = $generic_name[0];
-//            }
-
             return $product;
-
-//            return response()->json($product, 200);
-        } catch (\Exception $exception) {
-//            return response()->json(['message' => $exception->getMessage()], 400);
+        } catch (ModelNotFoundException $exception) {
+            throw new ProductNotFoundException($exception);
         }
 
     }

@@ -2,6 +2,7 @@
 
 @section('content')
     <h3 class="page-title">Product</h3>
+    @include('admin.layouts.errors-and-messages')
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
@@ -13,10 +14,11 @@
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
                             <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">General</a></li>
-                            <li><a href="#tab_2" data-toggle="tab" aria-expanded="false">Product Info</a></li>
-                            <li><a href="#tab_3" data-toggle="tab">Attributes</a></li>
-                            <li><a href="#tab_4" data-toggle="tab">Stock & Price</a></li>
-                            <li><a href="#tab_5" data-toggle="tab">Images</a></li>
+                            <li><a href="#tab_2" data-toggle="tab">Product Info</a></li>
+                            <li><a href="#tab_3" data-toggle="tab">Product Packs</a></li>
+                            <li><a href="#tab_4" data-toggle="tab">Attributes</a></li>
+                            <li><a href="#tab_5" data-toggle="tab">Stock & Price</a></li>
+                            <li><a href="#tab_6" data-toggle="tab">Images</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab_1">
@@ -26,12 +28,15 @@
                                 @include('admin.products.forms.edit.info')
                             </div>
                             <div class="tab-pane" id="tab_3">
-                                @include('admin.products.forms.edit.attribute')
+                                @include('admin.products.forms.create-packSizes')
                             </div>
                             <div class="tab-pane" id="tab_4">
-                                @include('admin.products.forms.edit.stock&price')
+                                @include('admin.products.forms.edit.attribute')
                             </div>
                             <div class="tab-pane" id="tab_5">
+                                @include('admin.products.forms.edit.stock&price')
+                            </div>
+                            <div class="tab-pane" id="tab_6">
 
                             </div>
                         </div>

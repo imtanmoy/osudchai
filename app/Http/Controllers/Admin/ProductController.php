@@ -9,6 +9,8 @@ use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\ProductType;
 use App\Repositories\Product\ProductInterface;
+use App\Shop\PackSize\Repositories\PackSizeRepository;
+use App\Shop\PackSizeValues\Repositories\PackSizeValueRepository;
 use Gate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -18,11 +20,19 @@ use Spatie\Activitylog\Models\Activity;
 class ProductController extends Controller
 {
 
-    private $product;
+    private $productRepo;
+    private $packSizeRepository;
+    private $packSizeValueRepository;
 
-    public function __construct(ProductInterface $product)
+    public function __construct(
+        ProductInterface $product,
+        PackSizeRepository $packSizeRepository,
+        PackSizeValueRepository $packSizeValueRepository
+    )
     {
-        $this->product = $product;
+        $this->productRepo = $product;
+        $this->packSizeRepository = $packSizeRepository;
+        $this->packSizeValueRepository = $packSizeValueRepository;
     }
 
     /**
@@ -35,7 +45,7 @@ class ProductController extends Controller
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
-        $products = $this->product->getAll();
+        $products = $this->productRepo->getAll();
         return view('admin.products.index', compact('products'));
     }
 
@@ -66,7 +76,7 @@ class ProductController extends Controller
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
-        return $this->product->create($request->all());
+        return $this->productRepo->create($request->all());
     }
 
     /**
@@ -91,12 +101,37 @@ class ProductController extends Controller
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
+
+        $product = $this->productRepo->getById($id);
+
+        $productPackSizes = $product->packSizes()->get();
+
+        if (request()->has('delete') && request()->has('pa')) {
+            $pa = $productPackSizes->where('id', request()->input('pa'))->first();
+            $pa->packSizeValues()->detach();
+            $pa->delete();
+            request()->session()->flash('message', 'Delete successful');
+            return redirect()->route('admin.products.edit', [$product->id, 'combination' => 1]);
+        }
+
+
         $manufacturers = Manufacturer::pluck('name', 'id');
         $categories = Category::pluck('name', 'id');
         $product_types = ProductType::pluck('name', 'id');
         $product = Product::findOrFail($id);
 
-        return view('admin.products.edit', compact('product', 'manufacturers', 'categories', 'product_types'));
+        $packSizes = $this->packSizeRepository->listPackSizes();
+
+
+        return view('admin.products.edit', compact(
+            'product',
+            'manufacturers',
+            'categories',
+            'product_types',
+            'productPackSizes',
+            'packSizes'
+        ));
+//        return $productPackSizes;
     }
 
     /**
@@ -108,7 +143,7 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, $id)
     {
-        return $this->product->update($id, $request->all());
+        return $this->productRepo->update($id, $request->all());
     }
 
     /**
@@ -128,7 +163,8 @@ class ProductController extends Controller
             return abort(401);
         }
 
-        $product = Product::findOrFail($id);
+//        $product = Product::findOrFail($id);
+        $product = $this->productRepo->getById($id);
 
         return view('admin.products.adjust', compact('product'));
     }
@@ -140,7 +176,7 @@ class ProductController extends Controller
         }
 
         try {
-            $product = Product::findOrFail($id);
+            $product = $this->productRepo->getById($id);
 
             if (isset($request->price)) {
                 $product->price = $request->price;

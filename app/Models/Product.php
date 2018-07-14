@@ -118,6 +118,6 @@ class Product extends Model
      */
     public function packSizes()
     {
-        return $this->hasMany(ProductPackSize::class);
+        return $this->hasMany(ProductPackSize::class, 'product_id', 'id');
     }
 }
