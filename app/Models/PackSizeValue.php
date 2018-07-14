@@ -20,7 +20,7 @@ class PackSizeValue extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function productAttributes()
+    public function productPackSizes()
     {
         return $this->belongsToMany(ProductPackSize::class);
     }

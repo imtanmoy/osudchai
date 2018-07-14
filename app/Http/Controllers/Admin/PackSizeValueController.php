@@ -2,92 +2,91 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\PackSizeValue;
+use App\Shop\PackSize\Repositories\PackSizeRepository;
+use App\Shop\PackSizeValues\Repositories\PackSizeValueRepository;
+use App\Shop\PackSizeValues\Requests\CreatePackSizeValueRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class PackSizeValueController extends Controller
 {
     /**
-     * PackSizeValueController constructor.
+     * @var PackSizeRepository
      */
-    public function __construct()
-    {
-    }
-
+    private $packSizeRepository;
+    /**
+     * @var PackSizeValueRepository
+     */
+    private $packSizeValueRepository;
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * PackSizeValueController constructor.
+     * @param PackSizeRepository $packSizeRepository
+     * @param PackSizeValueRepository $packSizeValueRepository
      */
-    public function index()
+    public function __construct(
+        PackSizeRepository $packSizeRepository,
+        PackSizeValueRepository $packSizeValueRepository
+    )
     {
-        //
+        $this->packSizeRepository = $packSizeRepository;
+        $this->packSizeValueRepository = $packSizeValueRepository;
     }
 
     /**
      * Show the form for creating a new resource.
      *
+     * @param $id
      * @return \Illuminate\Http\Response
+     * @throws \App\Shop\PackSize\Exceptions\PackSizeNotFoundException
      */
-    public function create()
+    public function create($id)
     {
-        //
+        return view('admin.packSizes-values.create', [
+            'packSize' => $this->packSizeRepository->findPackSizeById($id)
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param CreatePackSizeValueRequest $request
+     * @param $id
      * @return \Illuminate\Http\Response
+     * @throws \App\Shop\PackSize\Exceptions\PackSizeNotFoundException
      */
-    public function store(Request $request)
+    public function store(CreatePackSizeValueRequest $request, $id)
     {
-        //
-    }
+        $packSize = $this->packSizeRepository->findPackSizeById($id);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        $packSizeValue = new PackSizeValue($request->except('_token'));
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        $packSizeValueRepo = new PackSizeValueRepository($packSizeValue);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        $packSizeValueRepo->associateToPackSize($packSize);
+
+        $request->session()->flash('message', 'PackSize value created');
+
+        return redirect()->route('admin.packSizes.show', $packSize->id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param $packSizeId
+     * @param $packSizeValueId
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy($packSizeId, $packSizeValueId)
     {
-        //
+        $packSizeValue = $this->packSizeValueRepository->findOneOrFail($packSizeValueId);
+
+        $packSizeValueRepo = new PackSizeValueRepository($packSizeValue);
+        $packSizeValueRepo->dissociateFromPackSize();
+
+        request()->session()->flash('message', 'PackSize value removed!');
+        return redirect()->route('admin.packSizes.show', $packSizeId);
     }
 }

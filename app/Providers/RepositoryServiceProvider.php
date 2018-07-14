@@ -10,6 +10,8 @@ use App\Repositories\ProductType\ProductTypeInterface;
 use App\Repositories\ProductType\ProductTypeRepository;
 use App\Shop\PackSize\Repositories\PackSizeRepository;
 use App\Shop\PackSize\Repositories\PackSizeRepositoryInterface;
+use App\Shop\PackSizeValues\Repositories\PackSizeValueRepository;
+use App\Shop\PackSizeValues\Repositories\PackSizeValueRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -37,6 +39,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             PackSizeRepositoryInterface::class,
             PackSizeRepository::class
+        );
+        $this->app->bind(
+            PackSizeValueRepositoryInterface::class,
+            PackSizeValueRepository::class
         );
     }
 }

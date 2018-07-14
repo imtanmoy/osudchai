@@ -36,7 +36,7 @@
                                 <td>{{ $item->value }}</td>
                                 <td>
                                     <form
-                                        action="{{ route('admin.attributes.values.destroy', [$packSize->id, $item->id]) }}"
+                                        action="{{ route('admin.packSizes.values.destroy', [$packSize->id, $item->id]) }}"
                                         class="form-horizontal" method="post">
                                         {{ csrf_field() }}
                                         <input type="hidden" name="_method" value="delete">
@@ -56,9 +56,9 @@
             <!-- /.box-body -->
             <div class="box-footer">
                 <div class="btn-group">
-                    <a href="{{ route('admin.attributes.values.create', $packSize->id) }}"
+                    <a href="{{ route('admin.packSizes.values.create', $packSize->id) }}"
                        class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add values</a>
-                    <a href="{{ route('admin.attributes.index') }}" class="btn btn-default btn-sm">Back</a>
+                    <a href="{{ route('admin.packSizes.index') }}" class="btn btn-default btn-sm">Back</a>
                 </div>
             </div>
         </div>

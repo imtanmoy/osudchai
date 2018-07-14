@@ -51,7 +51,7 @@ Route::delete('products/{id}/attributes/{aid}', 'Admin\ProductController@deleteA
 
 
 Route::resource('packSizes', 'Admin\PackSizeController');
-Route::resource('packSizes.values', 'Attributes\AttributeValueController');
+Route::resource('packSizes.values', 'Admin\PackSizeValueController');
 
 
 
