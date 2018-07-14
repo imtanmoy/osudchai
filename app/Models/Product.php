@@ -112,4 +112,12 @@ class Product extends Model
     {
         return $this->hasMany(ProductImages::class, 'product_id', 'id')->where('featured', '!=', 1);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function packSizes()
+    {
+        return $this->hasMany(ProductPackSize::class);
+    }
 }
