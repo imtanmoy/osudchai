@@ -49,11 +49,10 @@ Route::get('products/{id}/adjust', 'Admin\ProductController@showAdjust')->name('
 Route::post('products/{id}/adjust', 'Admin\ProductController@updateAdjust')->name('products.updateAdjust');
 Route::delete('products/{id}/attributes/{aid}', 'Admin\ProductController@deleteAttributes');
 
-
+Route::get('products/{id}/options', 'Admin\ProductController@addProductOption');
+Route::post('products/{id}/options', 'Admin\ProductController@storeProductOption')->name('products.options');
 Route::resource('options', 'Admin\OptionController');
 Route::resource('options.values', 'Admin\OptionValueController');
-
-
 
 
 

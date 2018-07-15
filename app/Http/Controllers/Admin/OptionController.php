@@ -72,14 +72,22 @@ class OptionController extends Controller
             $option = $this->optionRepo->findOptionById($id);
             $optionRepo = new OptionRepository($option);
 
-            return view('admin.options.show', [
-                'option' => $option,
-                'values' => $optionRepo->listOptionValues()
-            ]);
-        } catch (OptionNotFoundException $e) {
-            request()->session()->flash('error', 'The Option you are looking for is not found.');
+            if (request()->ajax()) {
+                return response()->json($optionRepo->listOptionValues());
+            } else {
+                return view('admin.options.show', [
+                    'option' => $option,
+                    'values' => $optionRepo->listOptionValues()
+                ]);
+            }
 
-            return redirect()->route('admin.options.index');
+        } catch (OptionNotFoundException $e) {
+            if (request()->ajax()) {
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            } else {
+                request()->session()->flash('error', 'The Option you are looking for is not found.');
+                return redirect()->route('admin.options.index');
+            }
         }
     }
 

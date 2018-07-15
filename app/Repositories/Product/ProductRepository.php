@@ -13,9 +13,11 @@ use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\Category;
 use App\Models\GenericName;
+use App\Models\OptionValue;
 use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\ProductImages;
+use App\Models\ProductOption;
 use App\Models\ProductStock;
 use App\Models\ProductType;
 use App\Models\Strength;
@@ -234,5 +236,27 @@ class ProductRepository implements ProductInterface
     function delete($id)
     {
         // TODO: Implement delete() method.
+    }
+
+    /**
+     * Associate the product attribute to the product
+     *
+     * @param ProductOption $productOption
+     * @return ProductOption
+     */
+    public function saveProductOption(ProductOption $productOption): ProductOption
+    {
+        $this->product->options()->save($productOption);
+        return $productOption;
+    }
+
+    /**
+     * @param ProductOption $productOption
+     * @param OptionValue $optionValue
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function saveCombination(ProductOption $productOption, OptionValue $optionValue)
+    {
+        return $productOption->optionValues()->save($optionValue);
     }
 }

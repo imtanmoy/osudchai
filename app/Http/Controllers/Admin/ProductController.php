@@ -7,8 +7,10 @@ use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\Product;
 use App\Models\ProductAttribute;
+use App\Models\ProductOption;
 use App\Models\ProductType;
 use App\Repositories\Product\ProductInterface;
+use App\Repositories\Product\ProductRepository;
 use App\Shop\Options\Repositories\OptionRepositoryInterface;
 use App\Shop\OptionValues\Repositories\OptionValueRepositoryInterface;
 use Gate;
@@ -16,6 +18,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Spatie\Activitylog\Models\Activity;
+use Validator;
 
 class ProductController extends Controller
 {
@@ -106,32 +109,32 @@ class ProductController extends Controller
 
         $productOptions = $product->options()->get();
 
-//        if (request()->has('delete') && request()->has('pa')) {
-//            $pa = $productOptions->where('id', request()->input('pa'))->first();
-//            $pa->optionValues()->detach();
-//            $pa->delete();
-//            request()->session()->flash('message', 'Delete successful');
-//            return redirect()->route('admin.products.edit', [$product->id, 'combination' => 1]);
-//        }
-//
-//
-//        $manufacturers = Manufacturer::pluck('name', 'id');
-//        $categories = Category::pluck('name', 'id');
-//        $product_types = ProductType::pluck('name', 'id');
-//        $product = Product::findOrFail($id);
-//
-//        $options = $this->optionRepo->listOptions();
+        if (request()->has('delete') && request()->has('pa')) {
+            $pa = $productOptions->where('id', request()->input('pa'))->first();
+            $pa->optionValues()->detach();
+            $pa->delete();
+            request()->session()->flash('message', 'Delete successful');
+            return redirect()->route('admin.products.edit', [$product->id, 'combination' => 1]);
+        }
 
 
-//        return view('admin.products.edit', compact(
-//            'product',
-//            'manufacturers',
-//            'categories',
-//            'product_types',
-//            'productOptions',
-//            'options'
-//        ));
-        return $productOptions;
+        $manufacturers = Manufacturer::pluck('name', 'id');
+        $categories = Category::pluck('name', 'id');
+        $product_types = ProductType::pluck('name', 'id');
+        $product = Product::findOrFail($id);
+
+        $options = $this->optionRepo->listOptions();
+
+
+        return view('admin.products.edit', compact(
+            'product',
+            'manufacturers',
+            'categories',
+            'product_types',
+            'productOptions',
+            'options'
+        ));
+//        return $productOptions;
     }
 
     /**
@@ -216,6 +219,69 @@ class ProductController extends Controller
             return response()->json(['status' => true, 'message' => 'Attribute Successfully Deleted']);
         } catch (\Exception $exception) {
             return response()->json(['status' => false, 'message' => $exception->getMessage()]);
+        }
+    }
+
+
+    /**
+     * @param Request $request
+     * @param Product $product
+     * @return boolean
+     */
+    private function saveProductCombinations(Request $request, Product $product)
+    {
+        $fields = $request->only('quantity', 'price');
+
+        if ($errors = $this->validateFields($fields)) {
+            return redirect()->route('admin.products.options', [$product->id])
+                ->withErrors($errors);
+        }
+
+        $quantity = $fields['quantity'];
+        $price = $fields['price'];
+
+
+        $optionValueID = $request->option_value_id;
+        $productRepo = new ProductRepository($product);
+        $productOption = $productRepo->saveProductOption(new ProductOption(compact('quantity', 'price')));
+        $optionValue = $this->optionValueRepo->find($optionValueID);
+        $productRepo->saveCombination($productOption, $optionValue);
+    }
+
+    /**
+     * @param array $data
+     * @return \Illuminate\Validation\Validator
+     */
+    private function validateFields(array $data)
+    {
+        $validator = Validator::make($data, [
+            'quantity' => 'required',
+            'price' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator;
+        }
+    }
+
+    public function addProductOption($id)
+    {
+        $product = $this->productRepo->getById($id);
+        $options = $this->optionRepo->listOptions();
+
+        return view('admin.products.create-options', compact('product', 'options'));
+    }
+
+    public function storeProductOption(Request $request, $id)
+    {
+
+        $product = $this->productRepo->getById($id);
+        if ($request->has('option_id') && $request->has('option_value_id')) {
+            $this->saveProductCombinations($request, $product);
+            $request->session()->flash('message', 'Attribute combination created successful');
+            return redirect()->route('admin.products.edit', [$id, 'combination' => 1]);
+        }else{
+            return 'sdsds';
         }
     }
 }
