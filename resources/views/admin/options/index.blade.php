@@ -7,8 +7,8 @@
     <!-- Default box -->
         <div class="box">
             <div class="box-body">
-                <h2>PackSizes</h2>
-                @if($packSizes->total() > 0)
+                <h2>Options</h2>
+                @if($options->total() > 0)
                     <table class="table">
                         <thead>
                         <tr>
@@ -17,21 +17,21 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach ($packSizes as $packSize)
+                        @foreach ($options as $option)
                             <tr>
                                 <td>
-                                    <a href="{{ route('admin.packSizes.show', $packSize->id) }}">{{ $packSize->name }}
-                                        <strong>({{ $packSize->values->count() }})</strong></a>
+                                    <a href="{{ route('admin.options.show', $option->id) }}">{{ $option->name }}
+                                        <strong>({{ $option->values->count() }})</strong></a>
                                 </td>
                                 <td>
-                                    <form action="{{ route('admin.packSizes.destroy', $packSize->id) }}" method="post"
+                                    <form action="{{ route('admin.options.destroy', $option->id) }}" method="post"
                                           class="form-horizontal">
                                         {{ csrf_field() }}
                                         <input type="hidden" name="_method" value="delete">
                                         <div class="btn-group">
-                                            <a href="{{ route('admin.packSizes.values.create', $packSize->id) }}"
+                                            <a href="{{ route('admin.options.values.create', $option->id) }}"
                                                class="btn btn-default btn-sm"><i class="fa fa-plus"></i> Add values</a>
-                                            <a href="{{ route('admin.packSizes.edit', $packSize->id) }}"
+                                            <a href="{{ route('admin.options.edit', $option->id) }}"
                                                class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
                                             <button onclick="return confirm('Are you sure?')" type="submit"
                                                     class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete
@@ -45,17 +45,17 @@
                     </table>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="pull-left">{{ $packSizes->links() }}</div>
+                            <div class="pull-left">{{ $options->links() }}</div>
                         </div>
                     </div>
                     <div class="box-footer">
                         <div class="btn-group">
-                            <a class="btn btn-sm btn-primary" href="{{ route('admin.packSizes.create') }}"><i
-                                    class="fa fa-plus"></i> Create attribute</a>
+                            <a class="btn btn-sm btn-primary" href="{{ route('admin.options.create') }}"><i
+                                        class="fa fa-plus"></i> Create attribute</a>
                         </div>
                     </div>
                 @else
-                    <p class="alert alert-warning">No attribute yet. <a href="{{ route('admin.packSizes.create') }}">Create
+                    <p class="alert alert-warning">No attribute yet. <a href="{{ route('admin.options.create') }}">Create
                             one</a></p>
                 @endif
             </div>

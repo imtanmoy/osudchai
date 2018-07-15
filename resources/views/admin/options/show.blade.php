@@ -7,17 +7,17 @@
     <!-- Default box -->
         <div class="box">
             <div class="box-body">
-                <h2>PackSizes</h2>
+                <h2>Options</h2>
                 <table class="table">
                     <thead>
                     <tr>
-                        <td>PackSize name</td>
+                        <td>Option name</td>
                         <td></td>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <td>{{ $packSize->name }}</td>
+                        <td>{{ $option->name }}</td>
                         <td></td>
                     </tr>
                     </tbody>
@@ -26,7 +26,7 @@
                     <table class="table table-striped" style="margin-left: 35px">
                         <thead>
                         <tr>
-                            <td>PackSize Values</td>
+                            <td>Option Values</td>
                             <td></td>
                         </tr>
                         </thead>
@@ -36,8 +36,8 @@
                                 <td>{{ $item->value }}</td>
                                 <td>
                                     <form
-                                        action="{{ route('admin.packSizes.values.destroy', [$packSize->id, $item->id]) }}"
-                                        class="form-horizontal" method="post">
+                                            action="{{ route('admin.options.values.destroy', [$option->id, $item->id]) }}"
+                                            class="form-horizontal" method="post">
                                         {{ csrf_field() }}
                                         <input type="hidden" name="_method" value="delete">
                                         <div class="btn-group">
@@ -56,9 +56,9 @@
             <!-- /.box-body -->
             <div class="box-footer">
                 <div class="btn-group">
-                    <a href="{{ route('admin.packSizes.values.create', $packSize->id) }}"
+                    <a href="{{ route('admin.options.values.create', $option->id) }}"
                        class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add values</a>
-                    <a href="{{ route('admin.packSizes.index') }}" class="btn btn-default btn-sm">Back</a>
+                    <a href="{{ route('admin.options.index') }}" class="btn btn-default btn-sm">Back</a>
                 </div>
             </div>
         </div>

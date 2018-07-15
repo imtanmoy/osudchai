@@ -28,7 +28,7 @@
                                 @include('admin.products.forms.edit.info')
                             </div>
                             <div class="tab-pane" id="tab_3">
-                                @include('admin.products.forms.create-packSizes')
+                                @include('admin.products.forms.create-options')
                             </div>
                             <div class="tab-pane" id="tab_4">
                                 @include('admin.products.forms.edit.attribute')

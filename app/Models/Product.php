@@ -116,8 +116,8 @@ class Product extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function packSizes()
+    public function options()
     {
-        return $this->hasMany(ProductPackSize::class, 'product_id', 'id');
+        return $this->hasMany(ProductOption::class, 'product_id', 'id');
     }
 }

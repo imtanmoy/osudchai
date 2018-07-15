@@ -5,14 +5,15 @@
     <section class="content">
         @include('admin.layouts.errors-and-messages')
         <div class="box">
-            <form action="{{ route('admin.packSizes.store') }}" method="post" class="form">
+            <form action="{{ route('admin.options.store') }}" method="post" class="form">
                 <div class="box-body">
                     <div class="row">
                         {{ csrf_field() }}
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="name">PackSize name <span class="text-danger">*</span></label>
-                                <input type="text" name="name" id="name" placeholder="PackSize name" class="form-control" value="{!! old('name')  !!}">
+                                <label for="name">Option name <span class="text-danger">*</span></label>
+                                <input type="text" name="name" id="name" placeholder="Option name" class="form-control"
+                                       value="{!! old('name')  !!}">
                             </div>
                         </div>
                     </div>
@@ -20,7 +21,7 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <div class="btn-group">
-                        <a href="{{ route('admin.packSizes.index') }}" class="btn btn-default">Back</a>
+                        <a href="{{ route('admin.options.index') }}" class="btn btn-default">Back</a>
                         <button type="submit" class="btn btn-primary">Create</button>
                     </div>
                 </div>

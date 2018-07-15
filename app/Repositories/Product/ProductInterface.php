@@ -9,11 +9,13 @@
 namespace App\Repositories\Product;
 
 
+use App\Models\Product;
+
 interface ProductInterface
 {
     function getAll();
 
-    function getById($id);
+    function getById($id): Product;
 
     function create(array $attributes);
 

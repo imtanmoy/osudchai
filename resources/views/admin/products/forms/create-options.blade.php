@@ -3,18 +3,18 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th>Pack Size</th>
-            <th>Pack Size Value</th>
+            <th>Option</th>
+            <th>Option Value</th>
             <th>Quantity</th>
             <th>Price</th>
             <th>Action</th>
         </tr>
         </thead>
         <tbody>
-        @include('admin.products.forms.packSizes')
+        @include('admin.products.forms.options')
         <tr>
             <td>
-                <select disabled id="customer_group_id" name="customer_group_id"
+                <select disabled id="option_id" name="option_id"
                         class="form-control select2"
                         style="width: 100%;">
                     <option></option>
@@ -22,15 +22,13 @@
                 </select>
             </td>
             <td>
-                <select id="discount_type" name="discount_type" class="form-control select2"
+                <select id="option_value" name="option_value" class="form-control select2"
                         style="width: 100%;">
                     <option></option>
-                    <option value="percentage">Percentage / %</option>
-                    <option value="cash">Cash / $</option>
                 </select>
             </td>
             <td>
-                {!! Form::number('quantity', '', ['class' => 'form-control', 'placeholder' => 'Quantity']) !!}
+                {!! Form::number('quantity', '', ['class' => 'form-control', 'placeholder' => 'Quantity', 'required'=> '']) !!}
                 @if($errors->has('quantity'))
                     <p class="help-block">
                         {{ $errors->first('quantity') }}
@@ -38,7 +36,7 @@
                 @endif
             </td>
             <td>
-                {!! Form::number('price', '', ['class' => 'form-control', 'placeholder' => 'Price']) !!}
+                {!! Form::number('price', '', ['class' => 'form-control', 'placeholder' => 'Price', 'required'=> '']) !!}
                 @if($errors->has('price'))
                     <p class="help-block">
                         {{ $errors->first('price') }}

@@ -50,8 +50,8 @@ Route::post('products/{id}/adjust', 'Admin\ProductController@updateAdjust')->nam
 Route::delete('products/{id}/attributes/{aid}', 'Admin\ProductController@deleteAttributes');
 
 
-Route::resource('packSizes', 'Admin\PackSizeController');
-Route::resource('packSizes.values', 'Admin\PackSizeValueController');
+Route::resource('options', 'Admin\OptionController');
+Route::resource('options.values', 'Admin\OptionValueController');
 
 
 

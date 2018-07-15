@@ -54,7 +54,7 @@ class ProductRepository implements ProductInterface
      * @return Product
      * @throws ProductNotFoundException
      */
-    function getById($id)
+    function getById($id): Product
     {
         try {
             $product = $this->product->find($id);

@@ -13,7 +13,7 @@ class CreateOptionValueProductOptionTable extends Migration
      */
     public function up()
     {
-        Schema::table('option_value_product_option', function (Blueprint $table) {
+        Schema::create('option_value_product_option', function (Blueprint $table) {
             $table->unsignedInteger('option_value_id');
             $table->foreign('option_value_id')->references('id')->on('option_values');
             $table->unsignedInteger('product_option_id');

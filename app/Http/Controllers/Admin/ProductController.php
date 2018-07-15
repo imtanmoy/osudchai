@@ -9,8 +9,8 @@ use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\ProductType;
 use App\Repositories\Product\ProductInterface;
-use App\Shop\PackSize\Repositories\PackSizeRepository;
-use App\Shop\PackSizeValues\Repositories\PackSizeValueRepository;
+use App\Shop\Options\Repositories\OptionRepositoryInterface;
+use App\Shop\OptionValues\Repositories\OptionValueRepositoryInterface;
 use Gate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -21,18 +21,18 @@ class ProductController extends Controller
 {
 
     private $productRepo;
-    private $packSizeRepository;
-    private $packSizeValueRepository;
+    private $optionRepo;
+    private $optionValueRepo;
 
     public function __construct(
         ProductInterface $product,
-        PackSizeRepository $packSizeRepository,
-        PackSizeValueRepository $packSizeValueRepository
+        OptionRepositoryInterface $optionRepository,
+        OptionValueRepositoryInterface $optionValueRepository
     )
     {
         $this->productRepo = $product;
-        $this->packSizeRepository = $packSizeRepository;
-        $this->packSizeValueRepository = $packSizeValueRepository;
+        $this->optionRepo = $optionRepository;
+        $this->optionValueRepo = $optionValueRepository;
     }
 
     /**
@@ -104,34 +104,34 @@ class ProductController extends Controller
 
         $product = $this->productRepo->getById($id);
 
-        $productPackSizes = $product->packSizes()->get();
+        $productOptions = $product->options()->get();
 
-        if (request()->has('delete') && request()->has('pa')) {
-            $pa = $productPackSizes->where('id', request()->input('pa'))->first();
-            $pa->packSizeValues()->detach();
-            $pa->delete();
-            request()->session()->flash('message', 'Delete successful');
-            return redirect()->route('admin.products.edit', [$product->id, 'combination' => 1]);
-        }
+//        if (request()->has('delete') && request()->has('pa')) {
+//            $pa = $productOptions->where('id', request()->input('pa'))->first();
+//            $pa->optionValues()->detach();
+//            $pa->delete();
+//            request()->session()->flash('message', 'Delete successful');
+//            return redirect()->route('admin.products.edit', [$product->id, 'combination' => 1]);
+//        }
+//
+//
+//        $manufacturers = Manufacturer::pluck('name', 'id');
+//        $categories = Category::pluck('name', 'id');
+//        $product_types = ProductType::pluck('name', 'id');
+//        $product = Product::findOrFail($id);
+//
+//        $options = $this->optionRepo->listOptions();
 
 
-        $manufacturers = Manufacturer::pluck('name', 'id');
-        $categories = Category::pluck('name', 'id');
-        $product_types = ProductType::pluck('name', 'id');
-        $product = Product::findOrFail($id);
-
-        $packSizes = $this->packSizeRepository->listPackSizes();
-
-
-        return view('admin.products.edit', compact(
-            'product',
-            'manufacturers',
-            'categories',
-            'product_types',
-            'productPackSizes',
-            'packSizes'
-        ));
-//        return $productPackSizes;
+//        return view('admin.products.edit', compact(
+//            'product',
+//            'manufacturers',
+//            'categories',
+//            'product_types',
+//            'productOptions',
+//            'options'
+//        ));
+        return $productOptions;
     }
 
     /**
