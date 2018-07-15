@@ -6,5 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Option extends Model
 {
-    //
+    protected $fillable = [
+        'name'
+    ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function values()
+    {
+        return $this->hasMany(OptionValue::class, 'option_id', 'id');
+    }
 }
