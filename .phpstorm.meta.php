@@ -3,7 +3,7 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2018-07-13 17:46:19.
+    * Generated on 2018-07-15 04:01:27.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
@@ -80,6 +80,8 @@ namespace PHPSTORM_META {
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
         'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'App\Repositories\Product\ProductInterface' => \App\Repositories\Product\ProductRepository::class,
+        'App\Shop\PackSize\Repositories\PackSizeRepositoryInterface' => \App\Shop\PackSize\Repositories\PackSizeRepository::class,
+        'App\Shop\PackSizeValues\Repositories\PackSizeValueRepositoryInterface' => \App\Shop\PackSizeValues\Repositories\PackSizeValueRepository::class,
         'user.verification' => \App\Services\UserService\UserVerification::class,
         'user.socialAccount' => \App\Services\UserService\SocialAccountService::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -261,6 +263,8 @@ namespace PHPSTORM_META {
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
         'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'App\Repositories\Product\ProductInterface' => \App\Repositories\Product\ProductRepository::class,
+        'App\Shop\PackSize\Repositories\PackSizeRepositoryInterface' => \App\Shop\PackSize\Repositories\PackSizeRepository::class,
+        'App\Shop\PackSizeValues\Repositories\PackSizeValueRepositoryInterface' => \App\Shop\PackSizeValues\Repositories\PackSizeValueRepository::class,
         'user.verification' => \App\Services\UserService\UserVerification::class,
         'user.socialAccount' => \App\Services\UserService\SocialAccountService::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -442,6 +446,8 @@ namespace PHPSTORM_META {
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
         'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'App\Repositories\Product\ProductInterface' => \App\Repositories\Product\ProductRepository::class,
+        'App\Shop\PackSize\Repositories\PackSizeRepositoryInterface' => \App\Shop\PackSize\Repositories\PackSizeRepository::class,
+        'App\Shop\PackSizeValues\Repositories\PackSizeValueRepositoryInterface' => \App\Shop\PackSizeValues\Repositories\PackSizeValueRepository::class,
         'user.verification' => \App\Services\UserService\UserVerification::class,
         'user.socialAccount' => \App\Services\UserService\SocialAccountService::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -623,6 +629,8 @@ namespace PHPSTORM_META {
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
         'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'App\Repositories\Product\ProductInterface' => \App\Repositories\Product\ProductRepository::class,
+        'App\Shop\PackSize\Repositories\PackSizeRepositoryInterface' => \App\Shop\PackSize\Repositories\PackSizeRepository::class,
+        'App\Shop\PackSizeValues\Repositories\PackSizeValueRepositoryInterface' => \App\Shop\PackSizeValues\Repositories\PackSizeValueRepository::class,
         'user.verification' => \App\Services\UserService\UserVerification::class,
         'user.socialAccount' => \App\Services\UserService\SocialAccountService::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -804,6 +812,8 @@ namespace PHPSTORM_META {
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
         'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'App\Repositories\Product\ProductInterface' => \App\Repositories\Product\ProductRepository::class,
+        'App\Shop\PackSize\Repositories\PackSizeRepositoryInterface' => \App\Shop\PackSize\Repositories\PackSizeRepository::class,
+        'App\Shop\PackSizeValues\Repositories\PackSizeValueRepositoryInterface' => \App\Shop\PackSizeValues\Repositories\PackSizeValueRepository::class,
         'user.verification' => \App\Services\UserService\UserVerification::class,
         'user.socialAccount' => \App\Services\UserService\SocialAccountService::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -985,6 +995,8 @@ namespace PHPSTORM_META {
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
         'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'App\Repositories\Product\ProductInterface' => \App\Repositories\Product\ProductRepository::class,
+        'App\Shop\PackSize\Repositories\PackSizeRepositoryInterface' => \App\Shop\PackSize\Repositories\PackSizeRepository::class,
+        'App\Shop\PackSizeValues\Repositories\PackSizeValueRepositoryInterface' => \App\Shop\PackSizeValues\Repositories\PackSizeValueRepository::class,
         'user.verification' => \App\Services\UserService\UserVerification::class,
         'user.socialAccount' => \App\Services\UserService\SocialAccountService::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -1166,6 +1178,8 @@ namespace PHPSTORM_META {
         'App\Repositories\ProductType\ProductTypeInterface' => \App\Repositories\ProductType\ProductTypeRepository::class,
         'App\Repositories\Attribute\AttributeInterface' => \App\Repositories\Attribute\AttributeRepository::class,
         'App\Repositories\Product\ProductInterface' => \App\Repositories\Product\ProductRepository::class,
+        'App\Shop\PackSize\Repositories\PackSizeRepositoryInterface' => \App\Shop\PackSize\Repositories\PackSizeRepository::class,
+        'App\Shop\PackSizeValues\Repositories\PackSizeValueRepositoryInterface' => \App\Shop\PackSizeValues\Repositories\PackSizeValueRepository::class,
         'user.verification' => \App\Services\UserService\UserVerification::class,
         'user.socialAccount' => \App\Services\UserService\SocialAccountService::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
