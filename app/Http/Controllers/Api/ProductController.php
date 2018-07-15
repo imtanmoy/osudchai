@@ -37,6 +37,7 @@ class ProductController extends Controller
                 'attributes',
                 'featuredPhoto',
                 'images',
+                'options',
                 'stock'
             ])->findOrFail($id);
 

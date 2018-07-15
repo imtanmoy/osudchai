@@ -10,6 +10,10 @@ class OptionValue extends Model
         'value'
     ];
 
+    protected $appends = ['name'];
+
+    protected $hidden = ['option', 'pivot', 'created_at', 'updated_at'];
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -25,5 +29,10 @@ class OptionValue extends Model
     public function productOptions()
     {
         return $this->belongsToMany(ProductOption::class, 'option_value_product_option', 'option_value_id', 'product_option_id', 'id', 'id');
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->option->name;
     }
 }
