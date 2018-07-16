@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Product;
+use App\Models\ProductOption;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Collection;
 
 class ProductController extends Controller
 {
@@ -41,12 +43,19 @@ class ProductController extends Controller
                 'stock'
             ])->findOrFail($id);
 
+//
+//            $options = collect($product->options);
+//
+//            return $options->map(function (ProductOption $productOption) {
+//                return $productOption->optionValues()->first();
+//            });
+
             if ($product == null || $product->is_active == 0) {
                 return response()->json(['message' => 'Product not found'], 404);
             }
             return response()->json($product);
         } catch (\Exception $exception) {
-            return response()->json(['message' => 'product not found'], 404);
+            return response()->json(['message' => $exception->getMessage()], $exception->getCode());
         }
 
     }

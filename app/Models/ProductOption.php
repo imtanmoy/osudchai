@@ -11,9 +11,9 @@ class ProductOption extends Model
         'price'
     ];
 
-//    protected $with = ['optionValues'];
+    protected $hidden = ['product_id', 'created_at', 'updated_at'];
 
-    protected $appends = ['value', 'name'];
+    protected $appends = ['option_value'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -31,12 +31,8 @@ class ProductOption extends Model
         return $this->belongsToMany(OptionValue::class, 'option_value_product_option', 'product_option_id', 'option_value_id', 'id', 'id');
     }
 
-    function getValueAttribute()
+    function getOptionValueAttribute()
     {
-        return $this->optionValues[0]->value;
-    }
-    function getNameAttribute()
-    {
-        return $this->optionValues[0]->option->name;
+        return $this->optionValues()->first();
     }
 }
