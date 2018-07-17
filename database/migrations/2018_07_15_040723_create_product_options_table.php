@@ -20,6 +20,13 @@ class CreateProductOptionsTable extends Migration
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();
+
+
+            $table->unsignedInteger('option_id');
+            $table->foreign('option_id')->references('id')->on('options')->onDelete('cascade');
+
+            $table->unsignedInteger('option_value_id');
+            $table->foreign('option_value_id')->references('id')->on('option_values');
         });
     }
 

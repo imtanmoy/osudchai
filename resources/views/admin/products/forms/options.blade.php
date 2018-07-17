@@ -11,19 +11,17 @@
     </thead>
     <tbody>
     @if(!$productOptions->isEmpty())
-        @foreach($productOptions as $pa)
+        @foreach($productOptions as $productOption)
             <tr>
-                @foreach($pa->optionValues as $item)
-                    <td>{{ $item->option->name }}</td>
-                    <td>{{ $item->value }}</td>
-                @endforeach
-                <td>{{ $pa->quantity }}</td>
-                <td>{{ $pa->price }}</td>
+                <td>{{ $productOption->option->name }}</td>
+                <td>{{ $productOption->optionValue->value }}</td>
+                <td>{{ $productOption->quantity }}</td>
+                <td>{{ $productOption->price }}</td>
                 <td class="btn-group">
                     <a
-                        onclick="return confirm('Are you sure?')"
-                        href="{{ route('admin.products.edit', [$product->id, 'combination' => 1, 'delete' => 1, 'pa' => $pa->id]) }}"
-                        class="btn btn-sm btn-danger">
+                            onclick="return confirm('Are you sure?')"
+                            href="{{ route('admin.products.edit', [$product->id, 'combination' => 1, 'delete' => 1, 'pa' => $productOption->id]) }}"
+                            class="btn btn-sm btn-danger">
                         <i class="fa fa-trash"></i> Delete
                     </a>
                 </td>

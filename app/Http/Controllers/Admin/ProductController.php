@@ -241,11 +241,21 @@ class ProductController extends Controller
         $price = $fields['price'];
 
 
-        $optionValueID = $request->option_value_id;
+        $option = $this->optionRepo->find($request->option_id);
+        $optionValue = $this->optionValueRepo->find($request->option_value_id);
+
+
         $productRepo = new ProductRepository($product);
-        $productOption = $productRepo->saveProductOption(new ProductOption(compact('quantity', 'price')));
-        $optionValue = $this->optionValueRepo->find($optionValueID);
-        $productRepo->saveCombination($productOption, $optionValue);
+
+        $productOption = new ProductOption(compact('quantity', 'price'));
+//
+        $productOption->option()->associate($option);
+        $productOption->optionValue()->associate($optionValue);
+
+//        dd($option, $optionValue, $productOption);
+
+        $productRepo->saveProductOption($productOption);
+//        $productRepo->saveCombination($productOption, $option, $optionValue);
     }
 
     /**
@@ -280,7 +290,7 @@ class ProductController extends Controller
             $this->saveProductCombinations($request, $product);
             $request->session()->flash('message', 'Attribute combination created successful');
             return redirect()->route('admin.products.edit', [$id, 'combination' => 1]);
-        }else{
+        } else {
             return 'sdsds';
         }
     }

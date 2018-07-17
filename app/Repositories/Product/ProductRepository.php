@@ -13,6 +13,7 @@ use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\Category;
 use App\Models\GenericName;
+use App\Models\Option;
 use App\Models\OptionValue;
 use App\Models\Product;
 use App\Models\ProductAttribute;
@@ -252,11 +253,12 @@ class ProductRepository implements ProductInterface
 
     /**
      * @param ProductOption $productOption
+     * @param Option $option
      * @param OptionValue $optionValue
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return bool
      */
-    public function saveCombination(ProductOption $productOption, OptionValue $optionValue)
+    public function saveCombination(ProductOption $productOption, Option $option, OptionValue $optionValue)
     {
-        return $productOption->optionValues()->save($optionValue);
+        return $productOption->option()->save($option) && $productOption->optionValue()->save($optionValue);
     }
 }

@@ -22,4 +22,9 @@ class Option extends Model
     {
         return $this->hasMany(OptionValue::class, 'option_id', 'id');
     }
+
+    public function productOptions()
+    {
+        return $this->hasMany(ProductOption::class, 'option_id', 'id');
+    }
 }

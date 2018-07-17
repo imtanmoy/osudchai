@@ -10,9 +10,8 @@ class OptionValue extends Model
         'value'
     ];
 
-    protected $hidden = ['pivot', 'created_at', 'updated_at'];
+    protected $hidden = ['option_id', 'created_at', 'updated_at'];
 
-    protected $with = ['option'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -23,10 +22,10 @@ class OptionValue extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function productOptions()
     {
-        return $this->belongsToMany(ProductOption::class, 'option_value_product_option', 'option_value_id', 'product_option_id', 'id', 'id');
+        return $this->hasMany(ProductOption::class);
     }
 }
