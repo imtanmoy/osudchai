@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\Address;
 use App\Models\CustomerGroup;
+use App\Models\Order;
 use App\Models\Prescription;
 use App\Models\SocialAccount;
 use App\Models\UserVerification;
@@ -79,5 +80,10 @@ class User extends Authenticatable implements JWTSubject
     public function addresses()
     {
         return $this->hasMany(Address::class, 'user_id', 'id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'user_id', 'id');
     }
 }
