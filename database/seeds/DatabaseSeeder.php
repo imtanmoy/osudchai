@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(GenericNameTableSeeder::class);
         $this->call(StrengthTableSeeder::class);
         $this->call(CityAreaTableSeeder::class);
+        $this->call(OptionAndValueTableSeeder::class);
 
         Model::reguard();
     }

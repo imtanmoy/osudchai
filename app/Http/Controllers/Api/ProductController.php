@@ -22,7 +22,8 @@ class ProductController extends Controller
             'attributes',
             'featuredPhoto',
             'images',
-            'stock'
+            'stock',
+            'options'
         ]);
         return response()->json($products);
     }
