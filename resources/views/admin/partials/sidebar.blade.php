@@ -73,6 +73,12 @@
                         <span class="title">Attributes</span>
                     </a>
                 </li>
+                <li class="{{ $request->segment(2) == 'options' ? 'active' : '' }}">
+                    <a href="{{ route('admin.options.index') }}">
+                        <i class="fa fa-wrench"></i>
+                        <span class="title">Options</span>
+                    </a>
+                </li>
                 <li class="{{ $request->segment(2) == 'products' ? 'active' : '' }}">
                     <a href="{{ route('admin.products.index') }}">
                         <i class="fa fa-wrench"></i>
