@@ -230,7 +230,7 @@ class ProductController extends Controller
      */
     private function saveProductCombinations(Request $request, Product $product)
     {
-        $fields = $request->only('quantity', 'price');
+        $fields = $request->only('quantity', 'price', 'stock_status');
 
         if ($errors = $this->validateFields($fields)) {
             return redirect()->route('admin.products.options', [$product->id])
@@ -239,6 +239,7 @@ class ProductController extends Controller
 
         $quantity = $fields['quantity'];
         $price = $fields['price'];
+        $stock_status = $fields['stock_status'];
 
 
         $option = $this->optionRepo->find($request->option_id);
@@ -247,7 +248,7 @@ class ProductController extends Controller
 
         $productRepo = new ProductRepository($product);
 
-        $productOption = new ProductOption(compact('quantity', 'price'));
+        $productOption = new ProductOption(compact('quantity', 'price', 'stock_status'));
 //
         $productOption->option()->associate($option);
         $productOption->optionValue()->associate($optionValue);
@@ -267,6 +268,7 @@ class ProductController extends Controller
         $validator = Validator::make($data, [
             'quantity' => 'required',
             'price' => 'required',
+            'stock_status' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -308,7 +310,7 @@ class ProductController extends Controller
     public function updateProductOption(Request $request, $id, $oid)
     {
         try {
-            $fields = $request->only('quantity', 'price');
+            $fields = $request->only('quantity', 'price', 'stock_status');
 
             if ($errors = $this->validateFields($fields)) {
                 return redirect()->route('admin.products.options', [$id])
@@ -317,11 +319,13 @@ class ProductController extends Controller
 
             $quantity = $fields['quantity'];
             $price = $fields['price'];
+            $stock_status = $fields['stock_status'];
 
             $productOption = ProductOption::findOrFail($oid);
 
             $productOption->quantity = (int)$quantity;
             $productOption->price = $price;
+            $productOption->stock_status = $stock_status;
 
             $productOption->save();
 

@@ -15,8 +15,9 @@ class CreateProductOptionsTable extends Migration
     {
         Schema::create('product_options', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('quantity');
+            $table->integer('quantity')->default(0);
             $table->decimal('price', 15, 2)->nullable();
+            $table->enum('stock_status', ['outOfStock', 'inStock', 'pre-order'])->default('inStock');
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();

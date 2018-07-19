@@ -8,7 +8,8 @@ class ProductOption extends Model
 {
     protected $fillable = [
         'quantity',
-        'price'
+        'price',
+        'stock_status'
     ];
 
     protected $hidden = ['product_id', 'option_id', 'option_value_id', 'created_at', 'updated_at'];

@@ -49,6 +49,10 @@
                                 </p>
                             @endif
                         </div>
+                        <div class="form-group">
+                            {!! Form::label('stock_status', 'Stock Status*', []) !!}
+                            {{ Form::select('stock_status', ['inStock'=> 'In Stock', 'outOfStock'=>'Out of Stock', 'pre-order'=>'Pre-Oder'],'', ['id'=>'stock_status','required' => '', 'class' => 'form-control select2', 'style'=>'width: 100%']) }}
+                        </div>
                     </div>
                     {!! Form::submit(trans('global.app_save'), ['class' => 'btn btn-danger']) !!}
                     {!! Form::close() !!}

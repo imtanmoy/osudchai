@@ -17,6 +17,7 @@
                 <td>{{ $productOption->optionValue->value }}</td>
                 <td>{{ $productOption->quantity }}</td>
                 <td>{{ $productOption->price }}</td>
+                <td>{{ $productOption->stock_status }}</td>
                 <td class="btn-group">
                     <a
                             onclick="return confirm('Are you sure?')"
