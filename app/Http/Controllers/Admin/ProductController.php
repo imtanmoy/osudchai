@@ -291,7 +291,44 @@ class ProductController extends Controller
             $request->session()->flash('message', 'Attribute combination created successful');
             return redirect()->route('admin.products.edit', [$id, 'combination' => 1]);
         } else {
-            return 'sdsds';
+            return redirect()->back();
         }
+    }
+
+
+    public function editProductOption($id, $oid)
+    {
+        $product = $this->productRepo->getById($id);
+        $productOption = ProductOption::findOrFail($oid);
+
+        return view('admin.products.forms.options.edit', compact('product', 'productOption'));
+    }
+
+
+    public function updateProductOption(Request $request, $id, $oid)
+    {
+        try {
+            $fields = $request->only('quantity', 'price');
+
+            if ($errors = $this->validateFields($fields)) {
+                return redirect()->route('admin.products.options', [$id])
+                    ->withErrors($errors);
+            }
+
+            $quantity = $fields['quantity'];
+            $price = $fields['price'];
+
+            $productOption = ProductOption::findOrFail($oid);
+
+            $productOption->quantity = (int)$quantity;
+            $productOption->price = $price;
+
+            $productOption->save();
+
+            return redirect()->route('admin.products.edit', [$id, 'combination' => 1]);
+        } catch (\Exception $exception) {
+            return redirect()->back()->withErrors($exception->getMessage());
+        }
+
     }
 }

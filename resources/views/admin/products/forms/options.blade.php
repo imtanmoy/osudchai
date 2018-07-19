@@ -24,6 +24,11 @@
                             class="btn btn-sm btn-danger">
                         <i class="fa fa-trash"></i> Delete
                     </a>
+                    <a
+                            href="{{ route('admin.products.options.edit', [$product->id,$productOption->id]) }}"
+                            class="btn btn-sm btn-info">
+                        <i class="fa fa-trash"></i> Edit
+                    </a>
                 </td>
             </tr>
         @endforeach
