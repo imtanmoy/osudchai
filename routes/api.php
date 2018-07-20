@@ -39,6 +39,7 @@ Route::group(['middleware' => ['api', 'cors']], function () {
     Route::group(['middleware' => 'jwt.auth'], function () {
         Route::resource('prescriptions', 'Api\PrescriptionController')->except(['create', 'edit']);
         Route::resource('addresses', 'Api\AddressController')->except(['create', 'edit']);
+        Route::resource('orders', 'Api\OrderController')->except(['create', 'edit']);
     });
 });
 

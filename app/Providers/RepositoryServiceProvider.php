@@ -8,14 +8,14 @@ use App\Repositories\Product\ProductInterface;
 use App\Repositories\Product\ProductRepository;
 use App\Repositories\ProductType\ProductTypeInterface;
 use App\Repositories\ProductType\ProductTypeRepository;
+use App\Shop\Addresses\Repositories\AddressRepository;
+use App\Shop\Addresses\Repositories\AddressRepositoryInterface;
 use App\Shop\Options\Repositories\OptionRepository;
 use App\Shop\Options\Repositories\OptionRepositoryInterface;
 use App\Shop\OptionValues\Repositories\OptionValueRepository;
 use App\Shop\OptionValues\Repositories\OptionValueRepositoryInterface;
-use App\Shop\PackSize\Repositories\PackSizeRepository;
-use App\Shop\PackSize\Repositories\PackSizeRepositoryInterface;
-use App\Shop\PackSizeValues\Repositories\PackSizeValueRepository;
-use App\Shop\PackSizeValues\Repositories\PackSizeValueRepositoryInterface;
+use App\Shop\Orders\Repositories\OrderRepository;
+use App\Shop\Orders\Repositories\OrderRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -48,6 +48,14 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             OptionValueRepositoryInterface::class,
             OptionValueRepository::class
+        );
+        $this->app->bind(
+            OrderRepositoryInterface::class,
+            OrderRepository::class
+        );
+        $this->app->bind(
+            AddressRepositoryInterface::class,
+            AddressRepository::class
         );
     }
 }

@@ -37,4 +37,9 @@ class ProductOption extends Model
         return $this->belongsTo(Option::class, 'option_id', 'id');
     }
 
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'product_option_id', 'id');
+    }
+
 }

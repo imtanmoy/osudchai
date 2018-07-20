@@ -17,7 +17,10 @@ class Order extends Model
         'shipping_cost',
         'tax',
         'shipping_status',
-        'customer_comment'
+        'customer_comment',
+        'address_id',
+        'user_id',
+        'payment_method_id'
     ];
 
 
