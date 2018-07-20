@@ -48,4 +48,9 @@ class Order extends Model
     {
         return $this->hasOne(Payment::class, 'order_id', 'id');
     }
+
+    public function statuses()
+    {
+        return $this->belongsToMany(OrderStatus::class, 'order_has_order_statuses', 'order_id', 'order_status_id')->withPivot('comment')->withTimestamps();
+    }
 }

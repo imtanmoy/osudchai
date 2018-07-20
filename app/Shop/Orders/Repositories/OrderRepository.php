@@ -12,6 +12,7 @@ namespace App\Shop\Orders\Repositories;
 use App\Events\OrderCreateEvent;
 use App\Models\Address;
 use App\Models\Order;
+use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Shop\Base\BaseRepository;
@@ -38,6 +39,10 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             $data['order_no'] = $this->generateOrderNumber();
 
             $order = $this->create($data);
+
+            $orderStatus = OrderStatus::firstOrNew(['name' => 'pending']);
+
+            $order->statuses()->save($orderStatus);
 
             return $order;
         } catch (QueryException $e) {

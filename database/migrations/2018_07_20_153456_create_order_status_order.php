@@ -19,7 +19,7 @@ class CreateOrderStatusOrder extends Migration
             $table->foreign('order_id')->references('id')->on('orders');
             $table->unsignedInteger('order_status_id');
             $table->foreign('order_status_id')->references('id')->on('order_statuses');
-            $table->text('comment');
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }

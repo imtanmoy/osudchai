@@ -64,6 +64,13 @@ Route::resource('options.values', 'Admin\OptionValueController');
 Route::resource('order-statuses', 'Admin\OrderStatusController');
 
 
+Route::post('orders/{id}/statuses', 'Admin\OrderController@addStatus')->name('orders.statuses');
+Route::resource('orders', 'Admin\OrderController');
+Route::get('datatable/orders', 'Admin\OrderController@datatable')->name('datatable.orders');
+Route::get('orders/{id}/delivery_note', 'Admin\OrderController@delivery')->name('orders.deliveryNote');
+
+
+
 
 
 

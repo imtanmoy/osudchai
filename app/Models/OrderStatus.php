@@ -16,5 +16,13 @@ class OrderStatus extends Model
         'color',
     ];
 
+    protected $dates = ['created_at', 'updated_at'];
+
+
     protected $hidden = [];
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'order_has_order_statuses', 'order_id', 'order_status_id')->withPivot('comment')->withTimestamps();
+    }
 }

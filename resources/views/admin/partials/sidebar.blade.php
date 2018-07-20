@@ -85,6 +85,18 @@
                         <span class="title">Products</span>
                     </a>
                 </li>
+                <li class="{{ $request->segment(2) == 'order-statuses' ? 'active' : '' }}">
+                    <a href="{{ route('admin.order-statuses.index') }}">
+                        <i class="fa fa-wrench"></i>
+                        <span class="title">Order Status</span>
+                    </a>
+                </li>
+                <li class="{{ $request->segment(2) == 'orders' ? 'active' : '' }}">
+                    <a href="{{ route('admin.orders.index') }}">
+                        <i class="fa fa-wrench"></i>
+                        <span class="title">Orders</span>
+                    </a>
+                </li>
                 {{--<li class="{{ $request->segment(2) == 'discounts' ? 'active' : '' }}">--}}
                 {{--<a href="{{ url('/admin/discounts') }}">--}}
                 {{--<i class="fa fa-wrench"></i>--}}
