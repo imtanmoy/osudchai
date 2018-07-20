@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\OrderCreateEvent;
 use App\Models\Address;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -119,6 +120,8 @@ class OrderController extends Controller
                     $orderItemRepo = new OrderItemRepository($orderItem);
                     $orderItemRepo->associateToOrder($order);
                 }
+
+                event(new OrderCreateEvent($order));
 
             } else {
                 return response()->json(['message' => 'No Product added to the cart'], 400);

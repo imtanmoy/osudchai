@@ -39,8 +39,6 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
 
             $order = $this->create($data);
 
-            event(new OrderCreateEvent($order));
-
             return $order;
         } catch (QueryException $e) {
             throw new OrderInvalidArgumentException($e->getMessage(), 500, $e);
