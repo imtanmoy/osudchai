@@ -16,6 +16,8 @@ use App\Shop\OptionValues\Repositories\OptionValueRepository;
 use App\Shop\OptionValues\Repositories\OptionValueRepositoryInterface;
 use App\Shop\Orders\Repositories\OrderRepository;
 use App\Shop\Orders\Repositories\OrderRepositoryInterface;
+use App\Shop\PaymentMethods\Repositories\PaymentMethodRepository;
+use App\Shop\PaymentMethods\Repositories\PaymentMethodRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -56,6 +58,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             AddressRepositoryInterface::class,
             AddressRepository::class
+        );
+        $this->app->bind(
+            PaymentMethodRepositoryInterface::class,
+            PaymentMethodRepository::class
         );
     }
 }

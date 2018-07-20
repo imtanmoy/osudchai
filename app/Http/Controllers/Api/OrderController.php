@@ -11,6 +11,7 @@ use App\Shop\Addresses\Repositories\AddressRepository;
 use App\Shop\Addresses\Repositories\AddressRepositoryInterface;
 use App\Shop\Orders\Repositories\OrderRepository;
 use App\Shop\Orders\Repositories\OrderRepositoryInterface;
+use App\Shop\PaymentMethods\Repositories\PaymentMethodRepositoryInterface;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -20,22 +21,26 @@ class OrderController extends Controller
     private $orderRepo;
     private $addressRepo;
     private $productRepo;
+    private $paymentMethodRepo;
 
     /**
      * OrderController constructor.
      * @param OrderRepositoryInterface $orderRepository
      * @param AddressRepositoryInterface $addressRepository
      * @param ProductInterface $product
+     * @param PaymentMethodRepositoryInterface $paymentMethodRepository
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         AddressRepositoryInterface $addressRepository,
-        ProductInterface $product
+        ProductInterface $product,
+        PaymentMethodRepositoryInterface $paymentMethodRepository
     )
     {
         $this->orderRepo = $orderRepository;
         $this->addressRepo = $addressRepository;
         $this->productRepo = $product;
+        $this->paymentMethodRepo = $paymentMethodRepository;
     }
 
 
@@ -98,9 +103,9 @@ class OrderController extends Controller
                 $data['tax'] = $this->calculateTax($data['total_amount'], 5);
                 $data['customer_comment'] = $request->customer_comment ? $request->customer_comment : '';
 
-
-                $paymentMethod = PaymentMethod::findOrFail($request->payment_method);
-                $address = Address::findOrFail($request->address);
+                
+                $paymentMethod = $this->paymentMethodRepo->findOneOrFail($request->payment_method);
+                $address = $this->addressRepo->findOneOrFail($request->address);
                 $user = auth('api')->user();
 
                 $data['payment_method_id'] = $paymentMethod->id;
