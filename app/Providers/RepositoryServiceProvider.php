@@ -14,6 +14,8 @@ use App\Shop\Options\Repositories\OptionRepository;
 use App\Shop\Options\Repositories\OptionRepositoryInterface;
 use App\Shop\OptionValues\Repositories\OptionValueRepository;
 use App\Shop\OptionValues\Repositories\OptionValueRepositoryInterface;
+use App\Shop\OrderItems\Repositories\OrderItemRepository;
+use App\Shop\OrderItems\Repositories\OrderItemRepositoryInterface;
 use App\Shop\Orders\Repositories\OrderRepository;
 use App\Shop\Orders\Repositories\OrderRepositoryInterface;
 use App\Shop\PaymentMethods\Repositories\PaymentMethodRepository;
@@ -62,6 +64,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             PaymentMethodRepositoryInterface::class,
             PaymentMethodRepository::class
+        );
+        $this->app->bind(
+            OrderItemRepositoryInterface::class,
+            OrderItemRepository::class
         );
     }
 }

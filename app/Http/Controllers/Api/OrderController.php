@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Address;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Repositories\Product\ProductInterface;
 use App\Shop\Addresses\Repositories\AddressRepository;
 use App\Shop\Addresses\Repositories\AddressRepositoryInterface;
+use App\Shop\OrderItems\Repositories\OrderItemRepository;
 use App\Shop\Orders\Repositories\OrderRepository;
 use App\Shop\Orders\Repositories\OrderRepositoryInterface;
 use App\Shop\PaymentMethods\Repositories\PaymentMethodRepositoryInterface;
@@ -63,7 +65,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         try {
-            $products = [];
+            $items = [];
             $total_amount = 0.0;
             $sub_total = 0.0;
             $discount_amount = $request->discount_amount ? $request->discount_amount : 0.0;
@@ -73,22 +75,20 @@ class OrderController extends Controller
                 $prods = $request->products;
 
                 foreach ($prods as $prod) {
-//                    $product = Product::findOrFail($prod['id']);
                     $product = $this->productRepo->getById($prod['id']);
                     $item['quantity'] = $prod['quantity'];
                     $item['name'] = $product->name;
-                    $item['price'] = $product->price;
+                    $item['unit_price'] = $product->price;
                     $item['product_id'] = $product->id;
                     if (isset($prod['option']) && $prod['option'] !== null && $prod['option'] !== 0) {
                         $productOption = $product->options()->where('product_options.id', $prod['option'])->first();
                         $item['product_option_id'] = $productOption->id;
-                        $item['price'] = $productOption->price;
+                        $item['unit_price'] = $productOption->price;
                     }
-
                     $discount = 0.0;
                     $item['discount_amount'] = $discount;
-                    array_push($products, $item);
-                    $sub_total = $sub_total + (($item['price'] - $item['discount_amount']) * $item['quantity']);
+                    array_push($items, $item);
+                    $sub_total = $sub_total + (($item['unit_price'] - $item['discount_amount']) * $item['quantity']);
                 }
                 if ($sub_total < 0) {
                     $sub_total = 0;
@@ -103,7 +103,7 @@ class OrderController extends Controller
                 $data['tax'] = $this->calculateTax($data['total_amount'], 5);
                 $data['customer_comment'] = $request->customer_comment ? $request->customer_comment : '';
 
-                
+
                 $paymentMethod = $this->paymentMethodRepo->findOneOrFail($request->payment_method);
                 $address = $this->addressRepo->findOneOrFail($request->address);
                 $user = auth('api')->user();
@@ -112,11 +112,13 @@ class OrderController extends Controller
                 $data['address_id'] = $address->id;
                 $data['user_id'] = $user->id;
 
-
                 $order = $this->orderRepo->createOrder($data);
 
-
-                dd($order);
+                foreach ($items as $item) {
+                    $orderItem = new OrderItem($item);
+                    $orderItemRepo = new OrderItemRepository($orderItem);
+                    $orderItemRepo->associateToOrder($order);
+                }
 
             } else {
                 return response()->json(['message' => 'No Product added to the cart'], 400);

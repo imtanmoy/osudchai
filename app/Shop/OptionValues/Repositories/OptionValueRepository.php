@@ -59,7 +59,7 @@ class OptionValueRepository extends BaseRepository implements OptionValueReposit
      */
     public function dissociateFromOption(): bool
     {
-        return $this->model->delete();
+        return $this->model->option()->delete();
     }
 
     /**
