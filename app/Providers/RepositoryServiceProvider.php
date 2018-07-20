@@ -18,6 +18,8 @@ use App\Shop\OrderItems\Repositories\OrderItemRepository;
 use App\Shop\OrderItems\Repositories\OrderItemRepositoryInterface;
 use App\Shop\Orders\Repositories\OrderRepository;
 use App\Shop\Orders\Repositories\OrderRepositoryInterface;
+use App\Shop\OrderStatuses\Repositories\OrderStatusRepository;
+use App\Shop\OrderStatuses\Repositories\OrderStatusRepositoryInterface;
 use App\Shop\PaymentMethods\Repositories\PaymentMethodRepository;
 use App\Shop\PaymentMethods\Repositories\PaymentMethodRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -68,6 +70,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             OrderItemRepositoryInterface::class,
             OrderItemRepository::class
+        );
+        $this->app->bind(
+            OrderStatusRepositoryInterface::class,
+            OrderStatusRepository::class
         );
     }
 }

@@ -61,6 +61,8 @@ Route::put('products/{id}/options/{oid}', 'Admin\ProductController@updateProduct
 Route::resource('options', 'Admin\OptionController');
 Route::resource('options.values', 'Admin\OptionValueController');
 
+Route::resource('order-statuses', 'Admin\OrderStatusController');
+
 
 
 
