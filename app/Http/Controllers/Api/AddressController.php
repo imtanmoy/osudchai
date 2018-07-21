@@ -3,11 +3,28 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Address;
+use App\Shop\Addresses\Repositories\AddressRepositoryInterface;
+use App\Shop\Addresses\Transformations\AddressTransformable;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class AddressController extends Controller
 {
+
+    use AddressTransformable;
+
+    private $addressRepo;
+
+    /**
+     * AddressController constructor.
+     * @param $addressRepo
+     */
+    public function __construct(AddressRepositoryInterface $addressRepo)
+    {
+        $this->addressRepo = $addressRepo;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -45,17 +62,20 @@ class AddressController extends Controller
         try {
             $user = auth('api')->user();
 
-            $address = Address::findOrFail($id);
+//            $address = Address::findOrFail($id);
 
-            $temp = $address->toArray();
-            $temp['city'] = $address->city->name;
-            $temp['area'] = $address->area->name;
+            $address = $this->addressRepo->findOneOrFail($id);
+
+//            $temp = $address->toArray();
+//            $temp['city'] = $address->city->name;
+//            $temp['area'] = $address->area->name;
 
             if ($address->user_id != $user->id) {
                 return response()->json(['message' => 'This address does not belongs to you'], 403);
             }
 
-            return response()->json($temp);
+
+            return response()->json($this->transformAddress($address));
         } catch (\Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], 500);
         }
