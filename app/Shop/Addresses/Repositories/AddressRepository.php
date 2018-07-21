@@ -111,13 +111,12 @@ class AddressRepository extends BaseRepository implements AddressRepositoryInter
 
     public function searchAddress(string $text): Collection
     {
-//        return $this->model->search($text, [
-//            'address_1' => 10,
-//            'address_2' => 5,
-//            'province.name' => 5,
-//            'city.name' => 5,
-//            'country.name' => 5
-//        ])->get();
+        return $this->model->search($text, [
+            'address1' => 10,
+            'address2' => 5,
+            'area.name' => 5,
+            'city.name' => 5
+        ])->get();
     }
 
     public function findArea(): Area
@@ -133,7 +132,7 @@ class AddressRepository extends BaseRepository implements AddressRepositoryInter
     /**
      * @return Collection
      */
-    public function findOrders() : Collection
+    public function findOrders(): Collection
     {
         return $this->model->orders()->get();
     }

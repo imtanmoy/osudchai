@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Sofa\Eloquence\Eloquence;
 
 /**
  * @property mixed address2
@@ -14,6 +15,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Address extends Model
 {
+    use Eloquence;
+
     protected $fillable = ['address1', 'address2', 'post_code', 'user_id', 'city_id', 'area_id'];
 
     protected $hidden = ['user_id', 'city_id', 'area_id', 'created_at', 'updated_at'];
