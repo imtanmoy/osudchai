@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use App\Services\UserService\Exceptions\UserNotVerifiedException;
 use Exception;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -26,6 +27,14 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
+
+
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        return $request->expectsJson()
+            ? response()->json(['message' => $exception->getMessage()], 401)
+            : redirect()->guest(route('login'));
+    }
 
     /**
      * Report or log an exception.
