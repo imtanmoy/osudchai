@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ManufacturerRequest;
 use App\Models\Manufacturer;
+use App\Shop\Manufacturers\Repositories\ManufacturerRepository;
+use App\Shop\Manufacturers\Repositories\ManufacturerRepositoryInterface;
 use DataTables;
 use Gate;
 use App\Http\Controllers\Controller;
@@ -11,6 +13,21 @@ use Illuminate\Http\Request;
 
 class ManufacturerController extends Controller
 {
+    /**
+     * @var ManufacturerRepositoryInterface
+     */
+    private $manufacturerRepository;
+
+    /**
+     * ManufacturerController constructor.
+     * @param ManufacturerRepositoryInterface $manufacturerRepository
+     */
+    public function __construct(ManufacturerRepositoryInterface $manufacturerRepository)
+    {
+        $this->manufacturerRepository = $manufacturerRepository;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +38,7 @@ class ManufacturerController extends Controller
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
-        $manufacturers = Manufacturer::all();
+        $manufacturers = $this->manufacturerRepository->listManufacturers();
 
         return view('admin.manufacturers.index', compact('manufacturers'));
     }
@@ -48,11 +65,11 @@ class ManufacturerController extends Controller
     public function store(ManufacturerRequest $request)
     {
         try {
-            Manufacturer::create($request->all());
+            $this->manufacturerRepository->createManufacturer($request->all());
+            return redirect()->route('admin.manufacturers.index');
         } catch (\Exception $exception) {
             return redirect()->back()->withErrors($exception->getMessage());
         }
-        return redirect()->route('admin.manufacturers.index');
     }
 
     /**
@@ -66,7 +83,7 @@ class ManufacturerController extends Controller
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
-        $manufacturer = Manufacturer::findOrFail($id);
+        $manufacturer = $this->manufacturerRepository->findManufacturerById($id);
 
         return view('admin.manufacturers.edit', compact('manufacturer'));
     }
@@ -82,7 +99,7 @@ class ManufacturerController extends Controller
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
-        $manufacturer = Manufacturer::findOrFail($id);
+        $manufacturer = $this->manufacturerRepository->findManufacturerById($id);
 
         return view('admin.manufacturers.edit', compact('manufacturer'));
     }
@@ -97,7 +114,7 @@ class ManufacturerController extends Controller
     public function update(ManufacturerRequest $request, $id)
     {
         try {
-            $manufacturer = Manufacturer::findOrFail($id);
+            $manufacturer = $this->manufacturerRepository->findManufacturerById($id);
             $manufacturer->update($request->all());
         } catch (\Exception $exception) {
             return redirect()->back()->withErrors($exception->getMessage());
@@ -118,8 +135,10 @@ class ManufacturerController extends Controller
         }
 
         try {
-            $manufacturer = Manufacturer::findOrFail($id);
-            $status = $manufacturer->delete();
+            $manufacturer = $this->manufacturerRepository->findManufacturerById($id);
+            $manufacturerRepo = new ManufacturerRepository($manufacturer);
+            $manufacturerRepo->dissociateProducts();
+            $status = $manufacturerRepo->deleteManufacturer();
             if ($status) {
                 if ($request->ajax()) {
                     return response()->json(['status' => true, 'message' => 'Manufacturer Successfully Deleted']);
@@ -138,7 +157,7 @@ class ManufacturerController extends Controller
     public function dataTableManufacturer()
     {
         try {
-            $manufacturers = Manufacturer::all();
+            $manufacturers = $this->manufacturerRepository->listManufacturers();
             return Datatables::of($manufacturers)
                 ->editColumn('name', function ($manufacturer) {
                     return '<a href="' . route('admin.manufacturers.show', $manufacturer->id) . '">' . $manufacturer->name . '</a>';

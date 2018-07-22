@@ -125,6 +125,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     /**
      * @param int $id
      * @return bool
+     * @throws \Exception
      */
     public function delete(int $id) : bool
     {
