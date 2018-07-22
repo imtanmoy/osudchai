@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Models\Address;
 use App\Shop\Addresses\Repositories\AddressRepository;
 use App\Shop\Addresses\Repositories\AddressRepositoryInterface;
+use App\Shop\Addresses\Requests\CreateAddressRequest;
 use App\Shop\Addresses\Requests\UpdateAddressRequest;
 use App\Shop\Addresses\Transformations\AddressTransformable;
 use App\Shop\Users\Repositories\UserRepository;
 use App\Shop\Users\Repositories\UserRepositoryInterface;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class AddressController extends Controller
 {
@@ -60,10 +61,10 @@ class AddressController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param CreateAddressRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateAddressRequest $request)
     {
 
         $user = auth('api')->user();
