@@ -153,13 +153,15 @@ class AddressController extends Controller
         try {
             $user = auth('api')->user();
 
-            $address = Address::findOrFail($id);
+            $address = $this->addressRepo->findAddressById($id);
 
             if ($address->user_id != $user->id) {
                 return response()->json(['message' => 'This address does not belongs to you'], 403);
             }
 
-            $address->delete();
+            $addressRepo = new AddressRepository($address);
+
+            $addressRepo->deleteAddress();
 
             return response()->json(['message' => 'Address Successfully Deleted'], 200);
         } catch (\Exception $exception) {
