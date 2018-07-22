@@ -3043,16 +3043,16 @@
         },
         {
             "name": "spatie/laravel-activitylog",
-            "version": "2.7.0",
+            "version": "2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-activitylog.git",
-                "reference": "e354e84cee54565d59873dfd5826c57fff338c57"
+                "reference": "001bdbf2b892519301935b8480e029ed254284bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-activitylog/zipball/e354e84cee54565d59873dfd5826c57fff338c57",
-                "reference": "e354e84cee54565d59873dfd5826c57fff338c57",
+                "url": "https://api.github.com/repos/spatie/laravel-activitylog/zipball/001bdbf2b892519301935b8480e029ed254284bf",
+                "reference": "001bdbf2b892519301935b8480e029ed254284bf",
                 "shasum": ""
             },
             "require": {
@@ -3109,7 +3109,7 @@
                 "spatie",
                 "user"
             ],
-            "time": "2018-06-18T09:59:53+00:00"
+            "time": "2018-07-21T15:09:54+00:00"
         },
         {
             "name": "spatie/laravel-cors",

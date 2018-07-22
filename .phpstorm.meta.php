@@ -3,7 +3,7 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2018-07-21 14:57:48.
+    * Generated on 2018-07-22 03:35:00.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
@@ -58,6 +58,7 @@ namespace PHPSTORM_META {
         'eloquence.joiner' => \Sofa\Eloquence\Relations\JoinerFactory::class,
         'eloquence.parser' => \Sofa\Eloquence\Searchable\ParserFactory::class,
         'command.activitylog:clean' => \Spatie\Activitylog\CleanActivitylogCommand::class,
+        'Spatie\Activitylog\ActivityLogger' => \Spatie\Activitylog\ActivityLogger::class,
         'tymon.jwt.provider.jwt.namshi' => \Tymon\JWTAuth\Providers\JWT\Namshi::class,
         'tymon.jwt.provider.jwt.lcobucci' => \Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
         'tymon.jwt.provider.jwt' => \Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
@@ -249,6 +250,7 @@ namespace PHPSTORM_META {
         'eloquence.joiner' => \Sofa\Eloquence\Relations\JoinerFactory::class,
         'eloquence.parser' => \Sofa\Eloquence\Searchable\ParserFactory::class,
         'command.activitylog:clean' => \Spatie\Activitylog\CleanActivitylogCommand::class,
+        'Spatie\Activitylog\ActivityLogger' => \Spatie\Activitylog\ActivityLogger::class,
         'tymon.jwt.provider.jwt.namshi' => \Tymon\JWTAuth\Providers\JWT\Namshi::class,
         'tymon.jwt.provider.jwt.lcobucci' => \Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
         'tymon.jwt.provider.jwt' => \Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
@@ -440,6 +442,7 @@ namespace PHPSTORM_META {
         'eloquence.joiner' => \Sofa\Eloquence\Relations\JoinerFactory::class,
         'eloquence.parser' => \Sofa\Eloquence\Searchable\ParserFactory::class,
         'command.activitylog:clean' => \Spatie\Activitylog\CleanActivitylogCommand::class,
+        'Spatie\Activitylog\ActivityLogger' => \Spatie\Activitylog\ActivityLogger::class,
         'tymon.jwt.provider.jwt.namshi' => \Tymon\JWTAuth\Providers\JWT\Namshi::class,
         'tymon.jwt.provider.jwt.lcobucci' => \Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
         'tymon.jwt.provider.jwt' => \Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
@@ -631,6 +634,7 @@ namespace PHPSTORM_META {
         'eloquence.joiner' => \Sofa\Eloquence\Relations\JoinerFactory::class,
         'eloquence.parser' => \Sofa\Eloquence\Searchable\ParserFactory::class,
         'command.activitylog:clean' => \Spatie\Activitylog\CleanActivitylogCommand::class,
+        'Spatie\Activitylog\ActivityLogger' => \Spatie\Activitylog\ActivityLogger::class,
         'tymon.jwt.provider.jwt.namshi' => \Tymon\JWTAuth\Providers\JWT\Namshi::class,
         'tymon.jwt.provider.jwt.lcobucci' => \Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
         'tymon.jwt.provider.jwt' => \Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
@@ -822,6 +826,7 @@ namespace PHPSTORM_META {
         'eloquence.joiner' => \Sofa\Eloquence\Relations\JoinerFactory::class,
         'eloquence.parser' => \Sofa\Eloquence\Searchable\ParserFactory::class,
         'command.activitylog:clean' => \Spatie\Activitylog\CleanActivitylogCommand::class,
+        'Spatie\Activitylog\ActivityLogger' => \Spatie\Activitylog\ActivityLogger::class,
         'tymon.jwt.provider.jwt.namshi' => \Tymon\JWTAuth\Providers\JWT\Namshi::class,
         'tymon.jwt.provider.jwt.lcobucci' => \Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
         'tymon.jwt.provider.jwt' => \Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
@@ -1013,6 +1018,7 @@ namespace PHPSTORM_META {
         'eloquence.joiner' => \Sofa\Eloquence\Relations\JoinerFactory::class,
         'eloquence.parser' => \Sofa\Eloquence\Searchable\ParserFactory::class,
         'command.activitylog:clean' => \Spatie\Activitylog\CleanActivitylogCommand::class,
+        'Spatie\Activitylog\ActivityLogger' => \Spatie\Activitylog\ActivityLogger::class,
         'tymon.jwt.provider.jwt.namshi' => \Tymon\JWTAuth\Providers\JWT\Namshi::class,
         'tymon.jwt.provider.jwt.lcobucci' => \Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
         'tymon.jwt.provider.jwt' => \Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
@@ -1204,6 +1210,7 @@ namespace PHPSTORM_META {
         'eloquence.joiner' => \Sofa\Eloquence\Relations\JoinerFactory::class,
         'eloquence.parser' => \Sofa\Eloquence\Searchable\ParserFactory::class,
         'command.activitylog:clean' => \Spatie\Activitylog\CleanActivitylogCommand::class,
+        'Spatie\Activitylog\ActivityLogger' => \Spatie\Activitylog\ActivityLogger::class,
         'tymon.jwt.provider.jwt.namshi' => \Tymon\JWTAuth\Providers\JWT\Namshi::class,
         'tymon.jwt.provider.jwt.lcobucci' => \Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
         'tymon.jwt.provider.jwt' => \Tymon\JWTAuth\Providers\JWT\Lcobucci::class,

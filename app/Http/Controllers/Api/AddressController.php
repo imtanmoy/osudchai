@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Address;
+use App\Shop\Addresses\Repositories\AddressRepository;
 use App\Shop\Addresses\Repositories\AddressRepositoryInterface;
+use App\Shop\Addresses\Requests\UpdateAddressRequest;
 use App\Shop\Addresses\Transformations\AddressTransformable;
+use App\Shop\Users\Repositories\UserRepository;
+use App\Shop\Users\Repositories\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -14,14 +18,20 @@ class AddressController extends Controller
     use AddressTransformable;
 
     private $addressRepo;
+    private $userRepo;
 
     /**
      * AddressController constructor.
-     * @param $addressRepo
+     * @param AddressRepositoryInterface $addressRepo
+     * @param UserRepositoryInterface $userRepository
      */
-    public function __construct(AddressRepositoryInterface $addressRepo)
+    public function __construct(
+        AddressRepositoryInterface $addressRepo,
+        UserRepositoryInterface $userRepository
+    )
     {
         $this->addressRepo = $addressRepo;
+        $this->userRepo = $userRepository;
     }
 
 
@@ -32,7 +42,19 @@ class AddressController extends Controller
      */
     public function index()
     {
-        return response()->json(auth('api')->user()->addresses);
+        $user = auth('api')->user();
+
+        $user = $this->userRepo->findUserById($user->id);
+
+        $user = new UserRepository($user);
+
+        $addresses = $user->getAddresses();
+
+        $addresses = $addresses->map(function ($address) {
+            return $this->transformAddress($address);
+        });
+
+        return response()->json($addresses);
     }
 
     /**
@@ -46,9 +68,16 @@ class AddressController extends Controller
 
         $user = auth('api')->user();
 
-        $user->addresses()->create($request->all());
+        $user = $this->userRepo->findUserById($user->id);
 
-        return response()->json($user->addresses);
+        $address = new Address($request->except('_token', '_method'));
+
+        $user = new UserRepository($user);
+
+        $address = $user->attachAddress($address);
+
+
+        return response()->json(['message' => 'Address Successfully Created', 'address' => $this->transformAddress($address)], 201);
     }
 
     /**
@@ -62,13 +91,9 @@ class AddressController extends Controller
         try {
             $user = auth('api')->user();
 
-//            $address = Address::findOrFail($id);
 
             $address = $this->addressRepo->findOneOrFail($id);
 
-//            $temp = $address->toArray();
-//            $temp['city'] = $address->city->name;
-//            $temp['area'] = $address->area->name;
 
             if ($address->user_id != $user->id) {
                 return response()->json(['message' => 'This address does not belongs to you'], 403);
@@ -84,30 +109,33 @@ class AddressController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param UpdateAddressRequest $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateAddressRequest $request, $id)
     {
         try {
             $user = auth('api')->user();
 
-            $address = Address::findOrFail($id);
+            $address = $this->addressRepo->findAddressById($id);
 
             if ($address->user_id != $user->id) {
                 return response()->json(['message' => 'This address does not belongs to you'], 403);
             }
 
-            foreach ($request->all() as $key => $value) {
-                if (isset($request->$key)) {
-                    $address->$key = $value;
-                }
-            }
+            $address['user_id'] = $user->id;
 
-            $address->save();
+            $addressRepo = new AddressRepository($address);
 
-            return response()->json(['message' => 'Address Successfully Updated'], 200);
+
+            $addressRepo->updateAddress($request->except('_token', '_method'));
+
+
+            $address = $this->addressRepo->findAddressById($id);
+            return response()->json(['message' => 'Address Successfully Updated', 'address' => $this->transformAddress($address)], 200);
+
+
         } catch (\Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], 500);
         }
