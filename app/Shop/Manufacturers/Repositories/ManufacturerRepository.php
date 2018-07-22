@@ -30,6 +30,7 @@ class ManufacturerRepository extends BaseRepository implements ManufacturerRepos
      */
     public function __construct(Manufacturer $manufacturer)
     {
+        parent::__construct($manufacturer);
         $this->model = $manufacturer;
     }
 
