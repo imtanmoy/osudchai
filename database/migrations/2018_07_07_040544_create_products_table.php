@@ -26,10 +26,9 @@ class CreateProductsTable extends Migration
 
             $table->index(['sku', 'slug']);
 
-            $table->unsignedBigInteger('manufacturer_id');
+            $table->unsignedBigInteger('manufacturer_id')->nullable()->after('id');
             $table->foreign('manufacturer_id')
-                ->references('id')->on('manufacturers')
-                ->onDelete('cascade');
+                ->references('id')->on('manufacturers');
 
             $table->unsignedInteger('category_id');
             $table->foreign('category_id')
