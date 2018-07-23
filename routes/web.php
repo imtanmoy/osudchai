@@ -34,8 +34,8 @@ Auth::routes();
 Route::group(['middleware' => ['isVerified']], function () {
     Route::get('/home', 'HomeController@index')->name('home');
 });
+Route::post('auth/accountkit', 'Auth\AccountKitController@login')->name('accountKit.login');
 Route::get('auth/verify/{token}', 'Auth\VerificationController@verifyUser');
-
 Route::get('auth/{provider}', 'Auth\SocialAccountController@redirectToProvider');
 Route::get('auth/{provider}/callback', 'Auth\SocialAccountController@handleProviderCallback');
 

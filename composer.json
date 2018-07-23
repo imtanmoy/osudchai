@@ -10,6 +10,7 @@
         "doctrine/dbal": "^2.7",
         "fideloper/proxy": "^4.0",
         "genealabs/laravel-model-caching": "^0.2.63",
+        "guzzlehttp/guzzle": "^6.3",
         "hesto/multi-auth": "^2.0",
         "kalnoy/nestedset": "^4.3",
         "laracasts/flash": "^3.0",

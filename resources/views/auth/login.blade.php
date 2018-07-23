@@ -14,7 +14,7 @@
 
                     <div class="panel-body">
                         <form class="form-horizontal" method="POST" action="{{ route('login') }}">
-                            {{ csrf_field() }}
+                            {{--{{ csrf_field() }}--}}
 
                             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                                 <label for="email" class="col-md-4 control-label">E-Mail Address</label>
@@ -80,10 +80,14 @@
                         </form>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <input value="+1" id="country_code"/>
+                                <input value="+88" id="country_code"/>
                                 <input placeholder="phone number" id="phone_number"/>
                                 <button onclick="smsLogin();">Login via SMS</button>
                             </div>
+                            <form id="account_kit" action="{{route('accountKit.login')}}" method="POST">
+                                <input type="hidden" name="_token" id="_token2" value="{{ csrf_token() }}">
+                                <input type="hidden" name="code" id="code"/>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -112,7 +116,9 @@
             if (response.status === "PARTIALLY_AUTHENTICATED") {
                 var code = response.code;
                 var csrf = response.state;
-                // Send code to server to exchange for access token
+                document.getElementById('code').value = response.code;
+                document.getElementById('_token2').value = response.state;
+                document.getElementById('account_kit').submit();
             }
             else if (response.status === "NOT_AUTHENTICATED") {
                 // handle authentication failure
