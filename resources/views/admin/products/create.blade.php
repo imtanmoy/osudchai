@@ -60,8 +60,8 @@
             var $attributeTable = $('#attributeTable');
 
 
-            var genericNameAutoComplete = "{{ route('admin.generic_names.suggest') }}";
-            var strengthAutoComplete = "{{ route('admin.strengths.suggest') }}";
+            var genericNameAutoComplete = "{{ route('admin.generic_names.index') }}";
+            var strengthAutoComplete = "{{ route('admin.strengths.index') }}";
             var attributeNameAutocomplete = "{{ route('admin.attributes.suggest') }}";
 
 

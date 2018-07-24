@@ -35,20 +35,17 @@ class CreateProductsTable extends Migration
                 ->references('id')->on('categories')
                 ->onDelete('cascade');
 
-            $table->unsignedInteger('product_type_id');
+            $table->unsignedInteger('product_type_id')->nullable();
             $table->foreign('product_type_id')
-                ->references('id')->on('product_types')
-                ->onDelete('cascade');
+                ->references('id')->on('product_types');
 
             $table->unsignedBigInteger('strength_id')->nullable();
             $table->foreign('strength_id')
-                ->references('id')->on('strengths')
-                ->onDelete('cascade');
+                ->references('id')->on('strengths');
 
             $table->unsignedBigInteger('generic_name_id')->nullable();
             $table->foreign('generic_name_id')
-                ->references('id')->on('generic_names')
-                ->onDelete('cascade');
+                ->references('id')->on('generic_names');
         });
     }
 

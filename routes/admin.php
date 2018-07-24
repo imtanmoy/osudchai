@@ -38,9 +38,11 @@ Route::resource('attributes', 'Admin\AttributeController');
 Route::get('datatable/attributes', 'Admin\AttributeController@data_table')->name('datatable.attributes');
 
 // Strength Routes
+Route::get('strengths', 'Admin\StrengthController@index')->name('strengths.index');
 Route::get('strengths/suggest', 'Admin\StrengthController@autoComplete')->name('strengths.suggest');
 
 // GenericName Routes
+Route::get('generic_names', 'Admin\GenericNameController@index')->name('generic_names.index');
 Route::get('generic_names/suggest', 'Admin\GenericNameController@autoComplete')->name('generic_names.suggest');
 
 // Product Routes

@@ -11,5 +11,5 @@ namespace App\Shop\Manufacturers\Exceptions;
 
 class DeletingManufacturerErrorException extends \Exception
 {
-
+    protected $code = 500;
 }

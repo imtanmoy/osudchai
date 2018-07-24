@@ -13,6 +13,7 @@ use App\Models\Manufacturer;
 use App\Models\Product;
 use App\Shop\Base\BaseRepository;
 use App\Shop\Manufacturers\Exceptions\CreateManufacturerErrorException;
+use App\Shop\Manufacturers\Exceptions\DeletingManufacturerErrorException;
 use App\Shop\Manufacturers\Exceptions\ManufacturerNotFoundErrorException;
 use App\Shop\Manufacturers\Exceptions\UpdateManufacturerErrorException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -84,7 +85,12 @@ class ManufacturerRepository extends BaseRepository implements ManufacturerRepos
      */
     public function deleteManufacturer(): bool
     {
-        return $this->model->delete();
+        try {
+            return $this->model->delete();
+        } catch (\Exception $exception) {
+            throw new DeletingManufacturerErrorException($exception->getMessage());
+        }
+
     }
 
     public function listManufacturers($columns = array('*'), string $orderBy = 'id', string $sortBy = 'asc'): Collection
@@ -117,5 +123,19 @@ class ManufacturerRepository extends BaseRepository implements ManufacturerRepos
             $product->manufacturer_id = null;
             $product->save();
         });
+    }
+
+
+    /**
+     * @param string $text
+     * @return Collection
+     */
+    public function searchManufacturer(string $text): Collection
+    {
+        return $this->model->search($text, [
+            'name' => 10,
+            'phone' => 8,
+            'email' => 5
+        ])->get();
     }
 }

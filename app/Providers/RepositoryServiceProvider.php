@@ -10,6 +10,8 @@ use App\Repositories\ProductType\ProductTypeInterface;
 use App\Repositories\ProductType\ProductTypeRepository;
 use App\Shop\Addresses\Repositories\AddressRepository;
 use App\Shop\Addresses\Repositories\AddressRepositoryInterface;
+use App\Shop\GenericNames\Repositories\GenericNameRepository;
+use App\Shop\GenericNames\Repositories\GenericNameRepositoryInterface;
 use App\Shop\Manufacturers\Repositories\ManufacturerRepository;
 use App\Shop\Manufacturers\Repositories\ManufacturerRepositoryInterface;
 use App\Shop\Options\Repositories\OptionRepository;
@@ -24,6 +26,8 @@ use App\Shop\OrderStatuses\Repositories\OrderStatusRepository;
 use App\Shop\OrderStatuses\Repositories\OrderStatusRepositoryInterface;
 use App\Shop\PaymentMethods\Repositories\PaymentMethodRepository;
 use App\Shop\PaymentMethods\Repositories\PaymentMethodRepositoryInterface;
+use App\Shop\Strengths\Repositories\StrengthRepository;
+use App\Shop\Strengths\Repositories\StrengthRepositoryInterface;
 use App\Shop\Users\Repositories\UserRepository;
 use App\Shop\Users\Repositories\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -86,6 +90,14 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             ManufacturerRepositoryInterface::class,
             ManufacturerRepository::class
+        );
+        $this->app->bind(
+            GenericNameRepositoryInterface::class,
+            GenericNameRepository::class
+        );
+        $this->app->bind(
+            StrengthRepositoryInterface::class,
+            StrengthRepository::class
         );
     }
 }

@@ -27,4 +27,6 @@ interface ManufacturerRepositoryInterface extends BaseRepositoryInterface
     public function listManufacturers($columns = array('*'), string $orderBy = 'id', string $sortBy = 'asc'): Collection;
 
     public function saveProduct(Product $product);
+
+    public function searchManufacturer(string $text): Collection;
 }

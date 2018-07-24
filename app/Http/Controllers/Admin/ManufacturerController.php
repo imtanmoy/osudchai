@@ -125,10 +125,11 @@ class ManufacturerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param ManufacturerRequest $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy(ManufacturerRequest $request, $id)
     {
         if (!Gate::allows('users_manage')) {
             return abort(401);
