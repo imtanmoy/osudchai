@@ -8,6 +8,10 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
+/**
+ * @property null product_type_id
+ * @property null generic_name_id
+ */
 class Product extends Model
 {
     use LogsActivity;

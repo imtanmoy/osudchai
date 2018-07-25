@@ -6,8 +6,6 @@ use App\Repositories\Attribute\AttributeInterface;
 use App\Repositories\Attribute\AttributeRepository;
 use App\Repositories\Product\ProductInterface;
 use App\Repositories\Product\ProductRepository;
-use App\Repositories\ProductType\ProductTypeInterface;
-use App\Repositories\ProductType\ProductTypeRepository;
 use App\Shop\Addresses\Repositories\AddressRepository;
 use App\Shop\Addresses\Repositories\AddressRepositoryInterface;
 use App\Shop\GenericNames\Repositories\GenericNameRepository;
@@ -26,6 +24,8 @@ use App\Shop\OrderStatuses\Repositories\OrderStatusRepository;
 use App\Shop\OrderStatuses\Repositories\OrderStatusRepositoryInterface;
 use App\Shop\PaymentMethods\Repositories\PaymentMethodRepository;
 use App\Shop\PaymentMethods\Repositories\PaymentMethodRepositoryInterface;
+use App\Shop\ProductTypes\Repositories\ProductTypeRepository;
+use App\Shop\ProductTypes\Repositories\ProductTypeRepositoryInterface;
 use App\Shop\Strengths\Repositories\StrengthRepository;
 use App\Shop\Strengths\Repositories\StrengthRepositoryInterface;
 use App\Shop\Users\Repositories\UserRepository;
@@ -51,9 +51,14 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(ProductTypeInterface::class, ProductTypeRepository::class);
-        $this->app->bind(AttributeInterface::class, AttributeRepository::class);
-        $this->app->bind(ProductInterface::class, ProductRepository::class);
+        $this->app->bind(
+            AttributeInterface::class,
+            AttributeRepository::class
+        );
+        $this->app->bind(
+            ProductInterface::class,
+            ProductRepository::class
+        );
 
         $this->app->bind(
             OptionRepositoryInterface::class,
@@ -98,6 +103,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             StrengthRepositoryInterface::class,
             StrengthRepository::class
+        );
+        $this->app->bind(
+            ProductTypeRepositoryInterface::class,
+            ProductTypeRepository::class
         );
     }
 }

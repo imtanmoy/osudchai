@@ -5,6 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\ProductTypeRequest;
 use App\Models\ProductType;
 use App\Repositories\ProductType\ProductTypeInterface;
+use App\Shop\ProductTypes\Exceptions\CreateProductTypeErrorException;
+use App\Shop\ProductTypes\Exceptions\DeleteProductTypeErrorException;
+use App\Shop\ProductTypes\Exceptions\UpdateProductTypeErrorException;
+use App\Shop\ProductTypes\Repositories\ProductTypeRepository;
+use App\Shop\ProductTypes\Repositories\ProductTypeRepositoryInterface;
 use DataTables;
 use Gate;
 use App\Http\Controllers\Controller;
@@ -12,15 +17,18 @@ use Illuminate\Http\Request;
 
 class ProductTypeController extends Controller
 {
-    private $productType;
+    /**
+     * @var ProductTypeRepositoryInterface
+     */
+    private $productTypeRepository;
 
     /**
      * ProductTypeController constructor.
-     * @param ProductTypeInterface $productType
+     * @param ProductTypeRepositoryInterface $productTypeRepository
      */
-    public function __construct(ProductTypeInterface $productType)
+    public function __construct(ProductTypeRepositoryInterface $productTypeRepository)
     {
-        $this->productType = $productType;
+        $this->productTypeRepository = $productTypeRepository;
     }
 
     /**
@@ -34,7 +42,7 @@ class ProductTypeController extends Controller
             return abort(401);
         }
 //        $product_types = ProductType::all();
-        $product_types = $this->productType->getAll();
+        $product_types = $this->productTypeRepository->listProductTypes();
 
         return view('admin.product_types.index', compact('product_types'));
     }
@@ -63,10 +71,16 @@ class ProductTypeController extends Controller
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
-//        ProductType::create($request->all());
-        $this->productType->create($request->all());
 
-        return redirect()->route('admin.product_types.index');
+        try {
+            $product_type = $this->productTypeRepository->createProductType($request->except('_token'));
+            flash('Product Type ' . $product_type->name . ' created successfully')->success();
+            return redirect()->route('admin.product_types.edit', $product_type->id);
+        } catch (CreateProductTypeErrorException $exception) {
+            flash($exception->getMessage())->error();
+
+            return redirect()->route('admin.product_types.create')->withInput();
+        }
     }
 
     /**
@@ -80,8 +94,7 @@ class ProductTypeController extends Controller
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
-//        $product_type = ProductType::findOrFail($id);
-        $product_type = $this->productType->getById($id);
+        $product_type = $this->productTypeRepository->findProductTypeById($id);
 
         return view('admin.product_types.edit', compact('product_type'));
     }
@@ -97,8 +110,7 @@ class ProductTypeController extends Controller
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
-//        $product_type = ProductType::findOrFail($id);
-        $product_type = $this->productType->getById($id);
+        $product_type = $this->productTypeRepository->findProductTypeById($id);
 
         return view('admin.product_types.edit', compact('product_type'));
     }
@@ -112,12 +124,20 @@ class ProductTypeController extends Controller
      */
     public function update(ProductTypeRequest $request, $id)
     {
-//        $product_type = ProductType::findOrFail($id);
-//        $product_type->update($request->all());
+        try {
+            $product_type = $this->productTypeRepository->findProductTypeById($id);
+            $product_typeRepo = new ProductTypeRepository($product_type);
 
-        $this->productType->update($id, $request->all());
+            $product_typeRepo->updateProductType($request->except('_token'));
 
-        return redirect()->route('admin.product_types.index');
+            flash('Product Type ' . $product_type->name . ' created successfully')->success();
+
+            return redirect()->route('admin.product_types.edit', $id);
+
+        } catch (UpdateProductTypeErrorException $exception) {
+            flash($exception->getMessage())->error();
+            return redirect()->route('admin.product_types.edit', $id)->withInput();
+        }
     }
 
     /**
@@ -133,8 +153,11 @@ class ProductTypeController extends Controller
         }
 
         try {
-            $product_type = ProductType::findOrFail($id);
-            $status = $product_type->delete();
+            $product_type = $this->productTypeRepository->findProductTypeById($id);
+            $product_typeRepo = new ProductTypeRepository($product_type);
+
+            $status = $product_typeRepo->deleteProductType();
+
             if ($status) {
                 if ($request->ajax()) {
                     return response()->json(['status' => true, 'message' => 'Product Type Successfully Deleted']);
@@ -142,23 +165,24 @@ class ProductTypeController extends Controller
                     return redirect()->route('admin.product_types.index');
                 }
             }
-        } catch (\Exception $exception) {
+        } catch (DeleteProductTypeErrorException $exception) {
             if ($request->ajax()) {
                 return response()->json(['status' => false, 'message' => $exception->getMessage()]);
             }
-            return redirect()->back()->withErrors($exception->getMessage());
+            flash($exception->getMessage())->error();
+            return redirect()->back();
         }
     }
 
     public function dataTable()
     {
         try {
-            $product_types = ProductType::all();
+            $product_types = $this->productTypeRepository->listProductTypes();
             return Datatables::of($product_types)
-                ->editColumn('name', function ($product_type) {
+                ->editColumn('name', function (ProductType $product_type) {
                     return '<a href="' . route('admin.product_types.show', $product_type->id) . '">' . $product_type->name . '</a>';
                 })
-                ->addColumn('action', function ($product_type) {
+                ->addColumn('action', function (ProductType $product_type) {
                     return '<a id="deleteBtn" data-id="' . $product_type->id . '"  class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
                 })->rawColumns(['action', 'name'])->make(true);
         } catch (\Exception $e) {
