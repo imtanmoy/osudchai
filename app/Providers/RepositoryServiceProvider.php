@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use App\Repositories\Attribute\AttributeInterface;
-use App\Repositories\Attribute\AttributeRepository;
 use App\Repositories\Product\ProductInterface;
 use App\Repositories\Product\ProductRepository;
 use App\Shop\Addresses\Repositories\AddressRepository;
 use App\Shop\Addresses\Repositories\AddressRepositoryInterface;
+use App\Shop\Attributes\Repositories\AttributeRepository;
+use App\Shop\Attributes\Repositories\AttributeRepositoryInterface;
 use App\Shop\GenericNames\Repositories\GenericNameRepository;
 use App\Shop\GenericNames\Repositories\GenericNameRepositoryInterface;
 use App\Shop\Manufacturers\Repositories\ManufacturerRepository;
@@ -52,7 +52,7 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(
-            AttributeInterface::class,
+            AttributeRepositoryInterface::class,
             AttributeRepository::class
         );
         $this->app->bind(

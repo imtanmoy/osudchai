@@ -6,41 +6,59 @@ use App\Http\Requests\AttributeRequest;
 use App\Models\Attribute;
 use App\Repositories\Attribute\AttributeInterface;
 use App\Http\Controllers\Controller;
+use App\Shop\Attributes\Exceptions\CreateAttributeErrorException;
+use App\Shop\Attributes\Exceptions\UpdateAttributeErrorException;
+use App\Shop\Attributes\Repositories\AttributeRepository;
+use App\Shop\Attributes\Repositories\AttributeRepositoryInterface;
 use DataTables;
 use Gate;
 use Illuminate\Http\Request;
 
 class AttributeController extends Controller
 {
-    private $attribute;
+    /**
+     * @var AttributeRepositoryInterface
+     */
+    private $attributeRepository;
+
 
     /**
      * AttributeController constructor.
-     * @param AttributeInterface $attribute
+     * @param AttributeRepositoryInterface $attributeRepository
      */
-    public function __construct(AttributeInterface $attribute)
+    public function __construct(AttributeRepositoryInterface $attributeRepository)
     {
-        $this->attribute = $attribute;
+        $this->attributeRepository = $attributeRepository;
     }
 
 
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
-        $attributes = $this->attribute->getAll();
+        if ($request->has('query')) {
+            $strengths = $this->attributeRepository->searchAttribute($request->input('query'));
+            $data = $strengths->map(function (Attribute $attribute) {
+                return $attribute->name;
+            });
+            if ($request->ajax()) {
+                return response()->json($data);
+            } else {
+                $attributes = $this->attributeRepository->listAttributes();
+                return view('admin.attributes.index', compact('attributes'));
+            }
 
-//        if ($request->isJson()) {
-//            return response()->json($attributes);
-//        } else {
+        }
+        $attributes = $this->attributeRepository->listAttributes();
+
         return view('admin.attributes.index', compact('attributes'));
-//        }
 
     }
 
@@ -65,9 +83,12 @@ class AttributeController extends Controller
      */
     public function store(AttributeRequest $request)
     {
-//        dd($request);
-        $this->attribute->create($request->all());
-        return redirect()->route('admin.attributes.index');
+        if (!Gate::allows('users_manage')) {
+            return abort(401);
+        }
+        $attribute = $this->attributeRepository->createAttribute($request->except('_token'));
+        flash('Attribute ' . $attribute->name . ' created successfully')->success();
+        return redirect()->route('admin.attributes.edit', $attribute->id);
     }
 
     /**
@@ -78,7 +99,10 @@ class AttributeController extends Controller
      */
     public function show($id)
     {
-        return response()->json($this->attribute->getById($id));
+        if (!Gate::allows('users_manage')) {
+            return abort(401);
+        }
+        return response()->json($this->attributeRepository->findAttributeById($id));
     }
 
     /**
@@ -92,8 +116,7 @@ class AttributeController extends Controller
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
-//        $product_type = ProductType::findOrFail($id);
-        $attribute = $this->attribute->getById($id);
+        $attribute = $this->attributeRepository->findAttributeById($id);
 
         return view('admin.attributes.edit', compact('attribute'));
     }
@@ -107,9 +130,19 @@ class AttributeController extends Controller
      */
     public function update(AttributeRequest $request, $id)
     {
-        $this->attribute->update($id, $request->all());
-
-        return redirect()->route('admin.attributes.index');
+        if (!Gate::allows('users_manage')) {
+            return abort(401);
+        }
+        try {
+            $attribute = $this->attributeRepository->findAttributeById($id);
+            $attributeRepo = new AttributeRepository($attribute);
+            $attributeRepo->updateAttribute($request->except('_token'));
+            flash('Attribute' . $attribute->name . 'created successfully')->success();
+            return redirect()->route('admin.attributes.edit', $id);
+        } catch (UpdateAttributeErrorException $exception) {
+            flash($exception->getMessage())->error();
+            return redirect()->route('admin.attributes.edit', $id)->withInput();
+        }
     }
 
     /**
@@ -126,14 +159,17 @@ class AttributeController extends Controller
         }
 
         try {
-            $attribute = Attribute::findOrFail($id);
+            $attribute = $this->attributeRepository->findAttributeById($id);
 
-            $status = $attribute->delete();
+            $attributeRepo = new AttributeRepository($attribute);
+
+            $status = $attributeRepo->deleteAttribute();
 
             if ($status) {
                 if ($request->ajax()) {
                     return response()->json(['status' => true, 'message' => 'Attribute Successfully Deleted']);
                 } else {
+                    flash('Attribute Successfully Deleted')->success();
                     return redirect()->route('admin.attributes.index');
                 }
             }
@@ -141,25 +177,26 @@ class AttributeController extends Controller
             if ($request->ajax()) {
                 return response()->json(['status' => false, 'message' => $exception->getMessage()]);
             }
+            flash($exception->getMessage())->error();
             return redirect()->back()->withErrors($exception->getMessage());
         }
     }
 
     public function showAll()
     {
-        $attributes = $this->attribute->getAll();
+        $attributes = $this->attributeRepository->listAttributes();
         return response()->json($attributes);
     }
 
     public function data_table()
     {
         try {
-            $attributes = Attribute::all();
+            $attributes = $this->attributeRepository->listAttributes();
             return Datatables::of($attributes)
-                ->editColumn('name', function ($attribute) {
+                ->editColumn('name', function (Attribute $attribute) {
                     return '<a href="' . route('admin.attributes.show', $attribute->id) . '">' . $attribute->name . '</a>';
                 })
-                ->addColumn('action', function ($attribute) {
+                ->addColumn('action', function (Attribute $attribute) {
                     return '<a id="deleteBtn" data-id="' . $attribute->id . '"  class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
                 })->rawColumns(['action', 'name'])->make(true);
         } catch (\Exception $e) {

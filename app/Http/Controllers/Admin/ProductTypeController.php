@@ -162,6 +162,7 @@ class ProductTypeController extends Controller
                 if ($request->ajax()) {
                     return response()->json(['status' => true, 'message' => 'Product Type Successfully Deleted']);
                 } else {
+                    flash('Product Type deleted')->success();
                     return redirect()->route('admin.product_types.index');
                 }
             }
