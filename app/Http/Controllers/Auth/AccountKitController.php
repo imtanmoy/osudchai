@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Shop\AccountKits\Repositories\AccountKitRepository;
 use App\Shop\AccountKits\Repositories\AccountKitRepositoryInterface;
 use App\User;
 use GuzzleHttp\Exception\GuzzleException;
@@ -79,13 +80,22 @@ class AccountKitController extends Controller
 
             $accountKit = $this->accountKitRepository->findAccountKitByNumber($number);
             if ($accountKit == null) {
-                $user = new User();
-                $user->phone = '0' . $national_number;
-                $user->save();
+                $user = User::where('phone', '0' . $national_number)->first();
+                if ($user == null) {
+                    $user = new User();
+                    $user->phone = '0' . $national_number;
+                    $user->save();
+                } else {
+                    if ($user->accountKit()->exists()) {
+                        $account = new AccountKitRepository($user->accountKit);
+                        $account->deleteAccountKit();
+                    }
+                }
+
                 $params = [
                     'account_kit_user_id' => $userId,
                     'access_token' => $userAccessToken,
-                    'token_refresh_interval_sec' => $this->refreshInterval,
+                    'token_refresh_interval_sec' => $refreshInterval,
                     'number' => $number,
                     'country_prefix' => $country_prefix,
                     'national_number' => $national_number,
@@ -98,6 +108,8 @@ class AccountKitController extends Controller
             }
 
         } catch (GuzzleException $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
