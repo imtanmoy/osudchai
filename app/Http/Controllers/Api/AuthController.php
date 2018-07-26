@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\RegisterRequest;
 use App\Services\UserService\Facades\UserVerification;
+use App\Shop\AccountKits\Repositories\AccountKitRepository;
 use App\User;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator;
+use GuzzleHttp\Client as GuzzleHttpClient;
 
 class AuthController extends Controller
 {
@@ -99,8 +101,19 @@ class AuthController extends Controller
         return response()->json(auth('api')->user());
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
     public function logout(Request $request)
     {
+        $user = auth('api')->user();
+        if ($user->accountKit()->exists()) {
+            $status = $this->logOutAccountKit($user->accountKit->access_token);
+            $accountKit = new AccountKitRepository($user->accountKit);
+            $status2 = $accountKit->deleteAccountKit();
+        }
         auth('api')->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
@@ -150,5 +163,21 @@ class AuthController extends Controller
             'phone' => 'required|regex:/(01)[0-9]{9}/|max:14|min:11|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
+    }
+
+    private function logOutAccountKit(string $userAccessToken)
+    {
+        $client = new GuzzleHttpClient();
+        $version = config('account_kit.account_kit_api_version');
+
+        $logout_endpoint_url = 'https://graph.accountkit.com/' . $version . '/logout?' .
+            'access_token=' . $userAccessToken;
+        try {
+            $request = $client->request('GET', $logout_endpoint_url);
+            $data = json_decode($request->getBody());
+            return true;
+        } catch (GuzzleException $e) {
+            return false;
+        }
     }
 }

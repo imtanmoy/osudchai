@@ -19,15 +19,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('logout', 'AuthController@logout');
-    Route::get('test', function () {
-        return response()->json(['foo' => 'bar']);
-    });
 });
 
 Route::group(['middleware' => ['api', 'cors']], function () {
 
     Route::post('auth/login', 'Api\AuthController@login');
     Route::post('auth/register', 'Api\AuthController@register');
+    Route::post('auth/accountkit', 'Api\AccountKitController@login');
 
     Route::group(['prefix' => 'auth', 'middleware' => 'jwt.auth'], function () {
         Route::get('user', 'Api\AuthController@getAuthUser');

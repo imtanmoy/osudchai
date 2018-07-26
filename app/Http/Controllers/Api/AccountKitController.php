@@ -1,23 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Api;
 
 use App\Shop\AccountKits\Repositories\AccountKitRepository;
 use App\Shop\AccountKits\Repositories\AccountKitRepositoryInterface;
 use App\User;
-use Auth;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Client as GuzzleHttpClient;
-use GuzzleHttp\Exception\RequestException;
 
 class AccountKitController extends Controller
 {
-
-    use AuthenticatesUsers;
 
     protected $client;
     /**
@@ -110,17 +105,23 @@ class AccountKitController extends Controller
                     'user_id' => $user->id
                 ];
                 $this->accountKitRepository->createAccountKit($params);
-                Auth::login($user, true);
-                return redirect()->intended($this->redirectPath());
+
+                if (!$token = auth('api')->login($user)) {
+                    return response()->json(['message' => 'Invalid credentials'], 401);
+                }
+
             } else {
-                Auth::login($user, true);
-                return redirect()->intended($this->redirectPath());
+                if (!$token = auth('api')->login($user)) {
+                    return response()->json(['message' => 'Invalid credentials'], 401);
+                }
             }
 
+            return $this->respondWithToken($token);
+
         } catch (GuzzleException $e) {
-            return redirect()->back()->withErrors($e->getMessage())->withInput();
+            return response()->json(['message' => $e->getMessage()], 500);
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors($e->getMessage())->withInput();
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
@@ -141,5 +142,12 @@ class AccountKitController extends Controller
         }
     }
 
-
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60
+        ]);
+    }
 }

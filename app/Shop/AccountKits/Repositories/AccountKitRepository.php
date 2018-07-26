@@ -84,10 +84,6 @@ class AccountKitRepository extends BaseRepository implements AccountKitRepositor
     public function deleteAccountKit()
     {
         $this->model->user()->dissociate();
-        $this->model->user()->update([
-            'is_phone_verified' => 0,
-            'is_verified' => 0,
-        ]);
         return $this->model->delete();
     }
 

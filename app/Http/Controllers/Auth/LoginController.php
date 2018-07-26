@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Shop\AccountKits\Repositories\AccountKitRepository;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use GuzzleHttp\Client as GuzzleHttpClient;
 
 class LoginController extends Controller
 {
@@ -55,5 +58,43 @@ class LoginController extends Controller
             return back()->with('warning', 'You need to confirm your account. We have sent you an activation code, please check your email.');
         }
         return redirect()->intended($this->redirectPath());
+    }
+
+    /**
+     * Log the user out of the application.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     * @throws \Exception
+     */
+    public function logout(Request $request)
+    {
+        $user = auth('api')->user();
+        if ($user->accountKit()->exists()) {
+            $status = $this->logOutAccountKit($user->accountKit->access_token);
+            $accountKit = new AccountKitRepository($user->accountKit);
+            $status2 = $accountKit->deleteAccountKit();
+        }
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        return $this->loggedOut($request) ?: redirect('/');
+    }
+
+    private function logOutAccountKit(string $userAccessToken)
+    {
+        $client = new GuzzleHttpClient();
+        $version = config('account_kit.account_kit_api_version');
+
+        $logout_endpoint_url = 'https://graph.accountkit.com/' . $version . '/logout?' .
+            'access_token=' . $userAccessToken;
+        try {
+            $request = $client->request('GET', $logout_endpoint_url);
+            $data = json_decode($request->getBody());
+            return true;
+        } catch (GuzzleException $e) {
+            return false;
+        }
     }
 }
