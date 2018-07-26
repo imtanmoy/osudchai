@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Shop\AccountKits\Repositories\AccountKitRepository;
 use App\Shop\AccountKits\Repositories\AccountKitRepositoryInterface;
 use App\User;
+use Auth;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Client as GuzzleHttpClient;
@@ -13,6 +15,8 @@ use GuzzleHttp\Exception\RequestException;
 
 class AccountKitController extends Controller
 {
+
+    use AuthenticatesUsers;
 
     protected $client;
     /**
@@ -48,6 +52,8 @@ class AccountKitController extends Controller
      */
     public function __construct(AccountKitRepositoryInterface $accountKitRepository)
     {
+        $this->middleware('guest')->except('logout');
+
         $this->appId = config('account_kit.account_kit_id');
         $this->client = new GuzzleHttpClient();
         $this->appSecret = config('account_kit.account_kit_secret');
@@ -79,8 +85,8 @@ class AccountKitController extends Controller
 //            dd($data, $userId, $userAccessToken, $refreshInterval, $number);
 
             $accountKit = $this->accountKitRepository->findAccountKitByNumber($number);
+            $user = User::where('phone', '0' . $national_number)->first();
             if ($accountKit == null) {
-                $user = User::where('phone', '0' . $national_number)->first();
                 if ($user == null) {
                     $user = new User();
                     $user->phone = '0' . $national_number;
@@ -102,15 +108,17 @@ class AccountKitController extends Controller
                     'user_id' => $user->id
                 ];
                 $this->accountKitRepository->createAccountKit($params);
-                return response()->json(['message' => 'Success', 'user' => $user]);
+                Auth::login($user, true);
+                return redirect()->intended($this->redirectPath());
             } else {
-                return response()->json(['message' => 'Success2', 'user' => $accountKit->user]);
+                Auth::login($user, true);
+                return redirect()->intended($this->redirectPath());
             }
 
         } catch (GuzzleException $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
+            return redirect()->back()->withErrors($e->getMessage())->withInput();
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
+            return redirect()->back()->withErrors($e->getMessage())->withInput();
         }
     }
 
