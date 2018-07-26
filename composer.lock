@@ -815,16 +815,16 @@
         },
         {
             "name": "genealabs/laravel-model-caching",
-            "version": "0.2.63",
+            "version": "0.2.64",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GeneaLabs/laravel-model-caching.git",
-                "reference": "a13c2dff5173af28786c9351edbf6c02a5431cac"
+                "reference": "95a5ef865d2907b46e0bca52f1386e9a5858b700"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GeneaLabs/laravel-model-caching/zipball/a13c2dff5173af28786c9351edbf6c02a5431cac",
-                "reference": "a13c2dff5173af28786c9351edbf6c02a5431cac",
+                "url": "https://api.github.com/repos/GeneaLabs/laravel-model-caching/zipball/95a5ef865d2907b46e0bca52f1386e9a5858b700",
+                "reference": "95a5ef865d2907b46e0bca52f1386e9a5858b700",
                 "shasum": ""
             },
             "require": {
@@ -874,7 +874,7 @@
                 }
             ],
             "description": "Automatic caching for Eloquent models.",
-            "time": "2018-06-09T17:56:23+00:00"
+            "time": "2018-07-26T02:45:40+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
