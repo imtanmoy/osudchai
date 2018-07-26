@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Shop\AccountKits\Repositories\AccountKitRepositoryInterface;
+use App\User;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -34,16 +36,22 @@ class AccountKitController extends Controller
     protected $refreshInterval;
 
     protected $version;
+    /**
+     * @var AccountKitRepositoryInterface
+     */
+    private $accountKitRepository;
 
     /**
      * AccountKitController constructor.
+     * @param AccountKitRepositoryInterface $accountKitRepository
      */
-    public function __construct()
+    public function __construct(AccountKitRepositoryInterface $accountKitRepository)
     {
         $this->appId = config('account_kit.account_kit_id');
         $this->client = new GuzzleHttpClient();
         $this->appSecret = config('account_kit.account_kit_secret');
         $this->version = config('account_kit.account_kit_api_version');
+        $this->accountKitRepository = $accountKitRepository;
     }
 
     public function login(Request $request)
@@ -59,9 +67,38 @@ class AccountKitController extends Controller
             $body = json_decode($apiRequest->getBody());
             $this->userAccessToken = $body->access_token;
             $this->refreshInterval = $body->token_refresh_interval_sec;
-            return $this->getData();
+            $data = $this->getData();
+
+            $userId = $data->id;
+            $userAccessToken = $this->userAccessToken;
+            $refreshInterval = $this->refreshInterval;
+            $number = isset($data->phone) ? $data->phone->number : '';
+            $country_prefix = isset($data->phone) ? $data->phone->country_prefix : '';
+            $national_number = isset($data->phone) ? $data->phone->national_number : '';
+//            dd($data, $userId, $userAccessToken, $refreshInterval, $number);
+
+            $accountKit = $this->accountKitRepository->findAccountKitByNumber($number);
+            if ($accountKit == null) {
+                $user = new User();
+                $user->phone = '0' . $national_number;
+                $user->save();
+                $params = [
+                    'account_kit_user_id' => $userId,
+                    'access_token' => $userAccessToken,
+                    'token_refresh_interval_sec' => $this->refreshInterval,
+                    'number' => $number,
+                    'country_prefix' => $country_prefix,
+                    'national_number' => $national_number,
+                    'user_id' => $user->id
+                ];
+                $this->accountKitRepository->createAccountKit($params);
+                return response()->json(['message' => 'Success', 'user' => $user]);
+            } else {
+                return response()->json(['message' => 'Success2', 'user' => $accountKit->user]);
+            }
+
         } catch (GuzzleException $e) {
-            dd($e);
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
@@ -76,12 +113,7 @@ class AccountKitController extends Controller
                 'access_token=' . $this->userAccessToken;
             $request = $this->client->request('GET', $me_endpoint_url);
             $data = json_decode($request->getBody());
-            $userId = $data->id;
-            $userAccessToken = $this->userAccessToken;
-            $refreshInterval = $this->refreshInterval;
-            $phone = isset($data->phone) ? $data->phone->number : '';
-            $email = isset($data->email) ? $data->email->address : '';
-            dd($userId, $userAccessToken, $refreshInterval, $phone, $email);
+            return $data;
         } catch (GuzzleException $e) {
             throw $e;
         }

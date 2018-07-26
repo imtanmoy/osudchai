@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\AccountKit;
 use App\Models\Address;
 use App\Models\CustomerGroup;
 use App\Models\Order;
@@ -85,5 +86,10 @@ class User extends Authenticatable implements JWTSubject
     public function orders()
     {
         return $this->hasMany(Order::class, 'user_id', 'id');
+    }
+
+    public function accountKit()
+    {
+        return $this->hasOne(AccountKit::class, 'user_id', 'id');
     }
 }

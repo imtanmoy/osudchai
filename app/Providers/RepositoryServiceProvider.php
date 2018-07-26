@@ -8,6 +8,8 @@ use App\Repositories\Product\ProductInterface;
 use App\Repositories\Product\ProductRepository;
 use App\Repositories\ProductType\ProductTypeInterface;
 use App\Repositories\ProductType\ProductTypeRepository;
+use App\Shop\AccountKits\Repositories\AccountKitRepository;
+use App\Shop\AccountKits\Repositories\AccountKitRepositoryInterface;
 use App\Shop\Addresses\Repositories\AddressRepository;
 use App\Shop\Addresses\Repositories\AddressRepositoryInterface;
 use App\Shop\Options\Repositories\OptionRepository;
@@ -80,6 +82,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             UserRepositoryInterface::class,
             UserRepository::class
+        );
+        $this->app->bind(
+            AccountKitRepositoryInterface::class,
+            AccountKitRepository::class
         );
     }
 }
