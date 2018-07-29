@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.6.28 on 2018-07-25 05:39:01.
+ * Generated for Laravel 5.6.29 on 2018-07-29 04:42:34.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -15060,6 +15060,23 @@ namespace App\Services\UserService\Facades {
         }
          
     }
+
+    class SocialAccountService {
+        
+        /**
+         * 
+         *
+         * @param \App\Services\UserService\ProviderUser $providerUser
+         * @param $provider
+         * @return mixed 
+         * @static 
+         */ 
+        public static function findOrCreate($providerUser, $provider)
+        {
+            return \App\Services\UserService\SocialAccountService::findOrCreate($providerUser, $provider);
+        }
+         
+    }
  
 }
 
@@ -17785,6 +17802,8 @@ namespace  {
     class Debugbar extends \Barryvdh\Debugbar\Facade {}
 
     class UserVerification extends \App\Services\UserService\Facades\UserVerification {}
+
+    class SocialAccountService extends \App\Services\UserService\Facades\SocialAccountService {}
 
     class Flash extends \Laracasts\Flash\Flash {}
 

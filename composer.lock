@@ -712,16 +712,16 @@
         },
         {
             "name": "fico7489/laravel-pivot",
-            "version": "2.2.6",
+            "version": "2.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fico7489/laravel-pivot.git",
-                "reference": "6c374f0c9d62891aafa75b70ed663943f326299a"
+                "reference": "8f83c60874afd4ac7f2f2265416495e9c4986ba3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fico7489/laravel-pivot/zipball/6c374f0c9d62891aafa75b70ed663943f326299a",
-                "reference": "6c374f0c9d62891aafa75b70ed663943f326299a",
+                "url": "https://api.github.com/repos/fico7489/laravel-pivot/zipball/8f83c60874afd4ac7f2f2265416495e9c4986ba3",
+                "reference": "8f83c60874afd4ac7f2f2265416495e9c4986ba3",
                 "shasum": ""
             },
             "require": {
@@ -757,7 +757,7 @@
                 "laravel pivot events",
                 "laravel sync events"
             ],
-            "time": "2018-03-08T16:03:54+00:00"
+            "time": "2018-07-28T05:39:32+00:00"
         },
         {
             "name": "fideloper/proxy",
@@ -1344,16 +1344,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.6.28",
+            "version": "v5.6.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "40ba2ee0e61cb4bc3c9f1dab04908e6acf06b86f"
+                "reference": "acc6b5c54ab196d3358f60acc5f55d9ebaaccc02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/40ba2ee0e61cb4bc3c9f1dab04908e6acf06b86f",
-                "reference": "40ba2ee0e61cb4bc3c9f1dab04908e6acf06b86f",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/acc6b5c54ab196d3358f60acc5f55d9ebaaccc02",
+                "reference": "acc6b5c54ab196d3358f60acc5f55d9ebaaccc02",
                 "shasum": ""
             },
             "require": {
@@ -1479,7 +1479,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2018-07-17T14:15:36+00:00"
+            "time": "2018-07-26T16:01:26+00:00"
         },
         {
             "name": "laravel/socialite",
@@ -3043,16 +3043,16 @@
         },
         {
             "name": "spatie/laravel-activitylog",
-            "version": "2.8.0",
+            "version": "2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-activitylog.git",
-                "reference": "001bdbf2b892519301935b8480e029ed254284bf"
+                "reference": "3a23838c591ddbdb3bad3ef2e03b23a4536ef0c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-activitylog/zipball/001bdbf2b892519301935b8480e029ed254284bf",
-                "reference": "001bdbf2b892519301935b8480e029ed254284bf",
+                "url": "https://api.github.com/repos/spatie/laravel-activitylog/zipball/3a23838c591ddbdb3bad3ef2e03b23a4536ef0c6",
+                "reference": "3a23838c591ddbdb3bad3ef2e03b23a4536ef0c6",
                 "shasum": ""
             },
             "require": {
@@ -3109,7 +3109,7 @@
                 "spatie",
                 "user"
             ],
-            "time": "2018-07-21T15:09:54+00:00"
+            "time": "2018-07-28T21:36:47+00:00"
         },
         {
             "name": "spatie/laravel-cors",
