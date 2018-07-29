@@ -31,6 +31,8 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
 
     public function findAddresses(): Support;
 
+    public function getAddresses(): Support;
+
     public function findOrders(): Collection;
 
     public function searchUser(string $text): Collection;

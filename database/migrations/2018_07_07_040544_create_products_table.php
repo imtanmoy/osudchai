@@ -26,30 +26,26 @@ class CreateProductsTable extends Migration
 
             $table->index(['sku', 'slug']);
 
-            $table->unsignedBigInteger('manufacturer_id');
+            $table->unsignedBigInteger('manufacturer_id')->nullable()->after('id');
             $table->foreign('manufacturer_id')
-                ->references('id')->on('manufacturers')
-                ->onDelete('cascade');
+                ->references('id')->on('manufacturers');
 
             $table->unsignedInteger('category_id');
             $table->foreign('category_id')
                 ->references('id')->on('categories')
                 ->onDelete('cascade');
 
-            $table->unsignedInteger('product_type_id');
+            $table->unsignedInteger('product_type_id')->nullable();
             $table->foreign('product_type_id')
-                ->references('id')->on('product_types')
-                ->onDelete('cascade');
+                ->references('id')->on('product_types');
 
             $table->unsignedBigInteger('strength_id')->nullable();
             $table->foreign('strength_id')
-                ->references('id')->on('strengths')
-                ->onDelete('cascade');
+                ->references('id')->on('strengths');
 
             $table->unsignedBigInteger('generic_name_id')->nullable();
             $table->foreign('generic_name_id')
-                ->references('id')->on('generic_names')
-                ->onDelete('cascade');
+                ->references('id')->on('generic_names');
         });
     }
 

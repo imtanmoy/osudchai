@@ -2,16 +2,18 @@
 
 namespace App\Providers;
 
-use App\Repositories\Attribute\AttributeInterface;
-use App\Repositories\Attribute\AttributeRepository;
 use App\Repositories\Product\ProductInterface;
 use App\Repositories\Product\ProductRepository;
-use App\Repositories\ProductType\ProductTypeInterface;
-use App\Repositories\ProductType\ProductTypeRepository;
 use App\Shop\AccountKits\Repositories\AccountKitRepository;
 use App\Shop\AccountKits\Repositories\AccountKitRepositoryInterface;
 use App\Shop\Addresses\Repositories\AddressRepository;
 use App\Shop\Addresses\Repositories\AddressRepositoryInterface;
+use App\Shop\Attributes\Repositories\AttributeRepository;
+use App\Shop\Attributes\Repositories\AttributeRepositoryInterface;
+use App\Shop\GenericNames\Repositories\GenericNameRepository;
+use App\Shop\GenericNames\Repositories\GenericNameRepositoryInterface;
+use App\Shop\Manufacturers\Repositories\ManufacturerRepository;
+use App\Shop\Manufacturers\Repositories\ManufacturerRepositoryInterface;
 use App\Shop\Options\Repositories\OptionRepository;
 use App\Shop\Options\Repositories\OptionRepositoryInterface;
 use App\Shop\OptionValues\Repositories\OptionValueRepository;
@@ -24,6 +26,10 @@ use App\Shop\OrderStatuses\Repositories\OrderStatusRepository;
 use App\Shop\OrderStatuses\Repositories\OrderStatusRepositoryInterface;
 use App\Shop\PaymentMethods\Repositories\PaymentMethodRepository;
 use App\Shop\PaymentMethods\Repositories\PaymentMethodRepositoryInterface;
+use App\Shop\ProductTypes\Repositories\ProductTypeRepository;
+use App\Shop\ProductTypes\Repositories\ProductTypeRepositoryInterface;
+use App\Shop\Strengths\Repositories\StrengthRepository;
+use App\Shop\Strengths\Repositories\StrengthRepositoryInterface;
 use App\Shop\Users\Repositories\UserRepository;
 use App\Shop\Users\Repositories\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -47,9 +53,14 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(ProductTypeInterface::class, ProductTypeRepository::class);
-        $this->app->bind(AttributeInterface::class, AttributeRepository::class);
-        $this->app->bind(ProductInterface::class, ProductRepository::class);
+        $this->app->bind(
+            AttributeRepositoryInterface::class,
+            AttributeRepository::class
+        );
+        $this->app->bind(
+            ProductInterface::class,
+            ProductRepository::class
+        );
 
         $this->app->bind(
             OptionRepositoryInterface::class,
@@ -82,6 +93,22 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             UserRepositoryInterface::class,
             UserRepository::class
+        );
+        $this->app->bind(
+            ManufacturerRepositoryInterface::class,
+            ManufacturerRepository::class
+        );
+        $this->app->bind(
+            GenericNameRepositoryInterface::class,
+            GenericNameRepository::class
+        );
+        $this->app->bind(
+            StrengthRepositoryInterface::class,
+            StrengthRepository::class
+        );
+        $this->app->bind(
+            ProductTypeRepositoryInterface::class,
+            ProductTypeRepository::class
         );
         $this->app->bind(
             AccountKitRepositoryInterface::class,

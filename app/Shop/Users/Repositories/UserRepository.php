@@ -125,4 +125,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         // TODO: Implement charge() method.
     }
+
+    public function getAddresses(): Collection
+    {
+        return $this->model->addresses;
+    }
 }
