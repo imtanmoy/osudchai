@@ -31,6 +31,9 @@ Route::group(['prefix' => 'admin'], function () {
 
 Auth::routes();
 
+Route::get('/phone/verify', 'Auth\AccountKitController@getverifyForm')->name('phone.verify.create');
+Route::post('/phone/verify', 'Auth\AccountKitController@verify')->name('phone.verify.store');
+
 Route::group(['middleware' => ['isVerified']], function () {
     Route::get('/home', 'HomeController@index')->name('home');
 });

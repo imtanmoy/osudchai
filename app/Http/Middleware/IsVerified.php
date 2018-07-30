@@ -18,7 +18,12 @@ class IsVerified
      */
     public function handle($request, Closure $next)
     {
-        if (!is_null($request->user()) && !$request->user()->is_verified == 1) {
+        if (!is_null($request->user()) && (!$request->user()->is_phone_verified == 1)) {
+            $user = $request->user();
+            Session::flush();
+            return redirect()->route('phone.verify.create', ['phone' => $user->phone])->with('warning', 'You need to verify your phone.');
+        }
+        if (!is_null($request->user()) && (!$request->user()->is_verified == 1 && !$request->user()->is_phone_verified == 1)) {
             Session::flush();
             throw new UserNotVerifiedException;
         }

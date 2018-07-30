@@ -141,5 +141,16 @@ class AccountKitController extends Controller
         }
     }
 
+    public function getverifyForm(Request $request)
+    {
+        $phone = $request->input('phone');
+        return view('auth.phone', compact('phone'));
+    }
+
+    public function verify(Request $request)
+    {
+        dd($request->all());
+    }
+
 
 }
