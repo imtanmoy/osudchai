@@ -26,6 +26,28 @@
                                 </div>
                             </div>
 
+
+                            <div class="form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
+                                <label for="phone" class="col-md-4 control-label">Phone</label>
+
+                                <div class="col-md-6">
+                                    <input value="+88" style="width: 20%; float: left" class="form-control"
+                                           id="country_code"
+                                           disabled="disabled" name="country_code">
+                                    <input id="phone" type="text" style="width: 75%; float: left; margin-left: 5%"
+                                           class="form-control"
+                                           name="phone"
+                                           value="{{ old('phone') }}" required>
+                                    <input type="hidden" name="code" id="code"/>
+
+                                    @if ($errors->has('phone'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('phone') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
+
                             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                                 <label for="email" class="col-md-4 control-label">E-Mail Address</label>
 
@@ -89,3 +111,6 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+@endpush
