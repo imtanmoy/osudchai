@@ -15,6 +15,7 @@ use App\Shop\Base\BaseRepository;
 use App\User;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
@@ -173,7 +174,7 @@ class AccountKitRepository extends BaseRepository implements AccountKitRepositor
             $country_prefix = isset($data->phone) ? $data->phone->country_prefix : '';
             $national_number = isset($data->phone) ? $data->phone->national_number : '';
 
-            $user = User::where('phone', '=', '0' . $national_number)->first();
+            $user = User::where('phone', '=', '0' . $number)->first();
 
             if ($user != null) {
                 if ($user->accountKit()->exists()) {
@@ -214,4 +215,18 @@ class AccountKitRepository extends BaseRepository implements AccountKitRepositor
         return $data;
     }
 
+    /**
+     *
+     */
+    public function logOut()
+    {
+        $logout_endpoint_url = 'https://graph.accountkit.com/' . $this->version . '/logout?' .
+            'access_token=' . $this->model->access_token;
+        try {
+            $request = $this->client->request('GET', $logout_endpoint_url);
+            json_decode($request->getBody());
+        } catch (GuzzleException $e) {
+        } catch (\Exception $e) {
+        }
+    }
 }

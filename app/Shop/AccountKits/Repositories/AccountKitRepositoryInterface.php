@@ -35,4 +35,6 @@ interface AccountKitRepositoryInterface extends BaseRepositoryInterface
     public function searchAccountKit(string $text): Collection;
 
     public function verify(string $code): AccountKit;
+
+    public function logOut();
 }

@@ -5,6 +5,9 @@ namespace App\Models;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property mixed access_token
+ */
 class AccountKit extends Model
 {
     protected $fillable = [

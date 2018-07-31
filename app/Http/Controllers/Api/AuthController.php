@@ -110,9 +110,8 @@ class AuthController extends Controller
     {
         $user = auth('api')->user();
         if ($user->accountKit()->exists()) {
-            $status = $this->logOutAccountKit($user->accountKit->access_token);
             $accountKit = new AccountKitRepository($user->accountKit);
-            $status2 = $accountKit->deleteAccountKit();
+            $accountKit->logOut();
         }
         auth('api')->logout();
 
@@ -163,21 +162,5 @@ class AuthController extends Controller
             'phone' => 'required|regex:/(01)[0-9]{9}/|max:14|min:11|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
-    }
-
-    private function logOutAccountKit(string $userAccessToken)
-    {
-        $client = new GuzzleHttpClient();
-        $version = config('account_kit.account_kit_api_version');
-
-        $logout_endpoint_url = 'https://graph.accountkit.com/' . $version . '/logout?' .
-            'access_token=' . $userAccessToken;
-        try {
-            $request = $client->request('GET', $logout_endpoint_url);
-            $data = json_decode($request->getBody());
-            return true;
-        } catch (GuzzleException $e) {
-            return false;
-        }
     }
 }
