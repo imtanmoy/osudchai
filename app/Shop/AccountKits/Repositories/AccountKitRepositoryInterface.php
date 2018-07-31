@@ -33,4 +33,6 @@ interface AccountKitRepositoryInterface extends BaseRepositoryInterface
     public function findUser(): User;
 
     public function searchAccountKit(string $text): Collection;
+
+    public function verify(string $code): AccountKit;
 }

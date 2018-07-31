@@ -10,6 +10,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Client as GuzzleHttpClient;
+use Validator;
 
 class AccountKitController extends Controller
 {
@@ -149,5 +150,26 @@ class AccountKitController extends Controller
             'token_type' => 'bearer',
             'expires_in' => auth('api')->factory()->getTTL() * 60
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function verifyPhone(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'code' => 'required'
+        ], [
+            'code.required' => 'Code is required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 400);
+        }
+        if (isset($request->code)) {
+            $accountKit = $this->accountKitRepository->verify($request->code);
+            return response()->json(['message' => 'Phone number is verified', 'data' => $accountKit], 200);
+        }
     }
 }

@@ -34,6 +34,8 @@ Route::group(['middleware' => ['api', 'cors']], function () {
         Route::get('me', 'Api\AuthController@me');
     });
 
+    Route::post('/phone/verify', 'Api\AccountKitController@verifyPhone')->name('phone.verify.store');
+
     Route::group(['middleware' => ['jwt.auth', 'auth:api', 'isVerified']], function () {
         Route::resource('prescriptions', 'Api\PrescriptionController')->except(['create', 'edit']);
         Route::resource('addresses', 'Api\AddressController')->except(['create', 'edit']);
