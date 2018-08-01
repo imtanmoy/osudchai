@@ -16,9 +16,8 @@ class CreateProductImagesTable extends Migration
         Schema::create('product_images', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name', 255);
-            $table->string('path', 255);
-            $table->string('thumbnail_path', 255)->nullable();
-            $table->tinyInteger('featured')->default(0);
+            $table->string('src', 255);
+            $table->tinyInteger('cover')->default(0);
             $table->string('provider')->default('local');
             $table->timestamps();
 

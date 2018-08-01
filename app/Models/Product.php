@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Nicolaslopezj\Searchable\SearchableTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Sluggable\HasSlug;
@@ -11,6 +12,14 @@ use Spatie\Sluggable\SlugOptions;
 /**
  * @property null product_type_id
  * @property null generic_name_id
+ * @property mixed manufacturer_id
+ * @property mixed is_active
+ * @property mixed description
+ * @property mixed slug
+ * @property mixed sku
+ * @property mixed name
+ * @property mixed id
+ * @property mixed manufacturer
  */
 class Product extends Model
 {
@@ -23,6 +32,7 @@ class Product extends Model
     protected $fillable = [
         'name',
         'sku',
+        'slug',
         'description',
         'is_active',
         'price',
@@ -56,6 +66,18 @@ class Product extends Model
         'price',
         'strength_id',
         'generic_name_id',
+    ];
+
+    /**
+     * Searchable rules.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'products.name' => 10,
+            'products.description' => 5
+        ]
     ];
 
 
@@ -123,5 +145,14 @@ class Product extends Model
     public function options()
     {
         return $this->hasMany(ProductOption::class, 'product_id', 'id');
+    }
+
+    /**
+     * @param string $term
+     * @return Collection
+     */
+    public function searchProduct(string $term): Collection
+    {
+        return self::search($term)->get();
     }
 }
