@@ -9,33 +9,99 @@ use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\ProductOption;
 use App\Models\ProductType;
-use App\Repositories\Product\ProductInterface;
-use App\Repositories\Product\ProductRepository;
+use App\Shop\Attributes\Repositories\AttributeRepositoryInterface;
+use App\Shop\Categories\Repositories\CategoryRepositoryInterface;
+use App\Shop\GenericNames\Repositories\GenericNameRepositoryInterface;
+use App\Shop\Manufacturers\Repositories\ManufacturerRepositoryInterface;
 use App\Shop\Options\Repositories\OptionRepositoryInterface;
 use App\Shop\OptionValues\Repositories\OptionValueRepositoryInterface;
+use App\Shop\Products\Repositories\ProductRepository;
+use App\Shop\Products\Repositories\ProductRepositoryInterface;
+use App\Shop\Products\Transformations\ProductTransformable;
+use App\Shop\ProductTypes\Repositories\ProductTypeRepositoryInterface;
+use App\Shop\Strengths\Repositories\StrengthRepositoryInterface;
+use App\Shop\Tools\UploadableTrait;
 use Gate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
 use Spatie\Activitylog\Models\Activity;
 use Validator;
 
 class ProductController extends Controller
 {
+    use ProductTransformable, UploadableTrait;
+    /**
+     * @var ManufacturerRepositoryInterface
+     */
+    private $manufacturerRepository;
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+    /**
+     * @var GenericNameRepositoryInterface
+     */
+    private $genericNameRepository;
+    /**
+     * @var StrengthRepositoryInterface
+     */
+    private $strengthRepository;
+    /**
+     * @var OptionRepositoryInterface
+     */
+    private $optionRepository;
+    /**
+     * @var OptionValueRepositoryInterface
+     */
+    private $optionValueRepository;
+    /**
+     * @var AttributeRepositoryInterface
+     */
+    private $attributeRepository;
+    /**
+     * @var ProductTypeRepositoryInterface
+     */
+    private $productTypeRepository;
 
-    private $productRepo;
-    private $optionRepo;
-    private $optionValueRepo;
-
+    /**
+     * ProductController constructor.
+     * @param ManufacturerRepositoryInterface $manufacturerRepository
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param ProductRepositoryInterface $productRepository
+     * @param GenericNameRepositoryInterface $genericNameRepository
+     * @param StrengthRepositoryInterface $strengthRepository
+     * @param OptionRepositoryInterface $optionRepository
+     * @param OptionValueRepositoryInterface $optionValueRepository
+     * @param AttributeRepositoryInterface $attributeRepository
+     * @param ProductTypeRepositoryInterface $productTypeRepository
+     */
     public function __construct(
-        ProductInterface $product,
+        ManufacturerRepositoryInterface $manufacturerRepository,
+        CategoryRepositoryInterface $categoryRepository,
+        ProductRepositoryInterface $productRepository,
+        GenericNameRepositoryInterface $genericNameRepository,
+        StrengthRepositoryInterface $strengthRepository,
         OptionRepositoryInterface $optionRepository,
-        OptionValueRepositoryInterface $optionValueRepository
+        OptionValueRepositoryInterface $optionValueRepository,
+        AttributeRepositoryInterface $attributeRepository,
+        ProductTypeRepositoryInterface $productTypeRepository
     )
     {
-        $this->productRepo = $product;
-        $this->optionRepo = $optionRepository;
-        $this->optionValueRepo = $optionValueRepository;
+        $this->manufacturerRepository = $manufacturerRepository;
+        $this->categoryRepository = $categoryRepository;
+        $this->productRepository = $productRepository;
+        $this->genericNameRepository = $genericNameRepository;
+        $this->strengthRepository = $strengthRepository;
+        $this->optionRepository = $optionRepository;
+        $this->optionValueRepository = $optionValueRepository;
+        $this->attributeRepository = $attributeRepository;
+        $this->productTypeRepository = $productTypeRepository;
     }
 
     /**
@@ -43,12 +109,20 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public
+    function index()
     {
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
-        $products = $this->productRepo->getAll();
+        $list = $this->productRepository->listProducts('id');
+        if (request()->has('q') && request()->input('q') != '') {
+            $list = $this->productRepository->searchProduct(request()->input('q'));
+        }
+        $products = $list->map(function (Product $item) {
+            return $this->transformProduct($item);
+        })->all();
+
         return view('admin.products.index', compact('products'));
     }
 
@@ -57,14 +131,15 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public
+    function create()
     {
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
-        $manufacturers = Manufacturer::all();
-        $categories = Category::all();
-        $product_types = ProductType::all();
+        $manufacturers = $this->manufacturerRepository->listManufacturers();
+        $categories = $this->categoryRepository->listCategories();
+        $product_types = $this->productTypeRepository->listProductTypes();
         return view('admin.products.create', compact('manufacturers', 'categories', 'product_types'));
     }
 
@@ -74,12 +149,64 @@ class ProductController extends Controller
      * @param ProductRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductRequest $request)
+    public
+    function store(Request $request)
     {
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
-        return $this->productRepo->create($request->all());
+        $data = collect($request->except('_token', '_method'));
+
+        $product = $this->productRepository->createProduct($data->only(['name', 'sku', 'description'])->toArray());
+
+
+        $productRepo = new ProductRepository($product);
+
+        if ($request->has('manufacturer')) {
+            $manufacturer = $this->manufacturerRepository->findManufacturerById($request->input('manufacturer'));
+            $productRepo->associateManufacturer($manufacturer);
+        }
+
+        if ($request->has('category')) {
+            $category = $this->categoryRepository->findCategoryById($request->input('category'));
+            $productRepo->associateCategory($category);
+        }
+
+        if ($request->has('product_type')) {
+            $product_type = $this->productTypeRepository->findProductTypeById($request->input('product_type'));
+            $productRepo->associateProductType($product_type);
+        }
+
+        if ($request->has('generic_name')) {
+            $generic_name = $this->genericNameRepository->findOneBy(['name' => $request->input('generic_name')]);
+            if ($generic_name == null) {
+                $generic_name = $this->genericNameRepository->createGenericName(['name' => $request->input('generic_name')]);
+            }
+            $productRepo->associateGenericName($generic_name);
+        }
+
+        if ($request->has('strength')) {
+            $strength = $this->strengthRepository->findOneBy(['value' => $request->input('strength')]);
+            if ($strength == null) {
+                $strength = $this->strengthRepository->createStrength(['value' => $request->input('strength')]);
+            }
+            $productRepo->associateStrength($strength);
+        }
+
+
+        if ($request->hasFile('cover') && $request->file('cover') instanceof UploadedFile) {
+            $productRepo->saveCoverImage($request->file('cover'));
+        }
+
+
+        if ($request->hasFile('images')) {
+            $productRepo->saveProductImages(collect($request->file('images')));
+        }
+
+
+        dd($product->product_type);
+
+
     }
 
     /**
@@ -88,7 +215,8 @@ class ProductController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public
+    function show($id)
     {
         //
     }
@@ -99,7 +227,8 @@ class ProductController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public
+    function edit($id)
     {
         if (!Gate::allows('users_manage')) {
             return abort(401);
@@ -144,7 +273,8 @@ class ProductController extends Controller
      * @param  int $id
      * @return Response
      */
-    public function update(ProductRequest $request, $id)
+    public
+    function update(ProductRequest $request, $id)
     {
         return $this->productRepo->update($id, $request->all());
     }
@@ -155,12 +285,14 @@ class ProductController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public
+    function destroy($id)
     {
         //
     }
 
-    public function showAdjust($id)
+    public
+    function showAdjust($id)
     {
         if (!Gate::allows('users_manage')) {
             return abort(401);
@@ -172,7 +304,8 @@ class ProductController extends Controller
         return view('admin.products.adjust', compact('product'));
     }
 
-    public function updateAdjust(Request $request, $id)
+    public
+    function updateAdjust(Request $request, $id)
     {
         if (!Gate::allows('users_manage')) {
             return abort(401);
@@ -208,7 +341,8 @@ class ProductController extends Controller
         }
     }
 
-    public function deleteAttributes($id, $aid)
+    public
+    function deleteAttributes($id, $aid)
     {
         if (!Gate::allows('users_manage')) {
             return abort(401);
@@ -228,7 +362,8 @@ class ProductController extends Controller
      * @param Product $product
      * @return boolean
      */
-    private function saveProductCombinations(Request $request, Product $product)
+    private
+    function saveProductCombinations(Request $request, Product $product)
     {
         $fields = $request->only('quantity', 'price', 'stock_status');
 
@@ -263,7 +398,8 @@ class ProductController extends Controller
      * @param array $data
      * @return \Illuminate\Validation\Validator
      */
-    private function validateFields(array $data)
+    private
+    function validateFields(array $data)
     {
         $validator = Validator::make($data, [
             'quantity' => 'required',
@@ -276,7 +412,8 @@ class ProductController extends Controller
         }
     }
 
-    public function addProductOption($id)
+    public
+    function addProductOption($id)
     {
         $product = $this->productRepo->getById($id);
         $options = $this->optionRepo->listOptions();
@@ -284,7 +421,8 @@ class ProductController extends Controller
         return view('admin.products.create-options', compact('product', 'options'));
     }
 
-    public function storeProductOption(Request $request, $id)
+    public
+    function storeProductOption(Request $request, $id)
     {
 
         $product = $this->productRepo->getById($id);
@@ -298,7 +436,8 @@ class ProductController extends Controller
     }
 
 
-    public function editProductOption($id, $oid)
+    public
+    function editProductOption($id, $oid)
     {
         $product = $this->productRepo->getById($id);
         $productOption = ProductOption::findOrFail($oid);
@@ -307,7 +446,8 @@ class ProductController extends Controller
     }
 
 
-    public function updateProductOption(Request $request, $id, $oid)
+    public
+    function updateProductOption(Request $request, $id, $oid)
     {
         try {
             $fields = $request->only('quantity', 'price', 'stock_status');

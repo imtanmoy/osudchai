@@ -28,8 +28,8 @@ trait ProductTransformable
         $prod->slug = $product->slug;
         $prod->description = $product->description;
 //        $prod->cover = asset("storage/$product->cover");
-        $prod->quantity = $product->stock->quantity;
-        $prod->price = $product->stock->price;
+        $prod->quantity = $product->stock()->exists() ? $product->stock->available_qty : 0;
+        $prod->price = $product->stock()->exists() ? $product->stock->price : 0;
         $prod->is_active = $product->is_active;
         $prod->manufacturer_id = (int)$product->manufacturer_id;
         return $prod;

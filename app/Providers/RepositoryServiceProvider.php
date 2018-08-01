@@ -2,14 +2,14 @@
 
 namespace App\Providers;
 
-use App\Repositories\Product\ProductInterface;
-use App\Repositories\Product\ProductRepository;
 use App\Shop\AccountKits\Repositories\AccountKitRepository;
 use App\Shop\AccountKits\Repositories\AccountKitRepositoryInterface;
 use App\Shop\Addresses\Repositories\AddressRepository;
 use App\Shop\Addresses\Repositories\AddressRepositoryInterface;
 use App\Shop\Attributes\Repositories\AttributeRepository;
 use App\Shop\Attributes\Repositories\AttributeRepositoryInterface;
+use App\Shop\Categories\Repositories\CategoryRepository;
+use App\Shop\Categories\Repositories\CategoryRepositoryInterface;
 use App\Shop\GenericNames\Repositories\GenericNameRepository;
 use App\Shop\GenericNames\Repositories\GenericNameRepositoryInterface;
 use App\Shop\Manufacturers\Repositories\ManufacturerRepository;
@@ -26,6 +26,8 @@ use App\Shop\OrderStatuses\Repositories\OrderStatusRepository;
 use App\Shop\OrderStatuses\Repositories\OrderStatusRepositoryInterface;
 use App\Shop\PaymentMethods\Repositories\PaymentMethodRepository;
 use App\Shop\PaymentMethods\Repositories\PaymentMethodRepositoryInterface;
+use App\Shop\Products\Repositories\ProductRepository;
+use App\Shop\Products\Repositories\ProductRepositoryInterface;
 use App\Shop\ProductTypes\Repositories\ProductTypeRepository;
 use App\Shop\ProductTypes\Repositories\ProductTypeRepositoryInterface;
 use App\Shop\Strengths\Repositories\StrengthRepository;
@@ -58,10 +60,9 @@ class RepositoryServiceProvider extends ServiceProvider
             AttributeRepository::class
         );
         $this->app->bind(
-            ProductInterface::class,
-            ProductRepository::class
+            ProductTypeRepositoryInterface::class,
+            ProductTypeRepository::class
         );
-
         $this->app->bind(
             OptionRepositoryInterface::class,
             OptionRepository::class
@@ -113,6 +114,14 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             AccountKitRepositoryInterface::class,
             AccountKitRepository::class
+        );
+        $this->app->bind(
+            CategoryRepositoryInterface::class,
+            CategoryRepository::class
+        );
+        $this->app->bind(
+            ProductRepositoryInterface::class,
+            ProductRepository::class
         );
     }
 }

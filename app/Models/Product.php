@@ -131,12 +131,12 @@ class Product extends Model
 
     public function featuredPhoto()
     {
-        return $this->hasOne(ProductImages::class, 'product_id', 'id')->where('featured', '=', 1);
+        return $this->hasOne(ProductImage::class, 'product_id', 'id')->where('featured', '=', 1);
     }
 
     public function images()
     {
-        return $this->hasMany(ProductImages::class, 'product_id', 'id')->where('featured', '!=', 1);
+        return $this->hasMany(ProductImage::class, 'product_id', 'id')->where('featured', '!=', 1);
     }
 
     /**

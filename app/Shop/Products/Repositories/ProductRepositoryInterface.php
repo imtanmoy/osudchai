@@ -10,13 +10,16 @@ namespace App\Shop\Products\Repositories;
 
 
 use App\Models\Category;
+use App\Models\GenericName;
 use App\Models\Manufacturer;
 use App\Models\Product;
-use App\Models\ProductAttribute;
+use App\Models\ProductType;
+use App\Models\Strength;
+use App\Shop\Base\Interfaces\BaseRepositoryInterface;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 
-interface ProductRepositoryInterface
+interface ProductRepositoryInterface extends BaseRepositoryInterface
 {
     public function listProducts(string $order = 'id', string $sort = 'desc', array $columns = ['*']): Collection;
 
@@ -46,11 +49,31 @@ interface ProductRepositoryInterface
 
     public function findProductImages(): Collection;
 
-    public function saveCoverImage(UploadedFile $file): string;
+    public function saveCoverImage(UploadedFile $file);
 
     public function saveProductImages(Collection $collection);
 
-    public function saveManufacturer(Manufacturer $manufacturer);
+    public function associateManufacturer(Manufacturer $manufacturer);
+
+    public function dissociateManufacturer();
 
     public function findManufacturer();
+
+    public function associateGenericName(GenericName $genericName);
+
+    public function dissociateGenericName();
+
+    public function findGenericName();
+
+    public function associateStrength(Strength $strength);
+
+    public function dissociateStrength();
+
+    public function findStrength();
+
+    public function associateProductType(ProductType $productType);
+
+    public function dissociateProductType();
+
+    public function findProductType();
 }

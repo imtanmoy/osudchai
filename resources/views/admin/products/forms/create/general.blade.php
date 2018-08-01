@@ -31,7 +31,7 @@
     </div>
     <div class="col-xs-12 form-group">
         <label for="manufactureSelect">Manufacturer</label>
-        <select id="manufactureSelect" required name="manufacturer_id"
+        <select id="manufactureSelect" required name="manufacturer"
                 class="form-control select2 select2-hidden-accessible"
                 style="width: 100%;" tabindex="-1" aria-hidden="true">
             <option></option>
@@ -42,7 +42,7 @@
     </div>
     <div class="col-xs-12 form-group">
         <label for="categorySelect">Category</label>
-        <select id="categorySelect" name="category_id" required
+        <select id="categorySelect" name="category" required
                 class="form-control select2 select2-hidden-accessible"
                 style="width: 100%;" tabindex="-1" aria-hidden="true">
             <option></option>

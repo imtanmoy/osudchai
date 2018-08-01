@@ -10,9 +10,12 @@ namespace App\Shop\Products\Repositories;
 
 
 use App\Models\Category;
+use App\Models\GenericName;
 use App\Models\Manufacturer;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\ProductType;
+use App\Models\Strength;
 use App\Shop\Base\BaseRepository;
 use App\Shop\Products\Exceptions\ProductCreateErrorException;
 use App\Shop\Products\Exceptions\ProductNotFoundException;
@@ -20,12 +23,10 @@ use App\Shop\Products\Exceptions\ProductUpdateErrorException;
 use App\Shop\Products\Transformations\ProductTransformable;
 use App\Shop\Tools\UploadableTrait;
 use DB;
-use File;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
-use Storage;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
@@ -174,28 +175,32 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         return $this->model->images()->get();
     }
 
-    public function saveCoverImage(UploadedFile $file): string
+    public function saveCoverImage(UploadedFile $file)
     {
-        $fileName = trim(time() . $file->getClientOriginalName());
-        return $file->storeAs('products', $fileName, ['disk' => 'public']);
+        $filename = $this->storeFile($file);
+        $productImage = new ProductImage([
+            'product_id' => $this->model->id,
+            'name' => $filename,
+            'src' => $filename,
+            'cover' => 1
+        ]);
+        $this->model->images()->save($productImage);
     }
 
     public function saveProductImages(Collection $collection)
     {
-        $collection->each(/**
-         * @param UploadedFile $file
-         */
-            function (UploadedFile $file) {
-                $filename = $this->storeFile($file);
-                $productImage = new ProductImage([
-                    'product_id' => $this->model->id,
-                    'src' => $filename
-                ]);
-                $this->model->images()->save($productImage);
-            });
+        $collection->each(function (UploadedFile $file) {
+            $filename = $this->storeFile($file);
+            $productImage = new ProductImage([
+                'product_id' => $this->model->id,
+                'name' => $filename,
+                'src' => $filename
+            ]);
+            $this->model->images()->save($productImage);
+        });
     }
 
-    public function saveManufacturer(Manufacturer $manufacturer)
+    public function associateManufacturer(Manufacturer $manufacturer)
     {
         $this->model->manufacturer()->associate($manufacturer);
     }
@@ -203,5 +208,55 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function findManufacturer()
     {
         return $this->model->manufacturer;
+    }
+
+    public function dissociateManufacturer()
+    {
+        $this->model->manufacturer()->dissociate();
+    }
+
+    public function associateGenericName(GenericName $genericName)
+    {
+        $this->model->generic_name()->associate($genericName);
+    }
+
+    public function dissociateGenericName()
+    {
+        $this->model->generic_name()->dissociate();
+    }
+
+    public function findGenericName()
+    {
+        return $this->model->generic_name;
+    }
+
+    public function associateStrength(Strength $strength)
+    {
+        $this->model->strength()->associate($strength);
+    }
+
+    public function dissociateStrength()
+    {
+        $this->model->strength()->dissociate();
+    }
+
+    public function findStrength()
+    {
+        return $this->model->strength;
+    }
+
+    public function associateProductType(ProductType $productType)
+    {
+        $this->model->product_type()->associate($productType);
+    }
+
+    public function dissociateProductType()
+    {
+        $this->model->product_type()->dissociate();
+    }
+
+    public function findProductType()
+    {
+        return $this->model->product_type;
     }
 }
