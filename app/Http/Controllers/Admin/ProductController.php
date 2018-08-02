@@ -8,6 +8,7 @@ use App\Models\Manufacturer;
 use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\ProductOption;
+use App\Models\ProductStock;
 use App\Models\ProductType;
 use App\Shop\Attributes\Repositories\AttributeRepositoryInterface;
 use App\Shop\Categories\Repositories\CategoryRepositoryInterface;
@@ -146,12 +147,13 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param ProductRequest $request
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public
     function store(Request $request)
     {
+        dd($request->all());
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
@@ -203,8 +205,27 @@ class ProductController extends Controller
             $productRepo->saveProductImages(collect($request->file('images')));
         }
 
+        if (
+            $request->has('available_qty') &&
+            $request->has('minimum_order_qty') &&
+            $request->has('price') &&
+            $request->has('stock_status')
+        ) {
+            $available_qty = $request->input('available_qty') ?: 1;
+            $minimum_order_qty = $request->input('minimum_order_qty') ?: 1;
+            $stock_status = $request->input('stock_status') ?: 'inStock';
+            $price = $request->input('price') ?: 0.0;
 
-        dd($product->product_type);
+            $subtract_stock = 1;
+            if ((!$request->has('subtract_stock') || $request->input('subtract_stock') == null) && $request->input('subtract_stock') != true) {
+                $subtract_stock = 0;
+            }
+            $product_stock = new ProductStock(['price' => $price, 'available_qty' => $available_qty, 'minimum_order_qty' => $minimum_order_qty, 'stock_status' => $stock_status, 'subtract_stock' => $subtract_stock]);
+            $productRepo->saveProductStock($product_stock);
+        }
+
+
+        dd($product);
 
 
     }

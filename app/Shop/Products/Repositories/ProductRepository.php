@@ -14,6 +14,7 @@ use App\Models\GenericName;
 use App\Models\Manufacturer;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\ProductStock;
 use App\Models\ProductType;
 use App\Models\Strength;
 use App\Shop\Base\BaseRepository;
@@ -258,5 +259,24 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function findProductType()
     {
         return $this->model->product_type;
+    }
+
+    /**
+     * @param ProductStock $productStock
+     * @return void
+     */
+    public function saveProductStock(ProductStock $productStock)
+    {
+        $this->model->stock()->save($productStock);
+    }
+
+    public function deleteProductStock(): bool
+    {
+        return $this->model->stock()->delete();
+    }
+
+    public function getProductStock(): ProductStock
+    {
+        return $this->model->stock;
     }
 }

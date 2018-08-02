@@ -15,10 +15,10 @@ class CreateProductStocksTable extends Migration
     {
         Schema::create('product_stocks', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('available_qty');
+            $table->bigInteger('available_qty')->default(0);
             $table->integer('minimum_order_qty')->default(1);
-            $table->decimal('price', 15, 2);
-            $table->enum('stock_status', ['outOfStock', 'inStock', 'pre-order']);
+            $table->decimal('price', 15, 2)->default(0.0);
+            $table->enum('stock_status', ['outOfStock', 'inStock', 'pre-order'])->default('inStock');
             $table->tinyInteger('subtract_stock')->default(0);
             $table->timestamps();
 

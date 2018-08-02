@@ -13,6 +13,7 @@ use App\Models\Category;
 use App\Models\GenericName;
 use App\Models\Manufacturer;
 use App\Models\Product;
+use App\Models\ProductStock;
 use App\Models\ProductType;
 use App\Models\Strength;
 use App\Shop\Base\Interfaces\BaseRepositoryInterface;
@@ -76,4 +77,10 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
     public function dissociateProductType();
 
     public function findProductType();
+
+    public function saveProductStock(ProductStock $productStock);
+
+    public function deleteProductStock(): bool;
+
+    public function getProductStock(): ProductStock;
 }

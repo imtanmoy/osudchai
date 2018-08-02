@@ -9,7 +9,7 @@ class ProductStock extends Model
 {
     use LogsActivity;
 
-    protected $fillable = ['product_id', 'available_qty', 'minimum_order_qty', 'stock_status', 'subtract_stock'];
+    protected $fillable = ['product_id', 'price', 'available_qty', 'minimum_order_qty', 'stock_status', 'subtract_stock'];
 
     protected $hidden = ['id', 'product_id', 'subtract_stock', 'created_at', 'updated_at'];
 

@@ -15,7 +15,7 @@ class CreateAccountKitsTable extends Migration
     {
         Schema::create('account_kits', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('account_kit_user_id')->index();
+            $table->string('account_kit_user_id')->nullable();
             $table->longText('access_token')->nullable();
             $table->integer('token_refresh_interval_sec')->nullable();
             $table->string('number')->unique()->index();
