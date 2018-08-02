@@ -273,7 +273,7 @@ class ProductController extends Controller
             return abort(401);
         }
 
-        $product = $this->productRepo->getById($id);
+        $product = $this->productRepository->findProductById($id);
 
         $productOptions = $product->options()->get();
 
@@ -286,12 +286,14 @@ class ProductController extends Controller
         }
 
 
-        $manufacturers = Manufacturer::pluck('name', 'id');
-        $categories = Category::pluck('name', 'id');
-        $product_types = ProductType::pluck('name', 'id');
-        $product = Product::findOrFail($id);
+//        $manufacturers = Manufacturer::pluck('name', 'id');
+        $manufacturers = collect($this->manufacturerRepository->listManufacturers())->pluck('name', 'id');
+//        $categories = Category::pluck('name', 'id');
+        $categories = collect($this->categoryRepository->listCategories())->pluck('name', 'id');
+        $product_types = collect($this->productTypeRepository->listProductTypes())->pluck('name', 'id');
+        $product = $this->productRepository->findProductById($id);
 
-        $options = $this->optionRepo->listOptions();
+        $options = $this->optionRepository->listOptions();
 
 
         return view('admin.products.edit', compact(
