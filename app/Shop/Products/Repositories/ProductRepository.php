@@ -13,6 +13,7 @@ use App\Models\Category;
 use App\Models\GenericName;
 use App\Models\Manufacturer;
 use App\Models\Product;
+use App\Models\ProductAttribute;
 use App\Models\ProductImage;
 use App\Models\ProductStock;
 use App\Models\ProductType;
@@ -278,5 +279,24 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function getProductStock(): ProductStock
     {
         return $this->model->stock;
+    }
+
+    /**
+     * @param ProductAttribute $productAttribute
+     * @return void
+     */
+    public function saveProductAttribute(ProductAttribute $productAttribute)
+    {
+        $this->model->attributes()->save($productAttribute);
+    }
+
+    /**
+     * @param ProductAttribute $productAttribute
+     * @return bool
+     * @throws \Exception
+     */
+    public function removeProductAttribute(ProductAttribute $productAttribute): bool
+    {
+        return $productAttribute->delete();
     }
 }

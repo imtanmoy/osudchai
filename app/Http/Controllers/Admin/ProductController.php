@@ -16,6 +16,7 @@ use App\Shop\GenericNames\Repositories\GenericNameRepositoryInterface;
 use App\Shop\Manufacturers\Repositories\ManufacturerRepositoryInterface;
 use App\Shop\Options\Repositories\OptionRepositoryInterface;
 use App\Shop\OptionValues\Repositories\OptionValueRepositoryInterface;
+use App\Shop\ProductAttributes\Repositories\ProductAttributeRepositoryInterface;
 use App\Shop\Products\Repositories\ProductRepository;
 use App\Shop\Products\Repositories\ProductRepositoryInterface;
 use App\Shop\Products\Transformations\ProductTransformable;
@@ -69,6 +70,10 @@ class ProductController extends Controller
      * @var ProductTypeRepositoryInterface
      */
     private $productTypeRepository;
+    /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private $productAttributeRepository;
 
     /**
      * ProductController constructor.
@@ -81,6 +86,7 @@ class ProductController extends Controller
      * @param OptionValueRepositoryInterface $optionValueRepository
      * @param AttributeRepositoryInterface $attributeRepository
      * @param ProductTypeRepositoryInterface $productTypeRepository
+     * @param ProductAttributeRepositoryInterface $productAttributeRepository
      */
     public function __construct(
         ManufacturerRepositoryInterface $manufacturerRepository,
@@ -91,7 +97,8 @@ class ProductController extends Controller
         OptionRepositoryInterface $optionRepository,
         OptionValueRepositoryInterface $optionValueRepository,
         AttributeRepositoryInterface $attributeRepository,
-        ProductTypeRepositoryInterface $productTypeRepository
+        ProductTypeRepositoryInterface $productTypeRepository,
+        ProductAttributeRepositoryInterface $productAttributeRepository
     )
     {
         $this->manufacturerRepository = $manufacturerRepository;
@@ -103,6 +110,7 @@ class ProductController extends Controller
         $this->optionValueRepository = $optionValueRepository;
         $this->attributeRepository = $attributeRepository;
         $this->productTypeRepository = $productTypeRepository;
+        $this->productAttributeRepository = $productAttributeRepository;
     }
 
     /**
@@ -153,7 +161,7 @@ class ProductController extends Controller
     public
     function store(Request $request)
     {
-        dd($request->all());
+//        dd($request->all());
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
@@ -224,10 +232,20 @@ class ProductController extends Controller
             $productRepo->saveProductStock($product_stock);
         }
 
+        if ($request->has('attribute_name') && $request->has('attribute_value')) {
 
-        dd($product);
+            $names = $request->input('attribute_name');
+            $values = $request->input('attribute_value');
 
-
+            foreach ($names as $name) {
+                if (!empty($name)) {
+                    $key = array_search($name, $names);
+                    $attribute = $this->attributeRepository->findOneOrCreate(['name' => $name]);
+                    $this->productAttributeRepository->createProductAttribute($product, $attribute, ['value' => $values[$key]]);
+                }
+            }
+        }
+        return response()->json(['message' => 'Product Created', 'product' => $product], 200);
     }
 
     /**

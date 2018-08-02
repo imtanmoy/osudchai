@@ -37,7 +37,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      * @param int $id
      * @return bool
      */
-    public function update(array $attributes, int $id) : bool
+    public function update(array $attributes, int $id): bool
     {
         return $this->find($id)->update($attributes);
     }
@@ -127,8 +127,13 @@ abstract class BaseRepository implements BaseRepositoryInterface
      * @return bool
      * @throws \Exception
      */
-    public function delete(int $id) : bool
+    public function delete(int $id): bool
     {
         return $this->model->find($id)->delete();
+    }
+
+    public function findOneOrCreate(array $data)
+    {
+        return $this->model->firstOrCreate($data);
     }
 }
