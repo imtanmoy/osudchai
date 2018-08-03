@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-xs-12 form-group">
         <label for="productTypeSelect">Product Type</label>
-        <select id="productTypeSelect" name="product_type" required
+        <select id="productTypeSelect" name="product_type"
                 class="form-control select2 select2-hidden-accessible"
                 style="width: 100%;" tabindex="-1" aria-hidden="true">
             <option></option>
