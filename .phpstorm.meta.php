@@ -3,7 +3,7 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2018-08-02 05:57:10.
+    * Generated on 2018-08-03 04:20:28.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
@@ -97,6 +97,7 @@ namespace PHPSTORM_META {
         'App\Shop\AccountKits\Repositories\AccountKitRepositoryInterface' => \App\Shop\AccountKits\Repositories\AccountKitRepository::class,
         'App\Shop\Categories\Repositories\CategoryRepositoryInterface' => \App\Shop\Categories\Repositories\CategoryRepository::class,
         'App\Shop\Products\Repositories\ProductRepositoryInterface' => \App\Shop\Products\Repositories\ProductRepository::class,
+        'App\Shop\ProductAttributes\Repositories\ProductAttributeRepositoryInterface' => \App\Shop\ProductAttributes\Repositories\ProductAttributeRepository::class,
         'user.verification' => \App\Services\UserService\UserVerification::class,
         'user.socialAccount' => \App\Services\UserService\SocialAccountService::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -295,6 +296,7 @@ namespace PHPSTORM_META {
         'App\Shop\AccountKits\Repositories\AccountKitRepositoryInterface' => \App\Shop\AccountKits\Repositories\AccountKitRepository::class,
         'App\Shop\Categories\Repositories\CategoryRepositoryInterface' => \App\Shop\Categories\Repositories\CategoryRepository::class,
         'App\Shop\Products\Repositories\ProductRepositoryInterface' => \App\Shop\Products\Repositories\ProductRepository::class,
+        'App\Shop\ProductAttributes\Repositories\ProductAttributeRepositoryInterface' => \App\Shop\ProductAttributes\Repositories\ProductAttributeRepository::class,
         'user.verification' => \App\Services\UserService\UserVerification::class,
         'user.socialAccount' => \App\Services\UserService\SocialAccountService::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -493,6 +495,7 @@ namespace PHPSTORM_META {
         'App\Shop\AccountKits\Repositories\AccountKitRepositoryInterface' => \App\Shop\AccountKits\Repositories\AccountKitRepository::class,
         'App\Shop\Categories\Repositories\CategoryRepositoryInterface' => \App\Shop\Categories\Repositories\CategoryRepository::class,
         'App\Shop\Products\Repositories\ProductRepositoryInterface' => \App\Shop\Products\Repositories\ProductRepository::class,
+        'App\Shop\ProductAttributes\Repositories\ProductAttributeRepositoryInterface' => \App\Shop\ProductAttributes\Repositories\ProductAttributeRepository::class,
         'user.verification' => \App\Services\UserService\UserVerification::class,
         'user.socialAccount' => \App\Services\UserService\SocialAccountService::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -691,6 +694,7 @@ namespace PHPSTORM_META {
         'App\Shop\AccountKits\Repositories\AccountKitRepositoryInterface' => \App\Shop\AccountKits\Repositories\AccountKitRepository::class,
         'App\Shop\Categories\Repositories\CategoryRepositoryInterface' => \App\Shop\Categories\Repositories\CategoryRepository::class,
         'App\Shop\Products\Repositories\ProductRepositoryInterface' => \App\Shop\Products\Repositories\ProductRepository::class,
+        'App\Shop\ProductAttributes\Repositories\ProductAttributeRepositoryInterface' => \App\Shop\ProductAttributes\Repositories\ProductAttributeRepository::class,
         'user.verification' => \App\Services\UserService\UserVerification::class,
         'user.socialAccount' => \App\Services\UserService\SocialAccountService::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -889,6 +893,7 @@ namespace PHPSTORM_META {
         'App\Shop\AccountKits\Repositories\AccountKitRepositoryInterface' => \App\Shop\AccountKits\Repositories\AccountKitRepository::class,
         'App\Shop\Categories\Repositories\CategoryRepositoryInterface' => \App\Shop\Categories\Repositories\CategoryRepository::class,
         'App\Shop\Products\Repositories\ProductRepositoryInterface' => \App\Shop\Products\Repositories\ProductRepository::class,
+        'App\Shop\ProductAttributes\Repositories\ProductAttributeRepositoryInterface' => \App\Shop\ProductAttributes\Repositories\ProductAttributeRepository::class,
         'user.verification' => \App\Services\UserService\UserVerification::class,
         'user.socialAccount' => \App\Services\UserService\SocialAccountService::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -1087,6 +1092,7 @@ namespace PHPSTORM_META {
         'App\Shop\AccountKits\Repositories\AccountKitRepositoryInterface' => \App\Shop\AccountKits\Repositories\AccountKitRepository::class,
         'App\Shop\Categories\Repositories\CategoryRepositoryInterface' => \App\Shop\Categories\Repositories\CategoryRepository::class,
         'App\Shop\Products\Repositories\ProductRepositoryInterface' => \App\Shop\Products\Repositories\ProductRepository::class,
+        'App\Shop\ProductAttributes\Repositories\ProductAttributeRepositoryInterface' => \App\Shop\ProductAttributes\Repositories\ProductAttributeRepository::class,
         'user.verification' => \App\Services\UserService\UserVerification::class,
         'user.socialAccount' => \App\Services\UserService\SocialAccountService::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -1285,6 +1291,7 @@ namespace PHPSTORM_META {
         'App\Shop\AccountKits\Repositories\AccountKitRepositoryInterface' => \App\Shop\AccountKits\Repositories\AccountKitRepository::class,
         'App\Shop\Categories\Repositories\CategoryRepositoryInterface' => \App\Shop\Categories\Repositories\CategoryRepository::class,
         'App\Shop\Products\Repositories\ProductRepositoryInterface' => \App\Shop\Products\Repositories\ProductRepository::class,
+        'App\Shop\ProductAttributes\Repositories\ProductAttributeRepositoryInterface' => \App\Shop\ProductAttributes\Repositories\ProductAttributeRepository::class,
         'user.verification' => \App\Services\UserService\UserVerification::class,
         'user.socialAccount' => \App\Services\UserService\SocialAccountService::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
