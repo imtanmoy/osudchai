@@ -136,7 +136,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function associateCategory(Category $category)
     {
-        $this->model->category()->associate($category);
+        $this->model->category()->associate($category)->save();
     }
 
     public function deleteFile(array $file, $disk = null): bool
@@ -204,7 +204,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function associateManufacturer(Manufacturer $manufacturer)
     {
-        $this->model->manufacturer()->associate($manufacturer);
+        $this->model->manufacturer()->associate($manufacturer)->save();
     }
 
     public function findManufacturer()
@@ -219,7 +219,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function associateGenericName(GenericName $genericName)
     {
-        $this->model->generic_name()->associate($genericName);
+        $this->model->generic_name()->associate($genericName)->save();
     }
 
     public function dissociateGenericName()
@@ -234,7 +234,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function associateStrength(Strength $strength)
     {
-        $this->model->strength()->associate($strength);
+        $this->model->strength()->associate($strength)->save();
     }
 
     public function dissociateStrength()
@@ -249,7 +249,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function associateProductType(ProductType $productType)
     {
-        $this->model->product_type()->associate($productType);
+        $this->model->product_type()->associate($productType)->save();
     }
 
     public function dissociateProductType()
