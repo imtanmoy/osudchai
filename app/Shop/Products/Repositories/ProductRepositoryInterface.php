@@ -14,6 +14,7 @@ use App\Models\GenericName;
 use App\Models\Manufacturer;
 use App\Models\Product;
 use App\Models\ProductAttribute;
+use App\Models\ProductOption;
 use App\Models\ProductStock;
 use App\Models\ProductType;
 use App\Models\Strength;
@@ -88,4 +89,6 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
     public function saveProductAttribute(ProductAttribute $productAttribute);
 
     public function removeProductAttribute(ProductAttribute $productAttribute): bool;
+
+    public function saveProductOption(ProductOption $productOption): ProductOption;
 }

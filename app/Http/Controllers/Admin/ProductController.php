@@ -17,6 +17,7 @@ use App\Shop\Manufacturers\Repositories\ManufacturerRepositoryInterface;
 use App\Shop\Options\Repositories\OptionRepositoryInterface;
 use App\Shop\OptionValues\Repositories\OptionValueRepositoryInterface;
 use App\Shop\ProductAttributes\Repositories\ProductAttributeRepositoryInterface;
+use App\Shop\Products\Exceptions\ProductUpdateErrorException;
 use App\Shop\Products\Repositories\ProductRepository;
 use App\Shop\Products\Repositories\ProductRepositoryInterface;
 use App\Shop\Products\Transformations\ProductTransformable;
@@ -230,6 +231,9 @@ class ProductController extends Controller
             }
             $product_stock = new ProductStock(['price' => $price, 'available_qty' => $available_qty, 'minimum_order_qty' => $minimum_order_qty, 'stock_status' => $stock_status, 'subtract_stock' => $subtract_stock]);
             $productRepo->saveProductStock($product_stock);
+        } else {
+            $product_stock = new ProductStock(['price' => 0.0, 'available_qty' => 0, 'minimum_order_qty' => 0, 'stock_status' => 'inStock']);
+            $productRepo->saveProductStock($product_stock);
         }
 
         if ($request->has('attribute_name') && $request->has('attribute_value')) {
@@ -275,11 +279,12 @@ class ProductController extends Controller
 
         $product = $this->productRepository->findProductById($id);
 
+
         $productOptions = $product->options()->get();
 
         if (request()->has('delete') && request()->has('pa')) {
             $pa = $productOptions->where('id', request()->input('pa'))->first();
-            $pa->optionValues()->detach();
+            $pa->optionValue()->dissociate();
             $pa->delete();
             request()->session()->flash('message', 'Delete successful');
             return redirect()->route('admin.products.edit', [$product->id, 'combination' => 1]);
@@ -291,7 +296,6 @@ class ProductController extends Controller
 //        $categories = Category::pluck('name', 'id');
         $categories = collect($this->categoryRepository->listCategories())->pluck('name', 'id');
         $product_types = collect($this->productTypeRepository->listProductTypes())->pluck('name', 'id');
-        $product = $this->productRepository->findProductById($id);
 
         $options = $this->optionRepository->listOptions();
 
@@ -313,11 +317,15 @@ class ProductController extends Controller
      * @param ProductRequest $request
      * @param  int $id
      * @return Response
+     * @throws ProductUpdateErrorException
      */
     public
     function update(ProductRequest $request, $id)
     {
-        return $this->productRepo->update($id, $request->all());
+        $product = $this->productRepository->findProductById($id);
+        $productRepo = new ProductRepository($product);
+        $productRepo->updateProduct($request->all());
+        return response()->json(['message' => 'Product Updated'], 200);
     }
 
     /**
@@ -340,7 +348,7 @@ class ProductController extends Controller
         }
 
 //        $product = Product::findOrFail($id);
-        $product = $this->productRepo->getById($id);
+        $product = $this->productRepository->findProductById($id);
 
         return view('admin.products.adjust', compact('product'));
     }
@@ -353,7 +361,7 @@ class ProductController extends Controller
         }
 
         try {
-            $product = $this->productRepo->getById($id);
+            $product = $this->productRepository->findProductById($id);
 
             if (isset($request->price)) {
                 $product->price = $request->price;
@@ -418,8 +426,8 @@ class ProductController extends Controller
         $stock_status = $fields['stock_status'];
 
 
-        $option = $this->optionRepo->find($request->option_id);
-        $optionValue = $this->optionValueRepo->find($request->option_value_id);
+        $option = $this->optionRepository->findOptionById($request->option_id);
+        $optionValue = $this->optionValueRepository->find($request->option_value_id);
 
 
         $productRepo = new ProductRepository($product);
@@ -456,8 +464,8 @@ class ProductController extends Controller
     public
     function addProductOption($id)
     {
-        $product = $this->productRepo->getById($id);
-        $options = $this->optionRepo->listOptions();
+        $product = $this->productRepository->findProductById($id);
+        $options = $this->optionRepository->listOptions();
 
         return view('admin.products.create-options', compact('product', 'options'));
     }
@@ -466,7 +474,7 @@ class ProductController extends Controller
     function storeProductOption(Request $request, $id)
     {
 
-        $product = $this->productRepo->getById($id);
+        $product = $this->productRepository->findProductById($id);
         if ($request->has('option_id') && $request->has('option_value_id')) {
             $this->saveProductCombinations($request, $product);
             $request->session()->flash('message', 'Attribute combination created successful');
@@ -480,7 +488,7 @@ class ProductController extends Controller
     public
     function editProductOption($id, $oid)
     {
-        $product = $this->productRepo->getById($id);
+        $product = $this->productRepository->findProductById($id);
         $productOption = ProductOption::findOrFail($oid);
 
         return view('admin.products.forms.options.edit', compact('product', 'productOption'));

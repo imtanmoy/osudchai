@@ -33,8 +33,8 @@
                 </td>
             </tr>
         @endforeach
+    @else
+        <p class="alert alert-warning">No combination yet.</p>
+    @endif
     </tbody>
 </table>
-@else
-    <p class="alert alert-warning">No combination yet.</p>
-@endif

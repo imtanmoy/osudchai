@@ -15,6 +15,7 @@ use App\Models\Manufacturer;
 use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\ProductImage;
+use App\Models\ProductOption;
 use App\Models\ProductStock;
 use App\Models\ProductType;
 use App\Models\Strength;
@@ -95,7 +96,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function findProductById(int $id): Product
     {
         try {
-            return $this->transformProduct($this->findOneOrFail($id));
+            return $this->findOneOrFail($id);
         } catch (ModelNotFoundException $e) {
             throw new ProductNotFoundException($e);
         }
@@ -126,7 +127,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
      */
     public function dissociateCategory()
     {
-        $this->model->category()->dissociate();
+        $this->model->category()->dissociate()->save();
     }
 
     public function getCategory(): Category
@@ -214,7 +215,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function dissociateManufacturer()
     {
-        $this->model->manufacturer()->dissociate();
+        $this->model->manufacturer()->dissociate()->save();
     }
 
     public function associateGenericName(GenericName $genericName)
@@ -224,7 +225,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function dissociateGenericName()
     {
-        $this->model->generic_name()->dissociate();
+        $this->model->generic_name()->dissociate()->save();
     }
 
     public function findGenericName()
@@ -239,7 +240,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function dissociateStrength()
     {
-        $this->model->strength()->dissociate();
+        $this->model->strength()->dissociate()->save();
     }
 
     public function findStrength()
@@ -254,7 +255,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function dissociateProductType()
     {
-        $this->model->product_type()->dissociate();
+        $this->model->product_type()->dissociate()->save();
     }
 
     public function findProductType()
@@ -298,5 +299,11 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function removeProductAttribute(ProductAttribute $productAttribute): bool
     {
         return $productAttribute->delete();
+    }
+
+    public function saveProductOption(ProductOption $productOption): ProductOption
+    {
+        $this->model->options()->save($productOption);
+        return $productOption;
     }
 }
