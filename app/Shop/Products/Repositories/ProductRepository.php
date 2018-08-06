@@ -190,6 +190,14 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $this->model->images()->save($productImage);
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function deleteCoverImage()
+    {
+        $this->model->images()->where('cover', '=', 1)->delete();
+    }
+
     public function saveProductImages(Collection $collection)
     {
         $collection->each(function (UploadedFile $file) {

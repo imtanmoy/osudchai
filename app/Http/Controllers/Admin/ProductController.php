@@ -316,6 +316,7 @@ class ProductController extends Controller
      * @param  int $id
      * @return Response
      * @throws ProductUpdateErrorException
+     * @throws \Exception
      */
     public
     function update(UpdateProductRequest $request, $id)
@@ -376,6 +377,18 @@ class ProductController extends Controller
                 $subtract_stock = 0;
             }
             $productRepo->updateProductStock(['price' => $price, 'available_qty' => $available_qty, 'minimum_order_qty' => $minimum_order_qty, 'stock_status' => $stock_status, 'subtract_stock' => $subtract_stock]);
+        }
+
+        if ($request->hasFile('cover') && $request->file('cover') instanceof UploadedFile) {
+//            if ($product->images()->where('cover', '=', 1)->exists()) {
+            $productRepo->deleteCoverImage();
+//            }
+            $productRepo->saveCoverImage($request->file('cover'));
+        }
+
+
+        if ($request->hasFile('images')) {
+            $productRepo->saveProductImages(collect($request->file('images')));
         }
 
         return response()->json(['message' => 'Product Updated'], 200);

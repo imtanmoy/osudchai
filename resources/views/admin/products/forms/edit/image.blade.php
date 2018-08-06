@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-xs-12 form-group">
-        <label for="featuredImg">Featured Image</label>
-        <input type="file" name="featuredImg" id="featuredImg">
+        <label for="cover">Cover Image</label>
+        <input type="file" name="cover" id="cover">
     </div>
 </div>
 <div class="row">

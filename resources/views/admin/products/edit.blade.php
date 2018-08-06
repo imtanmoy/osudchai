@@ -37,7 +37,7 @@
                                 @include('admin.products.forms.edit.stock&price')
                             </div>
                             <div class="tab-pane" id="tab_6">
-
+                                @include('admin.products.forms.edit.image')
                             </div>
                         </div>
                     </div>
