@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-xs-12 form-group">
         {!! Form::label('product_type_id', 'Product Type*', []) !!}
-        {{ Form::select('product_type_id', $product_types,old('product_type_id'), ['id'=>'product_type_id','required' => '', 'class' => 'form-control select2', 'style'=>'width: 100%']) }}
+        {{ Form::select('product_type_id', $product_types,$product->product_type->id, ['id'=>'product_type_id','required' => '', 'class' => 'form-control select2', 'style'=>'width: 100%']) }}
         @if($errors->has('product_type_id'))
             <span class="help-block">
                 {{ $errors->first('product_type_id') }}

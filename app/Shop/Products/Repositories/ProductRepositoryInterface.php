@@ -82,6 +82,8 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
 
     public function saveProductStock(ProductStock $productStock);
 
+    public function updateProductStock(array $params);
+
     public function deleteProductStock(): bool;
 
     public function getProductStock(): ProductStock;

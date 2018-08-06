@@ -306,4 +306,9 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $this->model->options()->save($productOption);
         return $productOption;
     }
+
+    public function updateProductStock(array $params)
+    {
+        $this->model->stock()->update($params);
+    }
 }

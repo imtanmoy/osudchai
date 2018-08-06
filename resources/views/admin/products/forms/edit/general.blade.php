@@ -30,20 +30,20 @@
         @endif
     </div>
     <div class="col-xs-12 form-group">
-        {!! Form::label('manufacturer_id', 'Manufacturer*', []) !!}
-        {{ Form::select('manufacturer_id', $manufacturers,old('manufacturer_id'), ['id'=>'manufacturer_id','required' => '', 'class' => 'form-control select2', 'style'=>'width: 100%']) }}
-        @if($errors->has('manufacturer_id'))
+        {!! Form::label('manufacturer', 'Manufacturer*', []) !!}
+        {{ Form::select('manufacturer', $manufacturers, $product->manufacturer->id, ['id'=>'manufacturer','required' => '', 'class' => 'form-control select2', 'style'=>'width: 100%']) }}
+        @if($errors->has('manufacturer'))
             <span class="help-block">
-                {{ $errors->first('manufacturer_id') }}
+                {{ $errors->first('manufacturer') }}
             </span>
         @endif
     </div>
     <div class="col-xs-12 form-group">
-        {!! Form::label('category_id', 'Category*', []) !!}
-        {{ Form::select('category_id', $categories,old('category_id'), ['id'=>'category_id','required' => '', 'class' => 'form-control select2', 'style'=>'width: 100%']) }}
-        @if($errors->has('category_id'))
+        {!! Form::label('category', 'Category*', []) !!}
+        {{ Form::select('category', $categories, $product->category->id, ['id'=>'category','required' => '', 'class' => 'form-control select2', 'style'=>'width: 100%']) }}
+        @if($errors->has('category'))
             <span class="help-block">
-                {{ $errors->first('category_id') }}
+                {{ $errors->first('category') }}
             </span>
         @endif
     </div>

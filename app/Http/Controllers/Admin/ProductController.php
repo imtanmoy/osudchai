@@ -20,6 +20,7 @@ use App\Shop\ProductAttributes\Repositories\ProductAttributeRepositoryInterface;
 use App\Shop\Products\Exceptions\ProductUpdateErrorException;
 use App\Shop\Products\Repositories\ProductRepository;
 use App\Shop\Products\Repositories\ProductRepositoryInterface;
+use App\Shop\Products\Requests\UpdateProductRequest;
 use App\Shop\Products\Transformations\ProductTransformable;
 use App\Shop\ProductTypes\Repositories\ProductTypeRepositoryInterface;
 use App\Shop\Strengths\Repositories\StrengthRepositoryInterface;
@@ -279,7 +280,6 @@ class ProductController extends Controller
 
         $product = $this->productRepository->findProductById($id);
 
-
         $productOptions = $product->options()->get();
 
         if (request()->has('delete') && request()->has('pa')) {
@@ -291,9 +291,7 @@ class ProductController extends Controller
         }
 
 
-//        $manufacturers = Manufacturer::pluck('name', 'id');
         $manufacturers = collect($this->manufacturerRepository->listManufacturers())->pluck('name', 'id');
-//        $categories = Category::pluck('name', 'id');
         $categories = collect($this->categoryRepository->listCategories())->pluck('name', 'id');
         $product_types = collect($this->productTypeRepository->listProductTypes())->pluck('name', 'id');
 
@@ -314,17 +312,72 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param ProductRequest $request
+     * @param UpdateProductRequest $request
      * @param  int $id
      * @return Response
      * @throws ProductUpdateErrorException
      */
     public
-    function update(ProductRequest $request, $id)
+    function update(UpdateProductRequest $request, $id)
     {
+
+        $data = collect($request->except('_token', '_method'));
+
         $product = $this->productRepository->findProductById($id);
+
         $productRepo = new ProductRepository($product);
-        $productRepo->updateProduct($request->all());
+
+        $productRepo->updateProduct($data->only(['name', 'sku', 'description'])->toArray());
+
+        if ($request->has('manufacturer')) {
+            $manufacturer = $this->manufacturerRepository->findManufacturerById($request->input('manufacturer'));
+            $productRepo->associateManufacturer($manufacturer);
+        }
+
+        if ($request->has('category')) {
+            $category = $this->categoryRepository->findCategoryById($request->input('category'));
+            $productRepo->associateCategory($category);
+        }
+
+        if ($request->has('product_type')) {
+            $product_type = $this->productTypeRepository->findProductTypeById($request->input('product_type'));
+            $productRepo->associateProductType($product_type);
+        }
+
+        if ($request->has('generic_name')) {
+            $generic_name = $this->genericNameRepository->findOneBy(['name' => $request->input('generic_name')]);
+            if ($generic_name == null) {
+                $generic_name = $this->genericNameRepository->createGenericName(['name' => $request->input('generic_name')]);
+            }
+            $productRepo->associateGenericName($generic_name);
+        }
+
+        if ($request->has('strength')) {
+            $strength = $this->strengthRepository->findOneBy(['value' => $request->input('strength')]);
+            if ($strength == null) {
+                $strength = $this->strengthRepository->createStrength(['value' => $request->input('strength')]);
+            }
+            $productRepo->associateStrength($strength);
+        }
+
+        if (
+            $request->has('available_qty') &&
+            $request->has('minimum_order_qty') &&
+            $request->has('price') &&
+            $request->has('stock_status')
+        ) {
+            $available_qty = $request->input('available_qty') ?: 1;
+            $minimum_order_qty = $request->input('minimum_order_qty') ?: 1;
+            $stock_status = $request->input('stock_status') ?: 'inStock';
+            $price = $request->input('price') ?: 0.0;
+
+            $subtract_stock = 1;
+            if ((!$request->has('subtract_stock') || $request->input('subtract_stock') == null) && $request->input('subtract_stock') != true) {
+                $subtract_stock = 0;
+            }
+            $productRepo->updateProductStock(['price' => $price, 'available_qty' => $available_qty, 'minimum_order_qty' => $minimum_order_qty, 'stock_status' => $stock_status, 'subtract_stock' => $subtract_stock]);
+        }
+
         return response()->json(['message' => 'Product Updated'], 200);
     }
 
