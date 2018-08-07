@@ -25,6 +25,7 @@ use App\Shop\Products\Transformations\ProductTransformable;
 use App\Shop\ProductTypes\Repositories\ProductTypeRepositoryInterface;
 use App\Shop\Strengths\Repositories\StrengthRepositoryInterface;
 use App\Shop\Tools\UploadableTrait;
+use DataTables;
 use Gate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -421,56 +422,6 @@ class ProductController extends Controller
     }
 
     public
-    function showAdjust($id)
-    {
-        if (!Gate::allows('users_manage')) {
-            return abort(401);
-        }
-
-//        $product = Product::findOrFail($id);
-        $product = $this->productRepository->findProductById($id);
-
-        return view('admin.products.adjust', compact('product'));
-    }
-
-    public
-    function updateAdjust(Request $request, $id)
-    {
-        if (!Gate::allows('users_manage')) {
-            return abort(401);
-        }
-
-        try {
-            $product = $this->productRepository->findProductById($id);
-
-            if (isset($request->price)) {
-                $product->price = $request->price;
-                $product->save();
-            }
-
-            if (isset($request->available_qty)) {
-                $product->stock->update([
-                    'available_qty' => $request->available_qty,
-                ]);
-            }
-
-            if (isset($request->stock_status)) {
-                $product->stock->update([
-                    'stock_status' => $request->stock_status,
-                ]);
-            }
-
-            $lastActivity = Activity::all()->last();
-
-            flash($lastActivity->description)->success();
-
-            return redirect()->route('admin.products.index');
-        } catch (\Exception $exception) {
-            return redirect()->back()->withErrors($exception->getMessage());
-        }
-    }
-
-    public
     function deleteAttributes($id, $aid)
     {
         if (!Gate::allows('users_manage')) {
@@ -513,11 +464,10 @@ class ProductController extends Controller
         $productRepo = new ProductRepository($product);
 
         $productOption = new ProductOption(compact('quantity', 'price', 'stock_status'));
-//
+
         $productOption->option()->associate($option);
         $productOption->optionValue()->associate($optionValue);
 
-//        dd($option, $optionValue, $productOption);
 
         $productRepo->saveProductOption($productOption);
 //        $productRepo->saveCombination($productOption, $option, $optionValue);
@@ -614,5 +564,24 @@ class ProductController extends Controller
     {
         $this->productRepository->deleteThumb($iid);
         return redirect()->back()->with('message', 'Image delete successful');
+    }
+
+
+    public function productDatatables()
+    {
+        try {
+            $products = $this->productRepository->listProducts();
+            return Datatables::of($products)
+                ->editColumn('product_type', function ($product) {
+                    return $product->product_type->name;
+                })
+                ->addColumn('action', function ($product) {
+                    return '<div class="btn-group">
+                              <button type="button" class="btn btn-info"><a href="' . route('admin.products.edit', $product->id) . '"><i class="fa fa-fw fa-eye"></i> View</a></button>
+                            </div>';
+                })->rawColumns(['action', 'product_type'])->make(true);
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 }

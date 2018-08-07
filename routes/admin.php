@@ -47,9 +47,8 @@ Route::get('generic_names/suggest', 'Admin\GenericNameController@autoComplete')-
 
 // Product Routes
 Route::resource('products', 'Admin\ProductController');
-Route::get('products/{id}/adjust', 'Admin\ProductController@showAdjust')->name('products.adjust');
-Route::post('products/{id}/adjust', 'Admin\ProductController@updateAdjust')->name('products.updateAdjust');
 Route::delete('products/{id}/attributes/{aid}', 'Admin\ProductController@deleteAttributes');
+Route::get('datatable/products', 'Admin\ProductController@productDatatables')->name('datatable.products');
 
 
 // Product Option Routes
