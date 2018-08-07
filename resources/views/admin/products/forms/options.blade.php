@@ -6,6 +6,7 @@
         <th>Option Value</th>
         <th>Quantity</th>
         <th>Price</th>
+        <th>Stock Status</th>
         <th>Action</th>
     </tr>
     </thead>

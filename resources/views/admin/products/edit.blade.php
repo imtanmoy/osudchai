@@ -110,7 +110,7 @@
                                 data: {method: '_DELETE', submit: true}
                             }).always(function (data) {
                             }).done(function (data) {
-                                console.log(data);
+                                window.location.reload();
                                 noty({
                                     layout: 'bottomCenter',
                                     theme: 'relax',

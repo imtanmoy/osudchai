@@ -391,6 +391,20 @@ class ProductController extends Controller
             $productRepo->saveProductImages(collect($request->file('images')));
         }
 
+        if ($request->has('attribute_name') && $request->has('attribute_value')) {
+
+            $names = $request->input('attribute_name');
+            $values = $request->input('attribute_value');
+
+            foreach ($names as $name) {
+                if (!empty($name)) {
+                    $key = array_search($name, $names);
+                    $attribute = $this->attributeRepository->findOneOrCreate(['name' => $name]);
+                    $this->productAttributeRepository->createProductAttribute($product, $attribute, ['value' => $values[$key]]);
+                }
+            }
+        }
+
         return response()->json(['message' => 'Product Updated'], 200);
     }
 
@@ -598,8 +612,6 @@ class ProductController extends Controller
      */
     public function removeThumbnail(Request $request, $id, $iid)
     {
-
-//        dd($iid, $request->all());
         $this->productRepository->deleteThumb($iid);
         return redirect()->back()->with('message', 'Image delete successful');
     }
