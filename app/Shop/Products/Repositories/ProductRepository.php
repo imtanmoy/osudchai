@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Storage;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
@@ -145,9 +146,17 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         // TODO: Implement deleteFile() method.
     }
 
-    public function deleteThumb(string $src): bool
+    /**
+     * @param string $id
+     * @return bool
+     */
+    public function deleteThumb(string $id): bool
     {
-        return DB::table('product_images')->where('src', $src)->delete();
+        $image = DB::table('product_images')->where('id', $id)->get()->first();
+        if (Storage::disk('public')->exists($image->src)) {
+            Storage::disk('public')->delete($image->src);
+        }
+        return DB::table('product_images')->where('id', $id)->delete();
     }
 
     /**

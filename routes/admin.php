@@ -59,6 +59,9 @@ Route::get('products/{id}/options/{oid}/edit', 'Admin\ProductController@editProd
 Route::put('products/{id}/options/{oid}', 'Admin\ProductController@updateProductOption')->name('products.options.update');
 
 
+Route::get('products/{id}/images/{iid}', 'Admin\ProductController@removeThumbnail')->name('products.images.remove');
+
+
 // Option Routes
 Route::resource('options', 'Admin\OptionController');
 Route::resource('options.values', 'Admin\OptionValueController');

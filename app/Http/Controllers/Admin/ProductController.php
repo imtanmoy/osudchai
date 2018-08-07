@@ -590,4 +590,17 @@ class ProductController extends Controller
         }
 
     }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function removeThumbnail(Request $request, $id, $iid)
+    {
+
+//        dd($iid, $request->all());
+        $this->productRepository->deleteThumb($iid);
+        return redirect()->back()->with('message', 'Image delete successful');
+    }
 }

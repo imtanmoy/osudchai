@@ -44,7 +44,7 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
 
     public function deleteFile(array $file, $disk = null): bool;
 
-    public function deleteThumb(string $src): bool;
+    public function deleteThumb(string $id): bool;
 
     public function findProductBySlug(array $slug): Product;
 
