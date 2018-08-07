@@ -50,3 +50,5 @@ Route::get('/products/{id}', 'Api\ProductController@show');
 Route::get('/categories', 'Api\CategoryController@index');
 Route::get('/categories/{id}', 'Api\CategoryController@show');
 Route::get('/categories/{id}/products', 'Api\CategoryController@productsByCategory');
+
+Route::get('search', 'Api\SearchController@index');
