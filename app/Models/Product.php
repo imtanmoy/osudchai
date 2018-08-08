@@ -45,14 +45,8 @@ class Product extends Model
 
     protected $hidden = [
         'deleted_at',
-        'category_id',
-        'manufacturer_id',
-        'product_type_id',
-        'strength_id',
-        'generic_name_id',
         'created_at',
         'updated_at',
-        'is_active'
     ];
 
     protected static $logAttributes = [
@@ -76,8 +70,16 @@ class Product extends Model
     protected $searchable = [
         'columns' => [
             'products.name' => 10,
-            'products.description' => 5
-        ]
+            'products.description' => 8,
+            'generic_names.name' => 7,
+            'categories.name' => 6,
+            'manufacturers.name' => 4
+        ],
+        'joins' => [
+            'categories' => ['categories.id', 'products.category_id'],
+            'manufacturers' => ['manufacturers.id', 'products.manufacturer_id'],
+            'generic_names' => ['generic_names.id', 'products.generic_name_id'],
+        ],
     ];
 
 
@@ -153,6 +155,6 @@ class Product extends Model
      */
     public function searchProduct(string $term): Collection
     {
-        return self::search($term)->get();
+        return self::search($term)->where('is_active', 1)->get();
     }
 }

@@ -10,7 +10,7 @@ class ProductImage extends Model
 
     protected $fillable = ['name', 'src', 'cover', 'provider', 'product_id'];
 
-    protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'featured', 'product_id'];
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'cover', 'product_id'];
 
 
     public function product()

@@ -31,7 +31,9 @@ trait ProductTransformable
         $prod->quantity = $product->stock()->exists() ? $product->stock->available_qty : 0;
         $prod->price = $product->stock()->exists() ? $product->stock->price : 0;
         $prod->is_active = $product->is_active;
-        $prod->manufacturer_id = (int)$product->manufacturer_id;
+        $prod->manufacturer = $product->manufacturer;
+        $prod->generic_name = $product->generic_name()->exists() ? $product->generic_name : null;
+        $prod->images = $product->images;
         return $prod;
     }
 }
