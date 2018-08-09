@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Prescription extends Model
 {
-    protected $fillable = ['name', 'path', 'provider', 'user_id'];
+    protected $fillable = ['title', 'src', 'provider', 'user_id'];
 
     protected $hidden = ['created_at', 'updated_at', 'user_id'];
 

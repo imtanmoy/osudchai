@@ -3,6 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Prescription;
+use App\Shop\Prescriptions\Repositories\PrescriptionRepositoryInterface;
+use App\Shop\Prescriptions\Requests\CreatePrescriptionRequest;
+use App\Shop\Prescriptions\Transformations\PrescriptionTransformable;
+use App\Shop\Users\Repositories\UserRepository;
+use App\Shop\Users\Repositories\UserRepositoryInterface;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Storage;
@@ -10,6 +16,31 @@ use File;
 
 class PrescriptionController extends Controller
 {
+    use PrescriptionTransformable;
+    /**
+     * @var PrescriptionRepositoryInterface
+     */
+    private $prescriptionRepository;
+    /**
+     * @var UserRepositoryInterface
+     */
+    private $userRepository;
+
+    /**
+     * PrescriptionController constructor.
+     * @param PrescriptionRepositoryInterface $prescriptionRepository
+     * @param UserRepositoryInterface $userRepository
+     */
+    public function __construct(
+        PrescriptionRepositoryInterface $prescriptionRepository,
+        UserRepositoryInterface $userRepository
+    )
+    {
+        $this->prescriptionRepository = $prescriptionRepository;
+        $this->userRepository = $userRepository;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -17,27 +48,41 @@ class PrescriptionController extends Controller
      */
     public function index()
     {
-        return response()->json(auth('api')->user()->prescriptions);
+        $user = auth('api')->user();
+        $userRepo = new UserRepository($user);
+        $list = $userRepo->getPrescriptions();
+
+        $prescriptions = collect($list)->map(function ($prescription) {
+            return $this->transformPrescription($prescription);
+        });
+        return response()->json($prescriptions);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param CreatePrescriptionRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreatePrescriptionRequest $request)
     {
         try {
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                $fileName = trim(time() . $image->getClientOriginalName());
-                Storage::disk('public')->put($fileName, File::get($image));
-                $url = Storage::disk('public')->url($fileName);
+
+                $imageFileName = $this->prescriptionRepository->savePrescriptionFile($image);
 
                 $user = auth('api')->user();
 
-                $prescription = $user->prescriptions()->create(['name' => $fileName, 'path' => $url]);
+                $prescription = $this->prescriptionRepository->createPrescription([
+                    'title' => $request->input('title'),
+                    'src' => $imageFileName,
+                    'provider' => 'local',
+                    'user_id' => $user->id
+                ]);
+
+                $prescription = $this->transformPrescription($prescription);
+
 
                 return response()->json(['message' => 'Prescription Uploaded Successfully', 'data' => $prescription], 201);
             } else {
@@ -61,13 +106,13 @@ class PrescriptionController extends Controller
 
             $prescription = Prescription::findOrFail($id);
 
-            $temp = $prescription->toArray();
-
             if ($prescription->user_id != $user->id) {
                 return response()->json(['message' => 'This Prescription does not belongs to you'], 403);
             }
 
-            return response()->json($temp);
+            $prescription = $this->transformPrescription($prescription);
+
+            return response()->json($prescription);
         } catch (\Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], 500);
         }
@@ -128,8 +173,6 @@ class PrescriptionController extends Controller
             if ($prescription->user_id != $user->id) {
                 return response()->json(['message' => 'This Prescription does not belongs to you'], 403);
             }
-
-//            Storage::delete($prescription->name);
 
             $prescription->delete();
 

@@ -15,8 +15,8 @@ class CreatePrescriptionsTable extends Migration
     {
         Schema::create('prescriptions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 255);
-            $table->string('path', 255);
+            $table->string('title', 255);
+            $table->string('src', 255);
             $table->string('provider')->default('local');
             $table->timestamps();
 

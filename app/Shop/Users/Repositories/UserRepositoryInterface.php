@@ -10,6 +10,7 @@ namespace App\Shop\Users\Repositories;
 
 
 use App\Models\Address;
+use App\Models\Prescription;
 use App\Shop\Base\Interfaces\BaseRepositoryInterface;
 use App\User;
 use Illuminate\Support\Collection as Support;
@@ -38,4 +39,8 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
     public function searchUser(string $text): Collection;
 
     public function charge(int $amount, array $options);
+
+    public function attachPrescription(Prescription $prescription): Prescription;
+
+    public function getPrescriptions();
 }

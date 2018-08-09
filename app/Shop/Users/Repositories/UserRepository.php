@@ -10,6 +10,7 @@ namespace App\Shop\Users\Repositories;
 
 
 use App\Models\Address;
+use App\Models\Prescription;
 use App\Shop\Base\BaseRepository;
 use App\Shop\Users\Exceptions\CreateUserInvalidArgumentException;
 use App\Shop\Users\Exceptions\UpdateUserInvalidArgumentException;
@@ -129,5 +130,16 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function getAddresses(): Collection
     {
         return $this->model->addresses;
+    }
+
+    public function attachPrescription(Prescription $prescription): Prescription
+    {
+        $this->model->prescriptions()->save($prescription);
+        return $prescription;
+    }
+
+    public function getPrescriptions(): Collection
+    {
+        return $this->model->prescriptions;
     }
 }

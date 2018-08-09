@@ -26,6 +26,8 @@ use App\Shop\OrderStatuses\Repositories\OrderStatusRepository;
 use App\Shop\OrderStatuses\Repositories\OrderStatusRepositoryInterface;
 use App\Shop\PaymentMethods\Repositories\PaymentMethodRepository;
 use App\Shop\PaymentMethods\Repositories\PaymentMethodRepositoryInterface;
+use App\Shop\Prescriptions\Repositories\PrescriptionRepository;
+use App\Shop\Prescriptions\Repositories\PrescriptionRepositoryInterface;
 use App\Shop\ProductAttributes\Repositories\ProductAttributeRepository;
 use App\Shop\ProductAttributes\Repositories\ProductAttributeRepositoryInterface;
 use App\Shop\Products\Repositories\ProductRepository;
@@ -128,6 +130,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             ProductAttributeRepositoryInterface::class,
             ProductAttributeRepository::class
+        );
+        $this->app->bind(
+            PrescriptionRepositoryInterface::class,
+            PrescriptionRepository::class
         );
     }
 }

@@ -40,7 +40,7 @@ class AddressRepository extends BaseRepository implements AddressRepositoryInter
         try {
             $address = new Address($params);
             if (isset($params['user'])) {
-                $address->user()->associate($params['customer']);
+                $address->user()->associate($params['user']);
             }
             $address->save();
 
