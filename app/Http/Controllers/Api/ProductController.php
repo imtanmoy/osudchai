@@ -4,12 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Product;
 use App\Models\ProductOption;
+use App\Shop\Products\Transformations\ProductTransformable;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
 
 class ProductController extends Controller
 {
+    use ProductTransformable;
+
+
     public function index()
     {
         $products = Product::all()->where('is_active', '=', 1);
@@ -20,11 +24,14 @@ class ProductController extends Controller
             'generic_name',
             'strength',
             'attributes',
-            'featuredPhoto',
+            'cover',
             'images',
             'stock',
             'options'
         ]);
+        $products = collect($products)->map(function ($product) {
+            return $this->transformProduct($product);
+        });
         return response()->json($products);
     }
 
@@ -38,7 +45,7 @@ class ProductController extends Controller
                 'generic_name',
                 'strength',
                 'attributes',
-                'featuredPhoto',
+                'cover',
                 'images',
                 'options',
                 'stock'
@@ -54,7 +61,7 @@ class ProductController extends Controller
             if ($product == null || $product->is_active == 0) {
                 return response()->json(['message' => 'Product not found'], 404);
             }
-            return response()->json($product);
+            return response()->json($this->transformProduct($product));
         } catch (\Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], $exception->getCode());
         }
