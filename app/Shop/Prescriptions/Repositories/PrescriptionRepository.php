@@ -12,8 +12,10 @@ namespace App\Shop\Prescriptions\Repositories;
 use App\Models\Prescription;
 use App\Shop\Base\BaseRepository;
 use App\Shop\Prescriptions\Exceptions\PrescriptionInvalidArgumentException;
+use App\Shop\Prescriptions\Exceptions\PrescriptionNotFoundException;
 use App\Shop\Tools\UploadableTrait;
 use App\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
@@ -62,29 +64,55 @@ class PrescriptionRepository extends BaseRepository implements PrescriptionRepos
         }
     }
 
+    /**
+     * @param array $update
+     * @return bool
+     */
     public function updatePrescription(array $update): bool
     {
-        // TODO: Implement updatePrescription() method.
+        return $this->model->update($update);
     }
 
+    /**
+     * @return bool|null
+     * @throws \Exception
+     */
     public function deletePrescription()
     {
-        // TODO: Implement deletePrescription() method.
+        $this->model->user()->dissociate();
+        return $this->model->delete();
     }
 
+    /**
+     * @param string $order
+     * @param string $sort
+     * @param array $columns
+     * @return Collection
+     */
     public function listPrescription(string $order = 'id', string $sort = 'desc', array $columns = ['*']): Collection
     {
-        // TODO: Implement listPrescription() method.
+        return $this->all($columns, $order, $sort);
     }
 
+    /**
+     * @param int $id
+     * @return Prescription
+     */
     public function findPrescriptionById(int $id): Prescription
     {
-        // TODO: Implement findPrescriptionById() method.
+        try {
+            return $this->findOneOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            throw new PrescriptionNotFoundException($e->getMessage());
+        }
     }
 
+    /**
+     * @return User
+     */
     public function findUser(): User
     {
-        // TODO: Implement findUser() method.
+        return $this->model->user;
     }
 
     /**

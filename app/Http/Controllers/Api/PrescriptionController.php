@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Prescription;
+use App\Shop\Prescriptions\Repositories\PrescriptionRepository;
 use App\Shop\Prescriptions\Repositories\PrescriptionRepositoryInterface;
 use App\Shop\Prescriptions\Requests\CreatePrescriptionRequest;
 use App\Shop\Prescriptions\Transformations\PrescriptionTransformable;
@@ -104,7 +105,7 @@ class PrescriptionController extends Controller
         try {
             $user = auth('api')->user();
 
-            $prescription = Prescription::findOrFail($id);
+            $prescription = $this->prescriptionRepository->findPrescriptionById($id);
 
             if ($prescription->user_id != $user->id) {
                 return response()->json(['message' => 'This Prescription does not belongs to you'], 403);
@@ -131,27 +132,29 @@ class PrescriptionController extends Controller
 
             $user = auth('api')->user();
 
-            $prescription = Prescription::findOrFail($id);
+            $prescription = $this->prescriptionRepository->findPrescriptionById($id);
 
             if ($prescription->user_id != $user->id) {
                 return response()->json(['message' => 'This Prescription does not belongs to you'], 403);
             }
 
+            $imageFileName = $prescription->src;
+
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                $fileName = trim(time() . $image->getClientOriginalName());
-                Storage::disk('public')->put($fileName, File::get($image));
-                $url = Storage::disk('public')->url($fileName);
-
-                $prescription->name = $fileName;
-                $prescription->path = $url;
-
-                $prescription->save();
-
-                return response()->json(['message' => 'Prescription Updated Successfully', 'data' => $prescription], 200);
-            } else {
-                return response()->json(['message' => 'No Image Attached'], 400);
+                $imageFileName = $this->prescriptionRepository->savePrescriptionFile($image);
             }
+
+            $prescriptionRepo = new PrescriptionRepository($prescription);
+
+            $prescriptionRepo->updatePrescription([
+                'title' => $request->input('title'),
+                'src' => $imageFileName,
+            ]);
+
+            $prescription = $this->prescriptionRepository->findPrescriptionById($id);
+
+            return response()->json(['message' => 'Prescription Updated Successfully', 'data' => $prescription], 200);
         } catch (\Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], 500);
         }
@@ -168,13 +171,14 @@ class PrescriptionController extends Controller
         try {
             $user = auth('api')->user();
 
-            $prescription = Prescription::findOrFail($id);
+            $prescription = $this->prescriptionRepository->findPrescriptionById($id);
 
             if ($prescription->user_id != $user->id) {
                 return response()->json(['message' => 'This Prescription does not belongs to you'], 403);
             }
 
-            $prescription->delete();
+            $prescriptionRepo = new PrescriptionRepository($prescription);
+            $prescriptionRepo->deletePrescription();
 
             return response()->json(['message' => 'Prescription Successfully Deleted'], 200);
         } catch (\Exception $exception) {

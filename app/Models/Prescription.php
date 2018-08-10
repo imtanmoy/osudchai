@@ -5,6 +5,11 @@ namespace App\Models;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property mixed user_id
+ * @property mixed user
+ * @property mixed src
+ */
 class Prescription extends Model
 {
     protected $fillable = ['title', 'src', 'provider', 'user_id'];
