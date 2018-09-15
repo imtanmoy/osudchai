@@ -38,7 +38,7 @@ class CategoryController extends Controller
             'generic_name',
             'strength',
             'attributes',
-            'featuredPhoto',
+            'cover',
             'images',
             'stock'
         ]);
