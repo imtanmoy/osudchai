@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->string('slug')->unique();
             $table->string('description', 1000)->nullable();
             $table->tinyInteger('is_active')->default(1);
+            $table->tinyInteger('prescription_required')->default(0);
             $table->timestamps();
 
 

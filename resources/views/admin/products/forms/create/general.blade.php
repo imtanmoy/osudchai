@@ -51,4 +51,8 @@
             @endforeach
         </select>
     </div>
+    <div class="col-xs-12 form-group">
+        {!! Form::label('prescription_required', 'Prescription Required', []) !!}
+        {{ Form::checkbox('prescription_required', 1, false) }}
+    </div>
 </div>

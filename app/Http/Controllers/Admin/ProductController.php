@@ -172,6 +172,10 @@ class ProductController extends Controller
 
         $product = $this->productRepository->createProduct($data->only(['name', 'sku', 'description'])->toArray());
 
+        if (isset($data['prescription_required']) && $data['prescription_required'] == 1) {
+            $product->prescription_required = 1;
+        }
+
 
         $productRepo = new ProductRepository($product);
 

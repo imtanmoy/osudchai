@@ -20,6 +20,7 @@ use Spatie\Sluggable\SlugOptions;
  * @property mixed name
  * @property mixed id
  * @property mixed manufacturer
+ * @property int prescription_required
  */
 class Product extends Model
 {
@@ -35,6 +36,7 @@ class Product extends Model
         'slug',
         'description',
         'is_active',
+        'prescription_required',
         'price',
         'manufacturer_id',
         'category_id',
